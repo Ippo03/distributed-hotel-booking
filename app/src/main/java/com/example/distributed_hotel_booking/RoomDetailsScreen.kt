@@ -12,35 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.distributed_hotel_booking.ui.theme.Distributed_hotel_bookingTheme
 
-class RoomDetailsScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Distributed_hotel_bookingTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting3("Android")
-                }
-            }
-        }
-    }
-}
-
 @Composable
-fun Greeting3(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    Distributed_hotel_bookingTheme {
-        Greeting3("Android")
+fun RoomDetailsScreen() {
+    // Temp object to show that the RoomDetailsScreen is working
+    Surface(color = MaterialTheme.colorScheme.background) {
+        Text(
+            text = "Room Details Screen",
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }

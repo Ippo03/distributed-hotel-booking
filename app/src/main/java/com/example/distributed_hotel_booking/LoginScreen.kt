@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun HomeScreen() {
+fun LoginScreen() {
     // Temp object to show that the HomeScreen is working
     val navController = rememberNavController()
     Surface(color = Color.White) {
@@ -72,8 +72,8 @@ fun HomeScreen() {
 }
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
-    HomeScreen()
+fun LoginScreenPreview() {
+    LoginScreen()
 }
         // This is the home screen of the app - LOGIN
         // It should contain two buttons "Enter as User" and "Enter as Manager"
