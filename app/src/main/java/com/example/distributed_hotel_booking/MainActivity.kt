@@ -10,7 +10,7 @@ class MainActivity : ComponentActivity() {
 
         // Sets the content of the initial activity
         setContent {
-            HomeScreen()
+            LoginScreen()
         }
     }
 }
