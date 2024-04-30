@@ -35,12 +35,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     // Temp object to show that the HomeScreen is working
-    val navController = rememberNavController()
     Surface(color = Color.White, modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
         val expanded = remember { mutableStateOf(false) }
         val extraPadding = if (expanded.value) 48.dp else 0.dp
@@ -85,17 +85,27 @@ fun LoginScreen() {
                         Column {
                             TextFieldEmail()
                             TextFieldPassword()
-                            Button(onClick = { navController.navigate(Screen.UserHomeScreen.route) },
-                                modifier = Modifier.wrapContentSize((Alignment.Center)))
+                            Button(
+                                onClick = { navController.navigate(Screen.UserHomeScreen.route) },
+                                modifier = Modifier.wrapContentSize((Alignment.Center))
+                            )
                             {
                                 Text(
                                     text = "Login",
-                                    modifier = Modifier.wrapContentSize((Alignment.Center)))
+                                    modifier = Modifier.wrapContentSize((Alignment.Center))
+                                )
                             }
                         }
                     }
                 }
 
+            }
+            // Dummy button to navigate to the user home screen
+            Button(
+                onClick = { navController.navigate(Screen.UserHomeScreen.route) },
+//                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp)
+            ) {
+                Text(text = "Go to User Home Screen")
             }
     }
 }
@@ -132,7 +142,7 @@ fun TextFieldPassword() {
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(navController = rememberNavController())
 }
         // This is the home screen of the app - LOGIN
         // It should contain two buttons "Enter as User" and "Enter as Manager"

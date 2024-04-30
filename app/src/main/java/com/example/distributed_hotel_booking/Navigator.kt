@@ -16,8 +16,8 @@ fun Navigator() {
 
     NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         // define the navigation routes here
-         composable(Screen.LoginScreen.route) { LoginScreen() }
-         composable(Screen.UserHomeScreen.route) { UserHomeScreen() }
+         composable(Screen.LoginScreen.route) { LoginScreen(navController) }
+         composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
          composable(Screen.BookingScreen.route) { BookingScreen() }
          composable(Screen.RoomDetailsScreen.route) { RoomDetailsScreen() }
     }
