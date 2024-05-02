@@ -1,9 +1,11 @@
 package com.example.distributed_hotel_booking
 
+import RoomDetailsScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.distributed_hotel_booking.data.Room
 
 @Composable
 fun Navigator() {
@@ -19,7 +21,7 @@ fun Navigator() {
          composable(Screen.LoginScreen.route) { LoginScreen(navController) }
          composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
          composable(Screen.BookingScreen.route) { BookingScreen() }
-         composable(Screen.RoomDetailsScreen.route) { RoomDetailsScreen() }
+         composable(Screen.RoomDetailsScreen.route) { RoomDetailsScreen(navController) }
     }
 
 }
