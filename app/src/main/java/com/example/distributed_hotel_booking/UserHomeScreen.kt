@@ -3,6 +3,7 @@ package com.example.distributed_hotel_booking
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -72,6 +73,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.distributed_hotel_booking.data.DataProvider
+import com.example.distributed_hotel_booking.data.Room
 
 
 @SuppressLint("ResourceType")
@@ -104,10 +107,9 @@ fun UserHomeScreen(navController: NavController) {
         }, year, month, dayOfMonth
     )
 
-    val names = List(1000) { "Hello, World!" }
-
     val selectedRating = remember { mutableStateOf(0f) }
     var selectedGuests by remember { mutableStateOf(1) }
+
 
     // Temp object to show that the UserHomeScreen is working
     Column(
@@ -293,29 +295,28 @@ fun UserHomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
         ) {
             Text(text = "List of hotels will be displayed here")
-            RoomsList(navController)
+            RoomsList(navController, rooms = DataProvider.roomsList)
         }
     }
 }
 
-@Preview
 @Composable
-fun UserHomeScreenPreview() {
-    UserHomeScreen(navController = NavController(LocalContext.current))
-}
-
-@Composable
-private fun RoomsList(
+fun RoomsList(
     navController: NavController,
     modifier: Modifier = Modifier,
-    names: List<String> = List(8) { "$it" }
+    rooms: List<Room>
 ) {
     LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
-        items(items = names) { name ->
+        items(items = rooms) { room ->
             RoomListItem(
+                room = room,
                 onItemClick = {
-                    // Navigate to the room details screen when an item is clicked
+                    // Navigate to the room details screen and pass the roomId as an argument
                     navController.navigate(Screen.RoomDetailsScreen.route)
+//                    navController.navigate("${Screen.RoomDetailsScreen.route}/${
+//                        Screen.RoomDetailsScreen.ARG_ROOM_ID}/${
+//                        room.id}"
+//                    )
                 }
             )
         }
@@ -324,45 +325,57 @@ private fun RoomsList(
 
 @Composable
 fun RoomListItem(
-//    room: Room,
+    room: Room,
     onItemClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onItemClick)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
-        // Hotel photo
-        // Hotel photo
+        // Room photo
         Image(
-            painter = painterResource(id = R.drawable.booking_logo), // Replace R.drawable.hotel_photo with your actual image resource
-            contentDescription = "Hotel photo",
-            modifier = Modifier.size(64.dp)
+            painter = painterResource(id = R.drawable.booking_logo), // Replace R.drawable.booking_logo with your actual image resource
+            contentDescription = "Room photo",
+            modifier = Modifier.size(68.dp)
         )
 
+        // Spacing
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Title, rating, and number of people
-        Column {
-            Text(text = "Room Title", fontWeight = FontWeight.Bold)
+        // Room details
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = room.name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Star, contentDescription = "Rating")
-                Text(text = "5", modifier = Modifier.padding(start = 4.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(Icons.Default.Person, contentDescription = "Number of people")
-                Text(text = "3", modifier = Modifier.padding(start = 4.dp))
-            }
+            Text(
+                text = room.description,
+                fontSize = 14.sp
+            )
         }
 
         // View button
-        Spacer(modifier = Modifier.weight(1f))
-        Button(onClick = onItemClick) {
-            Text(text = "View")
+        Button(
+            onClick = onItemClick,
+            modifier = Modifier.align(Alignment.CenterVertically),
+            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            Text(text = "View", color = Color.White)
         }
     }
+}
+
+
+@Preview
+@Composable
+fun UserHomeScreenPreview() {
+    UserHomeScreen(navController = NavController(LocalContext.current))
 }
 
 
