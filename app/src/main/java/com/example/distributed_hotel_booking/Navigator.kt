@@ -3,9 +3,12 @@ package com.example.distributed_hotel_booking
 import RoomDetailsScreen
 import android.window.SplashScreen
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
@@ -18,13 +21,19 @@ fun Navigator() {
     val navController = rememberNavController()
     val sharedViewModel = SharedViewModel()
 
-    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route, ) {
         // define the navigation routes here
          composable(Screen.SplashScreen.route) { SplashScreen(navController) }
          composable(Screen.LoginScreen.route) { LoginScreen(navController, sharedViewModel) }
          composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
          composable(Screen.BookingScreen.route) { BookingScreen() }
-         composable(Screen.RoomDetailsScreen.route) { RoomDetailsScreen(navController) }
+        composable(
+            "${Screen.RoomDetailsScreen.route}/{roomId}", // Define the argument in the route
+            arguments = listOf(navArgument("roomId") { type = NavType.StringType }) // Define the argument
+        ) { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getString("roomId") // Retrieve the argument
+            RoomDetailsScreen(navController, roomId)
+        }
     }
 
 }

@@ -310,9 +310,10 @@ fun RoomsList(
         items(items = rooms) { room ->
             RoomListItem(
                 room = room,
+                navController = navController,
                 onItemClick = {
                     // Navigate to the room details screen and pass the roomId as an argument
-                    navController.navigate(Screen.RoomDetailsScreen.route)
+                    navController.navigate("${Screen.RoomDetailsScreen.route}/${room.id}")
 //                    navController.navigate("${Screen.RoomDetailsScreen.route}/${
 //                        Screen.RoomDetailsScreen.ARG_ROOM_ID}/${
 //                        room.id}"
@@ -326,6 +327,7 @@ fun RoomsList(
 @Composable
 fun RoomListItem(
     room: Room,
+    navController: NavController,
     onItemClick: () -> Unit
 ) {
     Row(
@@ -362,7 +364,7 @@ fun RoomListItem(
 
         // View button
         Button(
-            onClick = onItemClick,
+            onClick = {navController.navigate("room_details_screen/${room.id}") },
             modifier = Modifier.align(Alignment.CenterVertically),
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
         ) {
