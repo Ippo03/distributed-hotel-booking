@@ -364,7 +364,7 @@ fun RoomListItem(
 
         // View button
         Button(
-            onClick = {navController.navigate("room_details_screen/${room.id}") },
+            onClick = {navController.navigate("room_details_screen/${room.id}")},
             modifier = Modifier.align(Alignment.CenterVertically),
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
         ) {

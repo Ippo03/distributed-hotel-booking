@@ -120,7 +120,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
 
             // Book button
             Button(
-                onClick = { /* TODO: Implement booking action */ },
+                onClick = {navController.navigate("booking_screen/${roomId}")},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

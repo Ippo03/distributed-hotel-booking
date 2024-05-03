@@ -26,7 +26,13 @@ fun Navigator() {
          composable(Screen.SplashScreen.route) { SplashScreen(navController) }
          composable(Screen.LoginScreen.route) { LoginScreen(navController, sharedViewModel) }
          composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
-         composable(Screen.BookingScreen.route) { BookingScreen() }
+        composable(
+            "${Screen.BookingScreen.route}/{roomId}", // Define the argument in the route
+            arguments = listOf(navArgument("roomId") { type = NavType.StringType }) // Define the argument
+        ) { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getString("roomId") // Retrieve the argument
+            BookingScreen(navController, roomId)
+        }
         composable(
             "${Screen.RoomDetailsScreen.route}/{roomId}", // Define the argument in the route
             arguments = listOf(navArgument("roomId") { type = NavType.StringType }) // Define the argument
