@@ -1,4 +1,7 @@
 package com.example.distributed_hotel_booking.viewmodel
 
-class SharedViewModel {
+import androidx.lifecycle.ViewModel
+
+class SharedViewModel : ViewModel() {
+
 }
