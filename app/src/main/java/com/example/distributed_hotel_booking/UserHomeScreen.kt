@@ -5,7 +5,9 @@ import android.app.DatePickerDialog
 import android.graphics.BitmapFactory
 import android.util.Log
 import android.widget.DatePicker
+import android.widget.RatingBar
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -62,6 +64,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedButton
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.Person
@@ -69,8 +72,19 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.data.DataProvider
@@ -83,8 +97,12 @@ fun UserHomeScreen(navController: NavController) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
+    // Filter selected values
     var selectedStartDateText by remember { mutableStateOf("") }
     var selectedEndDateText by remember { mutableStateOf("") }
+    val selectedArea = remember { mutableStateOf("Athens") }
+    val selectedRating = remember { mutableStateOf(0f) }
+    var selectedGuests by remember { mutableStateOf(1) }
 
     // Fetching current year, month and day
     val year = calendar[Calendar.YEAR]
@@ -107,11 +125,7 @@ fun UserHomeScreen(navController: NavController) {
         }, year, month, dayOfMonth
     )
 
-    val selectedRating = remember { mutableStateOf(0f) }
-    var selectedGuests by remember { mutableStateOf(1) }
-
-
-    // Temp object to show that the UserHomeScreen is working
+    // Elements of the User Home Screen
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,16 +135,33 @@ fun UserHomeScreen(navController: NavController) {
     ) {
         val searchQuery = remember { mutableStateOf("") }
 
-        Text(
-            text = "Welcome to Hotel Booking Website!",
-            style = TextStyle(
-                fontFamily = FontFamily.Serif,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                letterSpacing = 1.5.sp,
-            ),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        // App Bar
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth() // Pushes the Row to full left
+        ) {
+            // Circular Avatar
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray) // Placeholder color
+            ) {
+                // Placeholder content for avatar
+            }
+
+            // Hello user message
+            Text(
+                text = "Hello User!",
+                style = TextStyle(
+                    fontFamily = FontFamily.Serif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    letterSpacing = 1.5.sp,
+                ),
+                modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
+            )
+        }
 
         // Search Bar
         Surface(
@@ -149,137 +180,113 @@ fun UserHomeScreen(navController: NavController) {
             )
         }
 
-        // Date Pickers
-        Row(
-            modifier = Modifier.fillMaxWidth(),
+         // Date Pickers
+         Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
             ) {
-                Text(
-                    text = if (selectedStartDateText.isNotEmpty()) {
-                        "Selected start date is $selectedStartDateText"
-                    } else {
-                        "Please pick a start date"
-                    }
-                )
-
                 Button(
                     onClick = {
                         startDatePicker.show()
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Select start date")
+                    Text(
+                        text = if (selectedStartDateText.isNotEmpty()) {
+                            selectedStartDateText
+                        } else {
+                            "Select start date"
+                        }
+                    )
                 }
             }
 
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp) // Add padding to the left
             ) {
-                Text(
-                    text = if (selectedEndDateText.isNotEmpty()) {
-                        "Selected end date is $selectedEndDateText"
-                    } else {
-                        "Please pick an end date"
-                    }
-                )
-
                 Button(
                     onClick = {
                         endDatePicker.show()
-                    }
+                    },
+                    modifier = Modifier.fillMaxWidth() // Increase width of the button
                 ) {
-                    Text(text = "Select end date")
+                    Text(
+                        text = if (selectedEndDateText.isNotEmpty()) {
+                            selectedEndDateText
+                        } else {
+                            "Select end date"
+                        }
+                    )
                 }
             }
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Area selection
-            Column {
-                Text("Area")
-                // Dropdown menu for selecting the area
-            }
+            // Dropdown menu for selecting the area
+            SimpleDropdown(
+                items = listOf("Athens", "Thessaloniki", "Heraklion"),
+                selectedItem = selectedArea
+            )
 
+            // Column for selecting the number of guests
             Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.weight(1f), // Take up available space
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text("Guests")
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = selectedGuests == 1,
-                            onClick = { selectedGuests = 1 }
-                        )
-                        Text("1")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = selectedGuests == 1,
+                        onClick = { selectedGuests = 1 }
+                    )
+                    Text("1")
 
-                        RadioButton(
-                            selected = selectedGuests == 2,
-                            onClick = { selectedGuests = 2 }
-                        )
-                        Text("2")
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = selectedGuests == 3,
-                            onClick = { selectedGuests = 3 }
-                        )
-                        Text("3")
-
-                        RadioButton(
-                            selected = selectedGuests == 4,
-                            onClick = { selectedGuests = 4 }
-                        )
-                        Text("4")
-                    }
+                    RadioButton(
+                        selected = selectedGuests == 2,
+                        onClick = { selectedGuests = 2 }
+                    )
+                    Text("2")
                 }
-            }
-
-            // Rating bar
-            Column(
-
-            ) {
-                Text(
-                    "Current Rating: ${selectedRating.value.toInt()}",
-                    textAlign = TextAlign.Center, // Align text at the center horizontally
-                )
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "0", // Minimum value
-                        fontSize = 12.sp,
-                        modifier = Modifier.width(20.dp) // Adjust width to fit the text
+                    RadioButton(
+                        selected = selectedGuests == 3,
+                        onClick = { selectedGuests = 3 }
                     )
+                    Text("3")
 
-                    Slider(
-                        value = selectedRating.value,
-                        onValueChange = { newValue -> selectedRating.value = newValue },
-                        valueRange = 0f..5f,
-                        steps = 0,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .width(100.dp)
+                    RadioButton(
+                        selected = selectedGuests == 4,
+                        onClick = { selectedGuests = 4 }
                     )
-
-                    Text(
-                        text = "5", // Maximum value
-                        fontSize = 12.sp,
-                        modifier = Modifier.width(20.dp) // Adjust width to fit the text
-                    )
+                    Text("4")
                 }
             }
+
+            // Rating bar
+            RatingBar(
+                modifier = Modifier,
+                rating = selectedRating.value,
+                spaceBetween = 8.dp
+            )
         }
 
         // Button for search
@@ -294,7 +301,7 @@ fun UserHomeScreen(navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
         ) {
-            Text(text = "List of hotels will be displayed here")
+            Text(text = "Hotels Found:", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 24.sp))
             RoomsList(navController, rooms = DataProvider.roomsList)
         }
     }
@@ -314,9 +321,6 @@ fun RoomsList(
                 onItemClick = {
                     // Navigate to the room details screen and pass the roomId as an argument
                     navController.navigate("${Screen.RoomDetailsScreen.route}/${room.id}")
-//                    navController.navigate("${Screen.RoomDetailsScreen.route}/${
-//                        Screen.RoomDetailsScreen.ARG_ROOM_ID}/${
-//                        room.id}"
 //                    )
                 }
             )
@@ -370,6 +374,131 @@ fun RoomListItem(
         ) {
             Text(text = "View", color = Color.White)
         }
+    }
+}
+
+@Composable
+fun SimpleDropdown(
+    items: List<String>,
+    selectedItem: MutableState<String>,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column {
+        Button(
+            onClick = { expanded = true },
+            modifier = Modifier.width(120.dp) // Set a fixed width for the button
+        ) {
+            Text(
+                text = selectedItem.value,
+                fontSize = 12.sp // Set the font size to a smaller value (adjust as needed)
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            items.forEach { item ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = item,
+                            fontSize = 12.sp // Set the font size to a smaller value (adjust as needed)
+                        )
+                    },
+                    onClick = {
+                        selectedItem.value = item
+                        expanded = false
+                    },
+                    modifier = Modifier.width(130.dp)
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun RatingBar(
+    modifier: Modifier = Modifier,
+    rating: Float,
+    spaceBetween: Dp = 0.dp
+) {
+
+    val image = ImageBitmap.imageResource(id = R.drawable.half_star)
+    val imageFull = ImageBitmap.imageResource(id = R.drawable.star)
+
+    val totalCount = 5
+
+    val height = LocalDensity.current.run { image.height.toDp() }
+    val width = LocalDensity.current.run { image.width.toDp() }
+    val space = LocalDensity.current.run { spaceBetween.toPx() }
+    val totalWidth = width * totalCount + spaceBetween * (totalCount - 1)
+
+
+    Box(
+        modifier
+            .width(totalWidth)
+            .height(height)
+            .drawBehind {
+                drawRating(rating, image, imageFull, space)
+            })
+}
+
+private fun DrawScope.drawRating(
+    rating: Float,
+    image: ImageBitmap,
+    imageFull: ImageBitmap,
+    space: Float
+) {
+
+    val totalCount = 5
+
+    val imageWidth = image.width.toFloat()
+    val imageHeight = size.height
+
+    val reminder = rating - rating.toInt()
+    val ratingInt = (rating - reminder).toInt()
+
+    for (i in 0 until totalCount) {
+
+        val start = imageWidth * i + space * i
+
+        drawImage(
+            image = image,
+            topLeft = Offset(start, 0f)
+        )
+    }
+
+    drawWithLayer {
+        for (i in 0 until totalCount) {
+            val start = imageWidth * i + space * i
+            // Destination
+            drawImage(
+                image = imageFull,
+                topLeft = Offset(start, 0f)
+            )
+        }
+
+        val end = imageWidth * totalCount + space * (totalCount - 1)
+        val start = rating * imageWidth + ratingInt * space
+        val size = end - start
+
+        // Source
+        drawRect(
+            Color.Transparent,
+            topLeft = Offset(start, 0f),
+            size = Size(size, height = imageHeight),
+            blendMode = BlendMode.SrcIn
+        )
+    }
+}
+
+private fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
+    with(drawContext.canvas.nativeCanvas) {
+        val checkPoint = saveLayer(null, null)
+        block()
+        restoreToCount(checkPoint)
     }
 }
 
