@@ -1,6 +1,5 @@
 package com.example.distributed_hotel_booking.screens
 
-import RoomDetailsScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
