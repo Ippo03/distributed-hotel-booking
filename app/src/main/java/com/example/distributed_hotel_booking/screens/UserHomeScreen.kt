@@ -3,9 +3,7 @@ package com.example.distributed_hotel_booking.screens
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.widget.DatePicker
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,25 +43,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.RadioButton
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.data.DataProvider
+import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
 import com.example.distributed_hotel_booking.util.getResourceId
 
@@ -73,6 +62,8 @@ import com.example.distributed_hotel_booking.util.getResourceId
 fun UserHomeScreen(navController: NavController) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
+
+    val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
 
     // Filter selected values
     var selectedStartDateText by remember { mutableStateOf("") }
@@ -253,11 +244,25 @@ fun UserHomeScreen(navController: NavController) {
 
         // Button for search
         Button(
-            onClick = { /* Do something when search button is clicked */ },
+            onClick = {
+                // Create a SearchFilter object with the selected values
+                searchFilter.value = SearchFilter(
+                    title = searchQuery.value,
+                    dateRange = DateRange(selectedStartDateText, selectedEndDateText),
+                    area = selectedArea.value,
+                    numberOfGuests = selectedGuests,
+                    rating = 4.5f
+                )
+
+                // Print the searchFilter object *APPEARS IN LOGCAT*
+                println(searchFilter.value)
+            },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text("Search")
         }
+
+        // Add a button to clear search filters
 
         Spacer(modifier = Modifier.height(16.dp))
 
