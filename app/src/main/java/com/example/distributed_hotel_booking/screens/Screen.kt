@@ -1,4 +1,4 @@
-package com.example.distributed_hotel_booking
+package com.example.distributed_hotel_booking.screens
 
 sealed class Screen(val route: String) {
     // define the screens in the app like this
