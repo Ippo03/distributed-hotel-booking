@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.Screen
+import com.example.distributed_hotel_booking.screens.Screen
 
 class LoginViewModel : ViewModel() {
     var usernameText = mutableStateOf(TextFieldValue(""))
