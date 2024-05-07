@@ -16,14 +16,39 @@ object DataProvider {
         Room("10", "Athenaeum Grand Hotel", "Modern hotel with rooftop terrace", DateRange("01/02/2025", "05/03/2025"), 2, price = 300f),
     )
 
+    val reviewsList = mutableListOf<Review>(
+        Review("1", "1", 5, "Great hotel, amazing views!"),
+        Review("2", "1", 4, "Good location, friendly staff"),
+        Review("3", "2", 3, "Nice hotel, but a bit noisy"),
+        Review("4", "2", 4, "Clean rooms, good breakfast"),
+        Review("5", "3", 5, "Excellent service, beautiful pool"),
+        Review("6", "3", 4, "Spacious rooms, great location"),
+        Review("7", "4", 5, "Luxurious hotel, excellent food"),
+        Review("8", "4", 4, "Helpful staff, comfortable beds"),
+        Review("9", "5", 5, "Stunning views, delicious food"),
+        Review("10", "5", 4, "Modern rooms, great location"),
+        Review("11", "6", 5, "Fantastic hotel, friendly staff"),
+        Review("12", "6", 4, "Clean rooms, good facilities"),
+        Review("13", "7", 5, "Amazing views, comfortable rooms"),
+        Review("14", "7", 4, "Great location, friendly staff"),
+        Review("15", "8", 5, "Luxurious hotel, excellent food"),
+        Review("16", "8", 4, "Helpful staff, comfortable beds"),
+        Review("17", "9", 5, "Stunning views, delicious food"),
+        Review("18", "9", 4, "Modern rooms, great location"),
+        Review("19", "10", 5, "Fantastic hotel, friendly staff"),
+        Review("20", "10", 4, "Clean rooms, good facilities"),
+    )
+
+    val bookingsList = mutableListOf<Booking>(
+
+    )
+
     fun addRoom(newRoom: Room){
         roomsList.add(newRoom)
     }
     fun getRoomById(roomId: String?): Room? {
         return roomsList.firstOrNull { it.id == roomId }
     }
-
-    val bookingsList = mutableListOf<Booking>()
 
     fun getBookingsByRoomId(roomId: String): List<Booking> {
         return bookingsList.filter { it.room.id == roomId }
@@ -33,6 +58,10 @@ object DataProvider {
         return bookingsList.filter {
             (it.checkInDate?.before(checkOutDate) ?: false) && (it.checkOutDate?.after(checkInDate) ?: false)
         }
+    }
+
+    fun getReviewsByRoomId(roomId: String): List<Review> {
+        return reviewsList.filter { it.roomId == roomId }
     }
 
     fun addBooking(booking: Booking) {

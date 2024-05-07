@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.entities.ReviewListItem
 
 @Composable
 fun RoomDetailsScreen(navController: NavController, roomId: String?) {
@@ -109,7 +110,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
 
             // Book button
             Button(
-                onClick = {navController.navigate("booking_screen/${roomId}")},
+                onClick = { navController.navigate("booking_screen/${roomId}") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -120,6 +121,23 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
+            }
+
+            // Reviews section
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = "Reviews",
+                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                // Review list
+                for (review in DataProvider.getReviewsByRoomId(room!!.id)) {
+                    ReviewListItem(review = review, onReviewClick = { /* Handle review click */ })
+                }
             }
         }
     }
