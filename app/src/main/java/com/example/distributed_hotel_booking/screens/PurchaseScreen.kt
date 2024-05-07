@@ -51,7 +51,7 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
     val daysBetween = ChronoUnit.DAYS.between(checkInDate, checkOutDate)
     Log.d("PaymentScreen", "Days between: $daysBetween")
     Log.d("PaymentScreen", "Room price per Night: $roomPrice")
-    val total = guestCount?.let { it * roomPrice * daysBetween }
+    val total = roomPrice * daysBetween
     Log.d("PaymentScreen", "Total: $total")
     Surface {
         Column(
@@ -111,7 +111,7 @@ fun bookRoom(navController: NavController, newBooking: Booking) {
 
     if (bookingSuccessful) {
         // If the booking was successful, show a success message and navigate to the My Bookings screen
-        Toast.makeText(navController.context, "Your Booking was a success. Enjoy your stay !", Toast.LENGTH_LONG).show()
+        Toast.makeText(navController.context, "Your booking was successful. Enjoy your stay !", Toast.LENGTH_LONG).show()
         navController.navigate("user_bookings_screen") {
             popUpTo("user_home_screen") { inclusive = false }
         }

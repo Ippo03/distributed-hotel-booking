@@ -360,7 +360,7 @@ fun UserHomeScreen(navController: NavController) {
                 ) {
                     Text("Search")
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.padding(40.dp))
                 // Add a button to clear search filters
                 Button(
                     onClick = {
@@ -374,7 +374,7 @@ fun UserHomeScreen(navController: NavController) {
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
-                    Text("Clear")
+                    Text("Clear Filters")
                 }
             }
         }

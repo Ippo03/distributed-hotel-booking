@@ -81,7 +81,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Rating: " + room?.rating.toString(),
+                    text = "Rating: ", //+ room?.rating.toString(),
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )

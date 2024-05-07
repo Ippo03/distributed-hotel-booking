@@ -26,6 +26,7 @@ import com.example.distributed_hotel_booking.data.Review
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import com.example.distributed_hotel_booking.components.RatingBar
 
 
 @Composable
@@ -61,14 +62,11 @@ fun ReviewListItem(
         Column {
             // Star rating
             Row {
-                repeat(review.rating) {
-                    Icon(
-                        Icons.Filled.Star,
-                        contentDescription = null,
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+                RatingBar(
+                    modifier = Modifier,
+                    rating = review.rating.toFloat(),
+                    spaceBetween = 6.dp
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp)) // Add space between star rating and comment

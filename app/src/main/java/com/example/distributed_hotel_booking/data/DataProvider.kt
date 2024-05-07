@@ -10,7 +10,8 @@ object DataProvider {
             "Luxury hotel with Acropolis views",
             DateRange("20/05/2024", "25/06/2024"),
             1,
-            price = 200f
+            price = 200f,
+            rating = 4.5f,
         ),
         Room(
             "2",
@@ -18,7 +19,8 @@ object DataProvider {
             "Modern hotel near Plaka",
             DateRange("10/06/2024", "15/07/2024"),
             3,
-            price = 150f
+            price = 150f,
+            rating = 4.0f,
         ),
         Room(
             "3",

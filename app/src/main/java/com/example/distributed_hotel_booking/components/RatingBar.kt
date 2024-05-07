@@ -45,7 +45,6 @@ fun RatingBar(
                 drawRating(rating, image, imageFull, space)
             })
 }
-
 private fun DrawScope.drawRating(
     rating: Float,
     image: ImageBitmap,
@@ -61,44 +60,30 @@ private fun DrawScope.drawRating(
     val reminder = rating - rating.toInt()
     val ratingInt = (rating - reminder).toInt()
 
-    for (i in 0 until totalCount) {
-
+    // Draw full stars
+    for (i in 0 until ratingInt) {
         val start = imageWidth * i + space * i
+        drawImage(
+            image = imageFull,
+            topLeft = Offset(start, 0f)
+        )
+    }
 
+    // Draw half star if there is a remainder
+    if (reminder > 0) {
+        val start = imageWidth * ratingInt + space * ratingInt
         drawImage(
             image = image,
             topLeft = Offset(start, 0f)
         )
     }
 
-    drawWithLayer {
-        for (i in 0 until totalCount) {
-            val start = imageWidth * i + space * i
-            // Destination
-            drawImage(
-                image = imageFull,
-                topLeft = Offset(start, 0f)
-            )
-        }
-
-        val end = imageWidth * totalCount + space * (totalCount - 1)
-        val start = rating * imageWidth + ratingInt * space
-        val size = end - start
-
-        // Source
-        drawRect(
-            Color.Transparent,
-            topLeft = Offset(start, 0f),
-            size = Size(size, height = imageHeight),
-            blendMode = BlendMode.SrcIn
+    // Draw remaining empty stars
+    for (i in ratingInt + 1 until totalCount) {
+        val start = imageWidth * i + space * i
+        drawImage(
+            image = image,
+            topLeft = Offset(start, 0f)
         )
-    }
-}
-
-private fun DrawScope.drawWithLayer(block: DrawScope.() -> Unit) {
-    with(drawContext.canvas.nativeCanvas) {
-        val checkPoint = saveLayer(null, null)
-        block()
-        restoreToCount(checkPoint)
     }
 }
