@@ -41,10 +41,16 @@ import java.util.*
 import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.RatingBar
@@ -66,11 +72,15 @@ fun UserHomeScreen(navController: NavController) {
     val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
 
     // Filter selected values
+    val searchQuery = remember { mutableStateOf("") }
     var selectedStartDateText by remember { mutableStateOf("") }
     var selectedEndDateText by remember { mutableStateOf("") }
     val selectedArea = remember { mutableStateOf("Athens") }
     val selectedRating = remember { mutableStateOf(0f) }
     var selectedGuests by remember { mutableStateOf(1) }
+
+    // IconButton to open dropdown
+    var showMenu by remember { mutableStateOf(false) }
 
     // Fetching current year, month and day
     val year = calendar[Calendar.YEAR]
@@ -101,12 +111,11 @@ fun UserHomeScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val searchQuery = remember { mutableStateOf("") }
-
         // App Bar
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth() // Pushes the Row to full left
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
         ) {
             // Circular Avatar
             Box(
@@ -129,6 +138,67 @@ fun UserHomeScreen(navController: NavController) {
                 ),
                 modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
             )
+
+            // Spacer to push the icon to the right
+            Spacer(modifier = Modifier.weight(1f))
+
+            // IconButton to open dropdown
+            IconButton(
+                onClick = { showMenu = !showMenu },
+//                modifier = Modifier.padding(top = 4.dp) // Add padding to the end (right) of the IconButton
+            ) {
+                Icon(Icons.Filled.Menu, contentDescription = "Open menu")
+            }
+
+            // Dropdown menu (WE CAN MAKE THIS CUSTOMIZABLE)
+            if (showMenu) {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 25.dp)
+                ) {
+                    Popup(
+                        alignment = Alignment.TopEnd,
+                        properties = PopupProperties(
+                            dismissOnBackPress = true,
+                            dismissOnClickOutside = true,
+                            focusable = true
+                        ),
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .width(140.dp)
+                                .background(Color.Black)
+                                .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
+                                .clip(MaterialTheme.shapes.medium)
+                        ) {
+                            // Your dropdown menu content here
+                            Button(
+                                onClick = {
+                                    // Navigate to "MyBookings" destination
+                                    showMenu = false
+                                    navController.navigate("user_bookings_screen")
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("My Bookings")
+                            }
+                            Button(
+                                onClick = {
+                                    // Log out action
+                                    showMenu = false
+                                    // apply backend logic
+                                    navController.navigate("login_screen")
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("Log out")
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // Search Bar
