@@ -40,7 +40,16 @@ object DataProvider {
     )
 
     val bookingsList = mutableListOf<Booking>(
-
+        Booking("1", "1", Date(2024, 5, 20), Date(2024, 5, 25), 2, 400f),
+        Booking("1", "2", Date(2024, 6, 10), Date(2024, 6, 15), 3, 450f),
+        Booking("1", "3", Date(2024, 7, 5), Date(2024, 7, 10), 4, 1000f),
+        Booking("1", "4", Date(2024, 8, 15), Date(2024, 8, 20), 1, 200f),
+        Booking("1", "5", Date(2024, 9, 1), Date(2024, 9, 5), 2, 700f),
+        Booking("2", "6", Date(2024, 10, 10), Date(2024, 10, 15), 4, 1120f),
+        Booking("2", "7", Date(2024, 11, 20), Date(2024, 11, 25), 4, 1040f),
+        Booking("2", "8", Date(2024, 12, 5), Date(2024, 12, 10), 3, 1500f),
+        Booking("2", "9", Date(2025, 1, 15), Date(2025, 1, 20), 3, 1350f),
+        Booking("2", "10", Date(2025, 2, 1), Date(2025, 2, 5), 2, 600f),
     )
 
     fun addRoom(newRoom: Room){
@@ -51,7 +60,7 @@ object DataProvider {
     }
 
     fun getBookingsByRoomId(roomId: String): List<Booking> {
-        return bookingsList.filter { it.room.id == roomId }
+        return bookingsList.filter { it.roomId == roomId }
     }
 
     fun getBookingsByDateRange(checkInDate: Date, checkOutDate: Date): List<Booking> {
@@ -62,6 +71,10 @@ object DataProvider {
 
     fun getReviewsByRoomId(roomId: String): List<Review> {
         return reviewsList.filter { it.roomId == roomId }
+    }
+
+    fun getBookingsByUserId(userId: String): List<Booking> {
+        return bookingsList.filter { it.userId == userId }
     }
 
     fun addBooking(booking: Booking) {
