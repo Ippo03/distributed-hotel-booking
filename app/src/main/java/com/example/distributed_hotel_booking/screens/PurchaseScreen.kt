@@ -90,7 +90,7 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
                 onClick = {
                     // Create a new Booking object
                     Log.d("ROOM", "${room?.name}")
-                    val booking = Booking(room!!, checkInDate as Date?, checkOutDate as Date?, guestCount)
+                    val booking = Booking("1", room!!.id, checkInDate as Date?, checkOutDate as Date?, guestCount)
                     // Book the room
                     bookRoom(navController.context, booking)
                 },
