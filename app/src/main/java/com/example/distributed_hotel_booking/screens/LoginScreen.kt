@@ -1,6 +1,7 @@
 package com.example.distributed_hotel_booking.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -40,6 +46,10 @@ import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 @Composable
 fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel) {
     val viewModel: LoginViewModel = viewModel()
+
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val loginButtonFocusRequester = remember { FocusRequester() }
 
     // Temp object to show that the HomeScreen is working
     Surface(color = Color.White, modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
@@ -78,8 +88,20 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                TextFieldEmail()
-                TextFieldPassword()
+                TextFieldEmail(
+                    modifier = Modifier.focusRequester(emailFocusRequester).onKeyEvent {
+                        if (it.key == Key.Enter) {
+                            passwordFocusRequester.requestFocus()
+                            true
+                        } else false
+                    }
+                )
+                TextFieldPassword(modifier = Modifier.focusRequester(passwordFocusRequester).onKeyEvent {
+                    if (it.key == Key.Enter) {
+                        loginButtonFocusRequester.requestFocus()
+                        true
+                    } else false
+                })
                 Button(
                     onClick = {
                         viewModel.onLogin(navController, sharedViewModel)
@@ -88,6 +110,8 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                         .padding(16.dp)
                         .align(Alignment.CenterHorizontally)
                         .width(140.dp)
+                        .focusable(true)
+                        .focusRequester(loginButtonFocusRequester)
                 ) {
                     Text(
                         text = "Login",
@@ -139,30 +163,30 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
 }
 
 @Composable
-fun TextFieldEmail() {
+fun TextFieldEmail(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
-    return OutlinedTextField(
+    OutlinedTextField(
         value = text,
         leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "emailIcon") },
-        onValueChange = {
-            text = it
-        },
+        onValueChange = { text = it },
         label = { Text(text = "Email address") },
         placeholder = { Text(text = "Enter your e-mail") },
+        singleLine = true,
+        modifier = modifier
     )
 }
 
 @Composable
-fun TextFieldPassword() {
+fun TextFieldPassword(modifier: Modifier = Modifier) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
-    return OutlinedTextField(
+    OutlinedTextField(
         value = text,
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "passwordIcon") },
-        onValueChange = {
-            text = it
-        },
+        onValueChange = { text = it },
         label = { Text(text = "Password") },
         placeholder = { Text(text = "Enter your password") },
+        singleLine = true,
+        modifier = modifier
     )
 }
 

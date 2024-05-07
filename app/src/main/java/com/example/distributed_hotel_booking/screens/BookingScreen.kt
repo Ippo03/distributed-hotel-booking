@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.magnifier
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.DateRangePicker
@@ -38,8 +39,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -55,6 +62,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingScreen(navController: NavController, roomId: String?) {
+
     Log.d("BookingScreen", "Booking room with id $roomId")
     val room = DataProvider.getRoomById(roomId)
     val maxGuests = room?.guests
@@ -66,6 +74,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     var checkInDate: String? = null
     var checkOutDate: String? = null
+    val focusRequester = remember { FocusRequester() }
+
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier
             .fillMaxSize()
@@ -93,6 +103,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
             Row {
                 TextField(
                     value = guestCount.value, // Use the state as the TextField value
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { newValue: String ->
                         // Check if the entered number of guests exceeds the room's capacity
                         if (newValue.toIntOrNull() != null && newValue.toInt() > (maxGuests ?: 0)) {
@@ -105,7 +117,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                     label = { Text(text = "Enter number of guests") },
                     modifier = Modifier
                         .padding(16.dp)
-                        .wrapContentSize(),
+                        .wrapContentSize()
+                        .onKeyEvent { if (it.key == Key.Enter) { focusRequester.requestFocus(); true } else false },
                     isError = errorMessage.value.isNotEmpty(), // Show an error if the error message is not empty
                     supportingText = { if(errorMessage.value.isNotEmpty()) Text(text = errorMessage.value)} // Show the error message
                 )
@@ -151,7 +164,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                         .border(4.dp, MaterialTheme.colorScheme.surface)
                         .padding(16.dp)
                         .clip(MaterialTheme.shapes.medium)
-                        .size(width = 350.dp, height = 400.dp),
+                        .size(width = 350.dp, height = 400.dp)
+                        .focusRequester(focusRequester),
                 )
             }
             Row {
