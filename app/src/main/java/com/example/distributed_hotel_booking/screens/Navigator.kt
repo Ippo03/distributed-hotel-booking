@@ -1,17 +1,20 @@
-package com.example.distributed_hotel_booking.screens
+package com.example.distributed_hotel_booking
 
+import android.window.SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.distributed_hotel_booking.screens.BookingScreen
-import com.example.distributed_hotel_booking.screens.LoginScreen
-import com.example.distributed_hotel_booking.screens.Screen
+import com.example.distributed_hotel_booking.data.DataProvider
+import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.screens.SplashScreen
+import com.example.distributed_hotel_booking.screens.LoginScreen
+import com.example.distributed_hotel_booking.screens.RoomDetailsScreen
 import com.example.distributed_hotel_booking.screens.UserHomeScreen
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
+import java.util.Date
 
 @Composable
 fun Navigator() {
@@ -24,22 +27,41 @@ fun Navigator() {
 
     NavHost(navController = navController, startDestination = Screen.SplashScreen.route, ) {
         // define the navigation routes here
-         composable(Screen.SplashScreen.route) { SplashScreen(navController) }
-         composable(Screen.LoginScreen.route) { LoginScreen(navController, sharedViewModel) }
-         composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
+        composable(Screen.SplashScreen.route) { SplashScreen(navController) }
+        composable(Screen.LoginScreen.route) { LoginScreen(navController, sharedViewModel) }
+        composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
+        composable(
+            "${Screen.RoomDetailsScreen.route}/{roomId}", // Define the argument in the route
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.StringType
+            }) // Define the argument
+        ) { backStackEntry ->
+            val roomId = backStackEntry.arguments?.getString("roomId") // Retrieve the argument
+            RoomDetailsScreen(navController, roomId)
+        }
         composable(
             "${Screen.BookingScreen.route}/{roomId}", // Define the argument in the route
-            arguments = listOf(navArgument("roomId") { type = NavType.StringType }) // Define the argument
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.StringType
+            }) // Define the argument
         ) { backStackEntry ->
             val roomId = backStackEntry.arguments?.getString("roomId") // Retrieve the argument
             BookingScreen(navController, roomId)
         }
         composable(
-            "${Screen.RoomDetailsScreen.route}/{roomId}", // Define the argument in the route
-            arguments = listOf(navArgument("roomId") { type = NavType.StringType }) // Define the argument
+            route = "${Screen.PaymentScreen.route}/{roomId}/{checkInDate}/{checkOutDate}/{guestCount}",
+            arguments = listOf(
+                navArgument("roomId") { type = NavType.StringType },
+                navArgument("checkInDate") { type = NavType.StringType },
+                navArgument("checkOutDate") { type = NavType.StringType },
+                navArgument("guestCount") { type = NavType.StringType }
+            )
         ) { backStackEntry ->
-            val roomId = backStackEntry.arguments?.getString("roomId") // Retrieve the argument
-            RoomDetailsScreen(navController, roomId)
+            val roomId = backStackEntry.arguments?.getString("roomId")
+            val checkInDate = backStackEntry.arguments?.getString("checkInDate")
+            val checkOutDate = backStackEntry.arguments?.getString("checkOutDate")
+            val guests = backStackEntry.arguments?.getString("guestCount")
+            PaymentScreen(navController, roomId, checkInDate, checkOutDate, guests)
         }
     }
 
