@@ -1,5 +1,6 @@
 package com.example.distributed_hotel_booking.screens
 
+import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.widget.DatePicker
@@ -46,12 +47,14 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
+import com.example.distributed_hotel_booking.components.DateRangePicker
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.components.SimpleDropdown
@@ -61,13 +64,16 @@ import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
 import com.example.distributed_hotel_booking.util.getResourceId
+import java.time.LocalDateTime
 
 
 @SuppressLint("ResourceType")
 @Composable
 fun UserHomeScreen(navController: NavController) {
     val context = LocalContext.current
-    val calendar = Calendar.getInstance()
+//    val calendar = Calendar.getInstance()
+    val dateTime = LocalDateTime.now()
+    val focusRequester = remember { FocusRequester() }
 
     val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
 
@@ -83,25 +89,25 @@ fun UserHomeScreen(navController: NavController) {
     var showMenu by remember { mutableStateOf(false) }
 
     // Fetching current year, month and day
-    val year = calendar[Calendar.YEAR]
-    val month = calendar[Calendar.MONTH]
-    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+//    val year = calendar[Calendar.YEAR]
+//    val month = calendar[Calendar.MONTH]
+//    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
 
-    // Date Picker for Start Date
-    val startDatePicker = DatePickerDialog(
-        context,
-        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-            selectedStartDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-        }, year, month, dayOfMonth
-    )
-
-    // Date Picker for End Date
-    val endDatePicker = DatePickerDialog(
-        context,
-        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-            selectedEndDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-        }, year, month, dayOfMonth
-    )
+//    // Date Picker for Start Date
+//    val startDatePicker = DatePickerDialog(
+//        context,
+//        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+//            selectedStartDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
+//        }, year, month, dayOfMonth
+//    )
+//
+//    // Date Picker for End Date
+//    val endDatePicker = DatePickerDialog(
+//        context,
+//        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+//            selectedEndDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
+//        }, year, month, dayOfMonth
+//    )
 
     // Elements of the User Home Screen
     Column(
@@ -120,7 +126,7 @@ fun UserHomeScreen(navController: NavController) {
             // Circular Avatar
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(40.dp)
                     .clip(CircleShape)
                     .background(Color.Gray) // Placeholder color
             ) {
@@ -133,7 +139,7 @@ fun UserHomeScreen(navController: NavController) {
                 style = TextStyle(
                     fontFamily = FontFamily.Serif,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     letterSpacing = 1.5.sp,
                 ),
                 modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
@@ -214,60 +220,73 @@ fun UserHomeScreen(navController: NavController) {
                         Icon(Icons.Filled.Search, contentDescription = "Search")
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().height(50.dp)
             )
         }
 
-         // Date Pickers
-         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
-            ) {
-                Button(
-                    onClick = {
-                        startDatePicker.show()
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = if (selectedStartDateText.isNotEmpty()) {
-                            selectedStartDateText
-                        } else {
-                            "Select start date"
-                        }
-                    )
-                }
+//         // Date Pickers
+//         Row(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 16.dp),
+//            horizontalArrangement = Arrangement.SpaceBetween
+//        ) {
+//            Column(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(end = 8.dp)
+//            ) {
+//                Button(
+//                    onClick = {
+//                        startDatePicker.show()
+//                    },
+//                    modifier = Modifier.fillMaxWidth()
+//                ) {
+//                    Text(
+//                        text = if (selectedStartDateText.isNotEmpty()) {
+//                            selectedStartDateText
+//                        } else {
+//                            "Select start date"
+//                        }
+//                    )
+//                }
+//            }
+//
+//            Column(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(start = 8.dp) // Add padding to the left
+//            ) {
+//                Button(
+//                    onClick = {
+//                        endDatePicker.show()
+//                    },
+//                    modifier = Modifier.fillMaxWidth() // Increase width of the button
+//                ) {
+//                    Text(
+//                        text = if (selectedEndDateText.isNotEmpty()) {
+//                            selectedEndDateText
+//                        } else {
+//                            "Select end date"
+//                        }
+//                    )
+//                }
+//            }
+//        }
+        Spacer(modifier = Modifier.height(16.dp))
+        // DateRangePicker
+        Row {
+                DateRangePicker(
+                    dateTime = dateTime,
+                    focusRequester = focusRequester,
+                    small = true,
+                    onDateSelected = { checkIn, checkOut ->
+                        selectedStartDateText = checkIn ?: selectedStartDateText
+                        selectedEndDateText = checkOut ?: selectedEndDateText
+                    }
+                )
             }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp) // Add padding to the left
-            ) {
-                Button(
-                    onClick = {
-                        endDatePicker.show()
-                    },
-                    modifier = Modifier.fillMaxWidth() // Increase width of the button
-                ) {
-                    Text(
-                        text = if (selectedEndDateText.isNotEmpty()) {
-                            selectedEndDateText
-                        } else {
-                            "Select end date"
-                        }
-                    )
-                }
-            }
-        }
-
+        Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
