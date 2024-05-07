@@ -29,6 +29,7 @@ import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.time.temporal.Temporal
@@ -90,9 +91,9 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
                 onClick = {
                     // Create a new Booking object
                     Log.d("ROOM", "${room?.name}")
-                    val booking = Booking("1", room!!.id, checkInDate as Date?, checkOutDate as Date?, guestCount)
+                    val booking = Booking("1", room!!.id, checkInDate.toDate(), checkOutDate.toDate(), guestCount, total!!)
                     // Book the room
-                    bookRoom(navController.context, booking)
+                    bookRoom(navController, booking)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,11 +105,27 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
     }
 }
 
-fun bookRoom(context: Context, newBooking: Booking) {
-    // Code to book the room goes here
-    DataProvider.addBooking(booking = newBooking)
-    // Show a popup message saying "Room Booked Successfully"
-    Toast.makeText(context, "Room Booked Successfully", Toast.LENGTH_SHORT).show()
+fun bookRoom(navController: NavController, newBooking: Booking) {
+    // Try to book the room
+    val bookingSuccessful = DataProvider.addBooking(booking = newBooking)
+
+    if (bookingSuccessful) {
+        // If the booking was successful, show a success message and navigate to the My Bookings screen
+        Toast.makeText(navController.context, "Your Booking was a success. Enjoy your stay !", Toast.LENGTH_LONG).show()
+        navController.navigate("user_bookings_screen") {
+            popUpTo("user_home_screen") { inclusive = false }
+        }
+    } else {
+        // If the booking was unsuccessful, show an error message and navigate to the RoomDetailsScreen
+        Toast.makeText(navController.context, "Booking was unsuccessful. Please try again.", Toast.LENGTH_LONG).show()
+        navController.navigate("room_details_screen/${newBooking.roomId}"){
+            popUpTo("room_details_screen/${newBooking.roomId}"){ inclusive = true }
+        }
+    }
+}
+
+fun LocalDate.toDate(): Date {
+    return Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())
 }
 
 @Preview(showBackground = true)

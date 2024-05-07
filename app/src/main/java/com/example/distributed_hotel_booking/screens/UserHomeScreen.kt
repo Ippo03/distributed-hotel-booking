@@ -75,7 +75,8 @@ fun UserHomeScreen(navController: NavController) {
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
 
-    val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
+    val searchFilter =
+        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
@@ -110,7 +111,7 @@ fun UserHomeScreen(navController: NavController) {
 //    )
 
     // Elements of the User Home Screen
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
@@ -118,111 +119,115 @@ fun UserHomeScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // App Bar
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // Circular Avatar
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color.Gray) // Placeholder color
+        item {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                // Placeholder content for avatar
-            }
-
-            // Hello user message
-            Text(
-                text = "Hello User!",
-                style = TextStyle(
-                    fontFamily = FontFamily.Serif,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    letterSpacing = 1.5.sp,
-                ),
-                modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
-            )
-
-            // Spacer to push the icon to the right
-            Spacer(modifier = Modifier.weight(1f))
-
-            // IconButton to open dropdown
-            IconButton(
-                onClick = { showMenu = !showMenu },
-//                modifier = Modifier.padding(top = 4.dp) // Add padding to the end (right) of the IconButton
-            ) {
-                Icon(Icons.Filled.Menu, contentDescription = "Open menu")
-            }
-
-            // Dropdown menu (WE CAN MAKE THIS CUSTOMIZABLE)
-            if (showMenu) {
+                // Circular Avatar
                 Box(
                     modifier = Modifier
-                        .padding(top = 25.dp)
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray) // Placeholder color
                 ) {
-                    Popup(
-                        alignment = Alignment.TopEnd,
-                        properties = PopupProperties(
-                            dismissOnBackPress = true,
-                            dismissOnClickOutside = true,
-                            focusable = true
-                        ),
-                        onDismissRequest = { showMenu = false }
+                    // Placeholder content for avatar
+                }
+
+                // Hello user message
+                Text(
+                    text = "Hello User!",
+                    style = TextStyle(
+                        fontFamily = FontFamily.Serif,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        letterSpacing = 1.5.sp,
+                    ),
+                    modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
+                )
+
+                // Spacer to push the icon to the right
+                Spacer(modifier = Modifier.weight(1f))
+
+                // IconButton to open dropdown
+                IconButton(
+                    onClick = { showMenu = !showMenu },
+//                modifier = Modifier.padding(top = 4.dp) // Add padding to the end (right) of the IconButton
+                ) {
+                    Icon(Icons.Filled.Menu, contentDescription = "Open menu")
+                }
+
+                // Dropdown menu (WE CAN MAKE THIS CUSTOMIZABLE)
+                if (showMenu) {
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 25.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .width(140.dp)
-                                .background(Color.Black)
-                                .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
-                                .clip(MaterialTheme.shapes.medium)
+                        Popup(
+                            alignment = Alignment.TopEnd,
+                            properties = PopupProperties(
+                                dismissOnBackPress = true,
+                                dismissOnClickOutside = true,
+                                focusable = true
+                            ),
+                            onDismissRequest = { showMenu = false }
                         ) {
-                            // Your dropdown menu content here
-                            Button(
-                                onClick = {
-                                    // Navigate to "MyBookings" destination
-                                    showMenu = false
-                                    navController.navigate("user_bookings_screen")
-                                },
-                                modifier = Modifier.fillMaxWidth()
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = 8.dp)
+                                    .width(140.dp)
+                                    .background(Color.Black)
+                                    .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
+                                    .clip(MaterialTheme.shapes.medium)
                             ) {
-                                Text("My Bookings")
-                            }
-                            Button(
-                                onClick = {
-                                    // Log out action
-                                    showMenu = false
-                                    // apply backend logic
-                                    navController.navigate("login_screen")
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text("Log out")
+                                // Your dropdown menu content here
+                                Button(
+                                    onClick = {
+                                        // Navigate to "MyBookings" destination
+                                        showMenu = false
+                                        navController.navigate("user_bookings_screen")
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("My Bookings")
+                                }
+                                Button(
+                                    onClick = {
+                                        // Log out action
+                                        showMenu = false
+                                        // apply backend logic
+                                        navController.navigate("login_screen")
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Log out")
+                                }
                             }
                         }
                     }
                 }
             }
         }
-
         // Search Bar
-        Surface(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                value = searchQuery.value,
-                onValueChange = { newValue -> searchQuery.value = newValue },
-                label = { Text("Search") },
-                leadingIcon = {
-                    IconButton(onClick = { /* Do something when search button is clicked */ }) {
-                        Icon(Icons.Filled.Search, contentDescription = "Search")
-                    }
-                },
-                modifier = Modifier.fillMaxWidth().height(50.dp)
-            )
-        }
+        item {
+            Surface(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = searchQuery.value,
+                    onValueChange = { newValue -> searchQuery.value = newValue },
+                    label = { Text("Search") },
+                    leadingIcon = {
+                        IconButton(onClick = { /* Do something when search button is clicked */ }) {
+                            Icon(Icons.Filled.Search, contentDescription = "Search")
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                )
+            }
 
 //         // Date Pickers
 //         Row(
@@ -273,9 +278,11 @@ fun UserHomeScreen(navController: NavController) {
 //                }
 //            }
 //        }
-        Spacer(modifier = Modifier.height(16.dp))
-        // DateRangePicker
-        Row {
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            // DateRangePicker
+            Row {
                 DateRangePicker(
                     dateTime = dateTime,
                     focusRequester = focusRequester,
@@ -286,93 +293,114 @@ fun UserHomeScreen(navController: NavController) {
                     }
                 )
             }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Dropdown menu for selecting the area
-            SimpleDropdown(
-                items = listOf("Athens", "Thessaloniki", "Heraclio"),
-                selectedItem = selectedArea
-            )
-
-           // Grid for selecting the number of guests
-            GridSelector(
-                rows = 2,
-                columns = 2,
-                selectedValue = selectedGuests,
-                onValueSelected = { selectedGuests = it }
-            ) { value ->
-                // Content of each cell
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = selectedGuests == value,
-                        onClick = { selectedGuests = value }
-                    )
-                    Icon(
-                        painter = painterResource(id = getResourceId(value.toString())),
-                        contentDescription = null,
-                        modifier = Modifier.size(15.dp)
-                    )
-                }
-            }
-
-            // Rating bar
-            RatingBar(
-                modifier = Modifier,
-                rating = selectedRating.value,
-                spaceBetween = 8.dp
-            )
         }
-
-        // Button for search
-        Button(
-            onClick = {
-                // Create a SearchFilter object with the selected values
-                searchFilter.value = SearchFilter(
-                    title = searchQuery.value,
-                    dateRange = DateRange(selectedStartDateText, selectedEndDateText),
-                    area = selectedArea.value,
-                    numberOfGuests = selectedGuests,
-                    rating = 4.5f
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 0.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Dropdown menu for selecting the area
+                SimpleDropdown(
+                    items = listOf("Athens", "Thessaloniki", "Heraclio"),
+                    selectedItem = selectedArea
                 )
 
-                // Print the searchFilter object *APPEARS IN LOGCAT*
-                println(searchFilter.value)
-            },
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text("Search")
+                // Grid for selecting the number of guests
+                GridSelector(
+                    rows = 2,
+                    columns = 2,
+                    selectedValue = selectedGuests,
+                    onValueSelected = { selectedGuests = it }
+                ) { value ->
+                    // Content of each cell
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = selectedGuests == value,
+                            onClick = { selectedGuests = value }
+                        )
+                        Icon(
+                            painter = painterResource(id = getResourceId(value.toString())),
+                            contentDescription = null,
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
+                }
+
+                // Rating bar
+                RatingBar(
+                    modifier = Modifier,
+                    rating = selectedRating.value,
+                    spaceBetween = 8.dp
+                )
+            }
         }
-
-        // Add a button to clear search filters
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // List of hotels
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(text = "Hotels Found:", style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp))
-            LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-                items(items = DataProvider.roomsList) { room ->
-                    RoomListItem(
-                        room = room,
-                        navController = navController,
-                        onItemClick = {
-                            // Navigate to the room details screen and pass the roomId as an argument
-                            navController.navigate("${Screen.RoomDetailsScreen.route}/${room.id}")
-                        }
-                    )
+        item {
+            Row {
+                // Button for search
+                Button(
+                    onClick = {
+                        // Create a SearchFilter object with the selected values
+                        searchFilter.value = SearchFilter(
+                            title = searchQuery.value,
+                            dateRange = DateRange(selectedStartDateText, selectedEndDateText),
+                            area = selectedArea.value,
+                            numberOfGuests = selectedGuests,
+                            rating = 4.5f
+                        )
+                        // Print the searchFilter object *APPEARS IN LOGCAT*
+                        println(searchFilter.value)
+                    },
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text("Search")
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                // Add a button to clear search filters
+                Button(
+                    onClick = {
+                        // Clear the search filters
+                        searchQuery.value = ""
+                        selectedStartDateText = ""
+                        selectedEndDateText = ""
+                        selectedArea.value = "Athens"
+                        selectedGuests = 1
+                        selectedRating.value = 0f
+                    },
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    Text("Clear")
                 }
             }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // List of hotels
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Hotels Found:",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                )
+            }
+        }
+        items(items = DataProvider.roomsList) { room ->
+            RoomListItem(
+                room = room,
+                navController = navController,
+                onItemClick = {
+                    // Navigate to the room details screen and pass the roomId as an argument
+                    navController.navigate("${Screen.RoomDetailsScreen.route}/${room.id}")
+                }
+            )
         }
     }
 }
