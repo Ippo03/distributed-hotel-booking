@@ -9,4 +9,5 @@ data class Room(
     val rating: Float = 0f,
     val noReviews: Int = 0,
     val imagePath: String = "",
+    val price: Float = 0f,
 )
