@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.example.distributed_hotel_booking.Screen
 
 @Composable
 fun SplashScreen(navController: NavController) {

@@ -1,20 +1,12 @@
-package com.example.distributed_hotel_booking
+package com.example.distributed_hotel_booking.screens
 
-import android.window.SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.distributed_hotel_booking.data.DataProvider
-import com.example.distributed_hotel_booking.data.Room
-import com.example.distributed_hotel_booking.screens.SplashScreen
-import com.example.distributed_hotel_booking.screens.LoginScreen
-import com.example.distributed_hotel_booking.screens.RoomDetailsScreen
-import com.example.distributed_hotel_booking.screens.UserHomeScreen
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
-import java.util.Date
 
 @Composable
 fun Navigator() {

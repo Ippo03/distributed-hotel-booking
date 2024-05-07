@@ -1,4 +1,4 @@
-package com.example.distributed_hotel_booking
+package com.example.distributed_hotel_booking.screens
 
 import android.os.Bundle
 import android.util.Log
