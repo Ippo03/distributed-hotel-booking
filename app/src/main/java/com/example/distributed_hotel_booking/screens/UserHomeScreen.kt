@@ -72,7 +72,7 @@ fun UserHomeScreen(navController: NavController) {
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
     val searchFilter =
-        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
+        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f, 0f)) }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
@@ -85,7 +85,8 @@ fun UserHomeScreen(navController: NavController) {
 
     // IconButton to open dropdown
     var showMenu by remember { mutableStateOf(false) }
-
+    // Handle the search result list visibility
+    val showRoomsList = remember { mutableStateOf(true) }
     // Fetching current year, month and day
 //    val year = calendar[Calendar.YEAR]
 //    val month = calendar[Calendar.MONTH]
@@ -280,6 +281,7 @@ fun UserHomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
             // DateRangePicker
             Row {
+                // DateRangePicker
                 DateRangePicker(
                     dateTime = dateTime,
                     focusRequester = focusRequester,
@@ -291,6 +293,9 @@ fun UserHomeScreen(navController: NavController) {
                     }
                 )
             }
+            //TODO:
+            // MAYBE COULD HAVE THE DATE RANGE PICKER SCROLL TO THE DEFAULT DATES WHEN THE CLEAR FILTERS BUTTON IS PRESSED -> LAZYCOLUMN, scrollToItem(atIndex)
+            // Possible Solution for DateRange highlighter bug. First Scroll to an older/unavailable date and then immediately(next line of code) scroll to the default/current date (today + 3 days).
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -303,7 +308,7 @@ fun UserHomeScreen(navController: NavController) {
             ) {
                 // Dropdown menu for selecting the area
                 SimpleDropdown(
-                    items = listOf("Athens", "Thessaloniki", "Heraclio"), // Could add to get something from all the Rooms in the App from the DataProvider
+                    items = listOf("Athens", "Thessaloniki", "Heraclio"),  //TODO: Could add to get something from all the Rooms in the App from the DataProvider
                     selectedItem = selectedArea
                 )
 
@@ -376,9 +381,10 @@ fun UserHomeScreen(navController: NavController) {
                             dateRange = DateRange(selectedStartDateText, selectedEndDateText),
                             area = selectedArea.value,
                             numberOfGuests = selectedGuests,
-                            rating = 4.5f
-                            //priceRange = selectedPriceRange.value
+                            rating = selectedRatingState.value.toFloat(),
+                            priceRange = selectedPriceRange,
                         )
+                        showRoomsList.value = true // Show the rooms list
                         // Print the searchFilter object *APPEARS IN LOGCAT*
                         println(searchFilter.value)
                     },
@@ -387,7 +393,7 @@ fun UserHomeScreen(navController: NavController) {
                     Text("Search")
                 }
                 Spacer(modifier = Modifier.padding(40.dp))
-                // Add a button to clear search filters
+                // Button to clear search filters
                 Button(
                     onClick = {
                         // Clear the search filters
@@ -399,6 +405,7 @@ fun UserHomeScreen(navController: NavController) {
                         selectedRatingState.value = 0
                         selectedPriceRange = 0f
                         clearFilters.value = !clearFilters.value // For the DateRangePicker
+                        showRoomsList.value = false // Hide the rooms list
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
@@ -406,12 +413,14 @@ fun UserHomeScreen(navController: NavController) {
                 }
             }
         }
+        //TODO:
+        // MAYBE TO BE SHOWN FULLY ONLY WHEN THE SEARCH BUTTON IS PRESSED, ELSE HIDE IT BUT BE ABLE TO CLOSE IT AND OPEN IT BY SCROLLING
         item {
             Spacer(modifier = Modifier.height(16.dp))
 
             // List of hotels
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
@@ -433,6 +442,7 @@ fun UserHomeScreen(navController: NavController) {
     }
 }
 
+//TODO:
 @Composable
 fun RoomsList(
     navController: NavController,

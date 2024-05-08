@@ -8,6 +8,8 @@ import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -26,6 +28,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.jvm.JvmInline
 
 // Saw from this YT Video: https://youtu.be/uggF_O4xe4I
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +62,12 @@ fun DateRangePicker(
                 initialDisplayMode = if (input) DisplayMode.Input else DisplayMode.Picker, // ALWAYS PICKER AS OF NOW
                 yearRange = (dateTime.year .. dateTime.year + 1)
             )
-            clearFilters.value = false
-            Log.d("DateRangePicker", "Clearing DateRangePicker")
+            clearFilters.value = false // Reset the clearFilters value
+            focusRequester.requestFocus() // Request focus on the DateRangePicker
+            Log.d("DateRangePickerState", "Clearing DateRangePicker")
+            Log.d("CLEAR FILTERS PRESSED", "${
+                dateRangePickerState.selectedStartDateMillis?.let {Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)} ---- " +
+                    "${dateRangePickerState.selectedEndDateMillis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)}")
         }
     }
 
@@ -79,6 +86,9 @@ fun DateRangePicker(
                 .fillMaxWidth(1.0f) // Fill 100% of the available width
                 .size(300.dp, 200.dp) // Set the size of the DateRangePicker
         )
+        Log.d("SELECTED DATE_RANGE", "${
+            dateRangePickerState.selectedStartDateMillis?.let {Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)} ---- " +
+                "${dateRangePickerState.selectedEndDateMillis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)}")
         Log.d("DateRangePicker", "Small DateRangePicker-EXECUTED")
     } else { // For BookingScreen
         DateRangePicker(
