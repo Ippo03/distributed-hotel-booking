@@ -2,6 +2,7 @@ package com.example.distributed_hotel_booking.screens
 
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,30 +30,27 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.Calendar
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import java.util.*
 
 import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.components.UserRatingBar
@@ -72,7 +70,7 @@ fun UserHomeScreen(navController: NavController) {
 //    val calendar = Calendar.getInstance()
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
-
+    val clearFilters = remember { mutableStateOf(false) }
     val searchFilter =
         remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f)) }
 
@@ -83,6 +81,7 @@ fun UserHomeScreen(navController: NavController) {
     val selectedArea = remember { mutableStateOf("Athens") }
     val selectedRatingState = remember { mutableIntStateOf(0) }
     var selectedGuests by remember { mutableStateOf(1) }
+    var selectedPriceRange by remember { mutableStateOf(0f) }
 
     // IconButton to open dropdown
     var showMenu by remember { mutableStateOf(false) }
@@ -285,6 +284,7 @@ fun UserHomeScreen(navController: NavController) {
                     dateTime = dateTime,
                     focusRequester = focusRequester,
                     small = true,
+                    clearFilters = clearFilters,
                     onDateSelected = { checkIn, checkOut ->
                         selectedStartDateText = checkIn ?: selectedStartDateText
                         selectedEndDateText = checkOut ?: selectedEndDateText
@@ -297,13 +297,13 @@ fun UserHomeScreen(navController: NavController) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 0.dp),
+                    .padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Dropdown menu for selecting the area
                 SimpleDropdown(
-                    items = listOf("Athens", "Thessaloniki", "Heraclio"),
+                    items = listOf("Athens", "Thessaloniki", "Heraclio"), // Could add to get something from all the Rooms in the App from the DataProvider
                     selectedItem = selectedArea
                 )
 
@@ -329,16 +329,40 @@ fun UserHomeScreen(navController: NavController) {
                         )
                     }
                 }
-                // Rating bar
-                UserRatingBar(
-                    ratingState = selectedRatingState,
-                    size = 20.dp
-                )
-//                Text(
-//                    text = "Current Rating Bar Value: ${ratingState.intValue}",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 8.sp
-//                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                // Rating bar and Slider in a Column
+                Column {
+                    // Rating bar
+                    UserRatingBar(
+                        ratingState = selectedRatingState,
+                        size = 16.dp
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        // Slider for the Price Filter
+                        Slider(
+                            value = selectedPriceRange,
+                            onValueChange = { newValue ->
+                                selectedPriceRange = newValue
+                            },
+                            valueRange = 0f..500f, // Define your range according to your needs
+                            steps = 10, // Define the number of discrete steps
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        // Tooltip Text
+                        Text(
+                            text = "${selectedPriceRange.toInt()} €",
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .offset(x = (selectedPriceRange / 500f * 60.dp) - 2.dp, y = 4.dp) // or -4.dp and 2.dp
+                        )
+                    }
+                }
             }
         }
         item {
@@ -353,6 +377,7 @@ fun UserHomeScreen(navController: NavController) {
                             area = selectedArea.value,
                             numberOfGuests = selectedGuests,
                             rating = 4.5f
+                            //priceRange = selectedPriceRange.value
                         )
                         // Print the searchFilter object *APPEARS IN LOGCAT*
                         println(searchFilter.value)
@@ -372,6 +397,8 @@ fun UserHomeScreen(navController: NavController) {
                         selectedArea.value = "Athens"
                         selectedGuests = 1
                         selectedRatingState.value = 0
+                        selectedPriceRange = 0f
+                        clearFilters.value = !clearFilters.value // For the DateRangePicker
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {

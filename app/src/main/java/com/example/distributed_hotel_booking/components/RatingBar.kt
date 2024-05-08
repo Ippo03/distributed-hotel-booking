@@ -25,9 +25,10 @@ fun RatingBar(
     rating: Float,
     spaceBetween: Dp = 0.dp
 ) {
-
-    val image = ImageBitmap.imageResource(id = R.drawable.half_star)
+    // Could also try other images for the stars
+    val image = ImageBitmap.imageResource(id = R.drawable.star_half_empty)
     val imageFull = ImageBitmap.imageResource(id = R.drawable.star)
+    val imageEmpty = ImageBitmap.imageResource(id = R.drawable.empty_star_resized)
 
     val totalCount = 5
 
@@ -42,20 +43,19 @@ fun RatingBar(
             .width(totalWidth)
             .height(height)
             .drawBehind {
-                drawRating(rating, image, imageFull, space)
+                drawRating(rating, image, imageFull, imageEmpty, space)
             })
 }
 private fun DrawScope.drawRating(
     rating: Float,
     image: ImageBitmap,
     imageFull: ImageBitmap,
+    imageEmpty: ImageBitmap,
     space: Float
 ) {
 
     val totalCount = 5
-
     val imageWidth = image.width.toFloat()
-    val imageHeight = size.height
 
     val reminder = rating - rating.toInt()
     val ratingInt = (rating - reminder).toInt()
@@ -79,10 +79,10 @@ private fun DrawScope.drawRating(
     }
 
     // Draw remaining empty stars
-    for (i in ratingInt + 1 until totalCount) {
+    for (i in (ratingInt + if (reminder > 0) 1 else 0) until totalCount) {
         val start = imageWidth * i + space * i
         drawImage(
-            image = image,
+            image = imageEmpty,
             topLeft = Offset(start, 0f)
         )
     }

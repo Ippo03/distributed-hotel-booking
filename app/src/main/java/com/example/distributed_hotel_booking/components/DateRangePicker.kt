@@ -1,8 +1,6 @@
 package com.example.distributed_hotel_booking.components
 
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DateRangePicker
@@ -11,6 +9,9 @@ import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +36,7 @@ fun DateRangePicker(
     input: Boolean = false, //NOT USED NOW
     onDateSelected: (String?, String?) -> Unit,
     small: Boolean = false,
+    clearFilters: MutableState<Boolean>?
 ) {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     val displayFormatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy")
@@ -47,6 +49,21 @@ fun DateRangePicker(
             yearRange = (dateTime.year .. dateTime.year + 1)
         ))
     }
+    // For the ClearFilters Button to work on the DateRangePicker in the UserHomeScreen
+    LaunchedEffect(clearFilters?.value) {
+        if (clearFilters?.value == true) {
+            dateRangePickerState = DateRangePickerState(
+                initialSelectedStartDateMillis = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli(),
+                initialDisplayedMonthMillis = dateTime.toInstant(ZoneOffset.UTC).toEpochMilli(),
+                initialSelectedEndDateMillis = dateTime.plusDays(3).toInstant(ZoneOffset.UTC).toEpochMilli(),
+                initialDisplayMode = if (input) DisplayMode.Input else DisplayMode.Picker, // ALWAYS PICKER AS OF NOW
+                yearRange = (dateTime.year .. dateTime.year + 1)
+            )
+            clearFilters.value = false
+            Log.d("DateRangePicker", "Clearing DateRangePicker")
+        }
+    }
+
     if (small) { // For UserHomeScreen
         DateRangePicker(
             state = dateRangePickerState,
@@ -62,6 +79,7 @@ fun DateRangePicker(
                 .fillMaxWidth(1.0f) // Fill 100% of the available width
                 .size(300.dp, 200.dp) // Set the size of the DateRangePicker
         )
+        Log.d("DateRangePicker", "Small DateRangePicker-EXECUTED")
     } else { // For BookingScreen
         DateRangePicker(
             state = dateRangePickerState,
@@ -79,6 +97,7 @@ fun DateRangePicker(
                     val checkOutDate = endDate.format(formatter)
                     onDateSelected(checkInDate, checkOutDate)
                     Text("${startDate.format(displayFormatter)} - ${endDate.format(displayFormatter)}", maxLines = 1, textAlign = TextAlign.Center)
+                    Log.d("DateRangePicker", "Check-in: $checkInDate, Check-out: $checkOutDate")
                 }
             },
             dateValidator = { date ->

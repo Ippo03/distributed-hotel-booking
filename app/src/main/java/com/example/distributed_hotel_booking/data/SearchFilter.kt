@@ -6,4 +6,5 @@ data class SearchFilter(
     val area: String,
     val numberOfGuests: Int,
     val rating : Float
+    //val priceRange: Float
 )

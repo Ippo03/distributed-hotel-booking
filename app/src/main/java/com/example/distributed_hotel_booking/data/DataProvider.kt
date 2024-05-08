@@ -28,7 +28,8 @@ object DataProvider {
             "Elegant hotel with rooftop pool",
             DateRange("05/07/2024", "10/08/2024"),
             4,
-            price = 250f
+            price = 250f,
+            rating = 3.0f
         ),
         Room(
             "4",
@@ -36,7 +37,8 @@ object DataProvider {
             "Historic hotel with Michelin restaurants",
             DateRange("15/08/2024", "20/09/2024"),
             1,
-            price = 200f
+            price = 200f,
+            rating = 2.8f
         ),
         Room(
             "5",
@@ -44,7 +46,8 @@ object DataProvider {
             "Chic hotel with rooftop restaurant",
             DateRange("01/09/2024", "05/10/2024"),
             2,
-            price = 350f
+            price = 350f,
+            rating = 3.2f
         ),
         Room(
             "6",
