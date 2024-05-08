@@ -2,8 +2,6 @@ package com.example.distributed_hotel_booking.screens
 
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,10 +52,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.components.DateRangePicker
+import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.GridSelector
-import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.components.SimpleDropdown
+import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
@@ -83,7 +81,7 @@ fun UserHomeScreen(navController: NavController) {
     var selectedStartDateText by remember { mutableStateOf("") }
     var selectedEndDateText by remember { mutableStateOf("") }
     val selectedArea = remember { mutableStateOf("Athens") }
-    val selectedRating = remember { mutableStateOf(0f) }
+    val selectedRatingState = remember { mutableIntStateOf(0) }
     var selectedGuests by remember { mutableStateOf(1) }
 
     // IconButton to open dropdown
@@ -331,13 +329,16 @@ fun UserHomeScreen(navController: NavController) {
                         )
                     }
                 }
-
                 // Rating bar
-                RatingBar(
-                    modifier = Modifier,
-                    rating = selectedRating.value,
-                    spaceBetween = 8.dp
+                UserRatingBar(
+                    ratingState = selectedRatingState,
+                    size = 20.dp
                 )
+//                Text(
+//                    text = "Current Rating Bar Value: ${ratingState.intValue}",
+//                    fontWeight = FontWeight.Bold,
+//                    fontSize = 8.sp
+//                )
             }
         }
         item {
@@ -370,7 +371,7 @@ fun UserHomeScreen(navController: NavController) {
                         selectedEndDateText = ""
                         selectedArea.value = "Athens"
                         selectedGuests = 1
-                        selectedRating.value = 0f
+                        selectedRatingState.value = 0
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
