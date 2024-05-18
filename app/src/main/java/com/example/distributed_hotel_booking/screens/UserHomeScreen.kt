@@ -217,65 +217,15 @@ fun UserHomeScreen(navController: NavController) {
                     onValueChange = { newValue -> searchQuery.value = newValue },
                     label = { Text("Search") },
                     leadingIcon = {
-                        IconButton(onClick = { /* Do something when search button is clicked */ }) {
-                            Icon(Icons.Filled.Search, contentDescription = "Search")
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search"
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
                 )
             }
-
-//         // Date Pickers
-//         Row(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 16.dp),
-//            horizontalArrangement = Arrangement.SpaceBetween
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .padding(end = 8.dp)
-//            ) {
-//                Button(
-//                    onClick = {
-//                        startDatePicker.show()
-//                    },
-//                    modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    Text(
-//                        text = if (selectedStartDateText.isNotEmpty()) {
-//                            selectedStartDateText
-//                        } else {
-//                            "Select start date"
-//                        }
-//                    )
-//                }
-//            }
-//
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .padding(start = 8.dp) // Add padding to the left
-//            ) {
-//                Button(
-//                    onClick = {
-//                        endDatePicker.show()
-//                    },
-//                    modifier = Modifier.fillMaxWidth() // Increase width of the button
-//                ) {
-//                    Text(
-//                        text = if (selectedEndDateText.isNotEmpty()) {
-//                            selectedEndDateText
-//                        } else {
-//                            "Select end date"
-//                        }
-//                    )
-//                }
-//            }
-//        }
         }
         item {
             Spacer(modifier = Modifier.height(16.dp))
@@ -298,74 +248,90 @@ fun UserHomeScreen(navController: NavController) {
             // Possible Solution for DateRange highlighter bug. First Scroll to an older/unavailable date and then immediately(next line of code) scroll to the default/current date (today + 3 days).
         }
         item {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Dropdown menu for selecting the area
-                SimpleDropdown(
-                    items = listOf("Athens", "Thessaloniki", "Heraclio"),  //TODO: Could add to get something from all the Rooms in the App from the DataProvider
-                    selectedItem = selectedArea
-                )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // Grid for selecting the number of guests
-                GridSelector(
-                    rows = 2,
-                    columns = 2,
-                    selectedValue = selectedGuests,
-                    onValueSelected = { selectedGuests = it }
-                ) { value ->
-                    // Content of each cell
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Dropdown menu for selecting the area
+                    SimpleDropdown(
+                        items = listOf("Athens", "Thessaloniki", "Heraclio"),
+                        selectedItem = selectedArea
+                    )
+
+                    Spacer(modifier = Modifier.width(24.dp))
+
+                    // Rating bar and Slider in a Column
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        RadioButton(
-                            selected = selectedGuests == value,
-                            onClick = { selectedGuests = value }
+                        // Rating bar
+                        UserRatingBar(
+                            ratingState = selectedRatingState,
+                            size = 16.dp
                         )
-                        Icon(
-                            painter = painterResource(id = getResourceId(value.toString())),
-                            contentDescription = null,
-                            modifier = Modifier.size(15.dp)
-                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            // Slider for the Price Filter
+                            Slider(
+                                value = selectedPriceRange,
+                                onValueChange = { newValue ->
+                                    selectedPriceRange = newValue
+                                },
+                                valueRange = 0f..500f, // Define your range according to your needs
+                                steps = 10, // Define the number of discrete steps
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            // Tooltip Text
+                            Text(
+                                text = "${selectedPriceRange.toInt()} €",
+                                modifier = Modifier
+                                    .align(Alignment.BottomStart)
+                                    .offset(
+                                        x = (selectedPriceRange / 500f * 60.dp) - 2.dp,
+                                        y = 4.dp
+                                    ) // or -4.dp and 2.dp
+                            )
+                        }
                     }
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                // Rating bar and Slider in a Column
-                Column {
-                    // Rating bar
-                    UserRatingBar(
-                        ratingState = selectedRatingState,
-                        size = 16.dp
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        // Slider for the Price Filter
-                        Slider(
-                            value = selectedPriceRange,
-                            onValueChange = { newValue ->
-                                selectedPriceRange = newValue
-                            },
-                            valueRange = 0f..500f, // Define your range according to your needs
-                            steps = 10, // Define the number of discrete steps
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        // Tooltip Text
-                        Text(
-                            text = "${selectedPriceRange.toInt()} €",
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .offset(x = (selectedPriceRange / 500f * 60.dp) - 2.dp, y = 4.dp) // or -4.dp and 2.dp
-                        )
+                // Grid for selecting the number of guests
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    GridSelector(
+                        rows = 1,
+                        columns = 4,
+                        selectedValue = selectedGuests,
+                        onValueSelected = { selectedGuests = it }
+                    ) { value ->
+                        // Content of each cell
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = selectedGuests == value,
+                                onClick = { selectedGuests = value }
+                            )
+                            Icon(
+                                painter = painterResource(id = getResourceId(value.toString())),
+                                contentDescription = null,
+                                modifier = Modifier.size(15.dp)
+                            )
+                        }
                     }
                 }
             }

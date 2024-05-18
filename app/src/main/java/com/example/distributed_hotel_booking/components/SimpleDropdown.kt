@@ -35,7 +35,7 @@ fun SimpleDropdown(
     Column {
         Button(
             onClick = { expanded = true },
-            modifier = Modifier.width(120.dp),
+            modifier = Modifier.width(150.dp),
             contentPadding = PaddingValues(start = 8.dp, end = 8.dp),
         ) {
             Row(
@@ -44,13 +44,13 @@ fun SimpleDropdown(
             ) {
                 Text(
                     text = selectedItem.value,
-                    fontSize = 12.sp
+//                    fontSize = 16.sp
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.dropdown_arrow),
                     contentDescription = "Icon",
-                    modifier = Modifier.size(12.dp)
+                    modifier = Modifier.size(14.dp)
                 )
             }
         }
@@ -63,7 +63,7 @@ fun SimpleDropdown(
                     text = {
                         Text(
                             text = item,
-                            fontSize = 12.sp // Set the font size to a smaller value (adjust as needed)
+//                            fontSize = 12.sp // Set the font size to a smaller value (adjust as needed)
                         )
                     },
                     onClick = {
