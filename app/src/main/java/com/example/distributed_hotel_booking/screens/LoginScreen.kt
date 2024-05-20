@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -88,7 +89,8 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                     .padding(16.dp)
                     .align(Alignment.CenterHorizontally)
             ) {
-                TextFieldEmail(
+                TextFieldUsername(
+                    viewModel,
                     modifier = Modifier.focusRequester(emailFocusRequester).onKeyEvent {
                         if (it.key == Key.Enter) {
                             passwordFocusRequester.requestFocus()
@@ -96,12 +98,15 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                         } else false
                     }
                 )
-                TextFieldPassword(modifier = Modifier.focusRequester(passwordFocusRequester).onKeyEvent {
-                    if (it.key == Key.Enter) {
-                        loginButtonFocusRequester.requestFocus()
-                        true
-                    } else false
-                })
+                TextFieldPassword(
+                    viewModel,
+                    modifier = Modifier.focusRequester(passwordFocusRequester).onKeyEvent {
+                        if (it.key == Key.Enter) {
+                            loginButtonFocusRequester.requestFocus()
+                            true
+                        } else false
+                    }
+                )
                 Button(
                     onClick = {
                         viewModel.onLogin(navController, sharedViewModel)
@@ -121,68 +126,29 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                     )
                 }
             }
-//            Row (
-//                modifier = Modifier
-//                    .padding(120.dp)
-//                    .align(Alignment.CenterHorizontally)
-//            ){
-//                ElevatedButton(
-//                    enabled = true,
-//                    onClick = { expanded.value = !expanded.value },
-//                    modifier = Modifier.wrapContentSize((Alignment.Center))
-//                ) {
-//                    Text(text = "Enter as User")
-//                    if (expanded.value) {
-//                        Column {
-//                            TextFieldEmail()
-//                            TextFieldPassword()
-//                            Button(
-//                                onClick = { navController.navigate(Screen.UserHomeScreen.route) },
-//                                modifier = Modifier.wrapContentSize((Alignment.Center))
-//                            )
-//                            {
-//                                Text(
-//                                    text = "Login",
-//                                    modifier = Modifier.wrapContentSize((Alignment.Center))
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-//            // Dummy button to navigate to the user home screen
-//            Button(
-//                onClick = { navController.navigate(Screen.UserHomeScreen.route) },
-////                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 16.dp)
-//            ) {
-//                Text(text = "Go to User Home Screen")
-//            }
+        }
     }
-}
 }
 
 @Composable
-fun TextFieldEmail(modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+fun TextFieldUsername(viewModel: LoginViewModel, modifier: Modifier = Modifier) {
     OutlinedTextField(
-        value = text,
-        leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "emailIcon") },
-        onValueChange = { text = it },
-        label = { Text(text = "Email address") },
-        placeholder = { Text(text = "Enter your e-mail") },
+        value = viewModel.usernameText.value,
+        leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "usernameIcon") },
+        onValueChange = { viewModel.usernameText.value = it },
+        label = { Text(text = "Username") },
+        placeholder = { Text(text = "Enter your username") },
         singleLine = true,
         modifier = modifier
     )
 }
 
 @Composable
-fun TextFieldPassword(modifier: Modifier = Modifier) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+fun TextFieldPassword(viewModel:LoginViewModel, modifier: Modifier = Modifier) {
     OutlinedTextField(
-        value = text,
+        value = viewModel.passwordText.value,
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "passwordIcon") },
-        onValueChange = { text = it },
+        onValueChange = { viewModel.passwordText.value = it },
         label = { Text(text = "Password") },
         placeholder = { Text(text = "Enter your password") },
         singleLine = true,
@@ -196,6 +162,3 @@ fun TextFieldPassword(modifier: Modifier = Modifier) {
 //    LoginScreen(navController = rememberNavController(), viewModel)
 //}
 
-
-// This is the home screen of the app - LOGIN
-// It should contain two buttons "Enter as User" and "Enter as Manager"
