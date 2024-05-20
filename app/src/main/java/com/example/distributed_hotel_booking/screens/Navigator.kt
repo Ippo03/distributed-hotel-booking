@@ -21,7 +21,7 @@ fun Navigator() {
         // define the navigation routes here
         composable(Screen.SplashScreen.route) { SplashScreen(navController) }
         composable(Screen.LoginScreen.route) { LoginScreen(navController, sharedViewModel) }
-        composable(Screen.UserHomeScreen.route) { UserHomeScreen(navController) }
+        composable(Screen.HomeScreen.route) { HomeScreen(navController, sharedViewModel) }
         composable(Screen.UserBookingsScreen.route) { UserBookingsScreen(navController) }
         composable(
             "${Screen.RoomDetailsScreen.route}/{roomId}", // Define the argument in the route

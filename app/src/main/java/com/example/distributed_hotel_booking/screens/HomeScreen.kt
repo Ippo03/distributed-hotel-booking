@@ -2,13 +2,11 @@ package com.example.distributed_hotel_booking.screens
 
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -50,6 +48,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.SimpleDropdown
@@ -60,12 +59,16 @@ import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
 import com.example.distributed_hotel_booking.util.getResourceId
+import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
+import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.time.LocalDateTime
 
 
 @SuppressLint("ResourceType")
 @Composable
-fun UserHomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    val viewModel: HomeViewModel = viewModel();
+
     val context = LocalContext.current
 //    val calendar = Calendar.getInstance()
     val dateTime = LocalDateTime.now()
@@ -88,25 +91,6 @@ fun UserHomeScreen(navController: NavController) {
     // Handle the search result list visibility
     val showRoomsList = remember { mutableStateOf(true) }
     // Fetching current year, month and day
-//    val year = calendar[Calendar.YEAR]
-//    val month = calendar[Calendar.MONTH]
-//    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
-
-//    // Date Picker for Start Date
-//    val startDatePicker = DatePickerDialog(
-//        context,
-//        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-//            selectedStartDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-//        }, year, month, dayOfMonth
-//    )
-//
-//    // Date Picker for End Date
-//    val endDatePicker = DatePickerDialog(
-//        context,
-//        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
-//            selectedEndDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-//        }, year, month, dayOfMonth
-//    )
 
     // Elements of the User Home Screen
     LazyColumn(
@@ -135,7 +119,7 @@ fun UserHomeScreen(navController: NavController) {
 
                 // Hello user message
                 Text(
-                    text = "Hello User!",
+                    text = "Hello, ${sharedViewModel.username.value}!",
                     style = TextStyle(
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.Bold,
@@ -195,7 +179,7 @@ fun UserHomeScreen(navController: NavController) {
                                         // Log out action
                                         showMenu = false
                                         // apply backend logic
-                                        navController.navigate("login_screen")
+                                        viewModel.onLogout(navController, sharedViewModel)
                                     },
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
@@ -386,7 +370,9 @@ fun UserHomeScreen(navController: NavController) {
 
             // List of hotels
             Column(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
@@ -418,11 +404,11 @@ fun RoomsList(
 
 }
 
-@Preview
-@Composable
-fun UserHomeScreenPreview() {
-    UserHomeScreen(navController = NavController(LocalContext.current))
-}
+//@Preview
+//@Composable
+//fun UserHomeScreenPreview() {
+//    UserHomeScreen(navController = NavController(LocalContext.current))
+//}
 
 
 /*
