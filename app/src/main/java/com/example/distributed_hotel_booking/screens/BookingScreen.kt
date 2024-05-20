@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -50,9 +51,9 @@ fun BookingScreen(navController: NavController, roomId: String?) {
     val guestCount = remember { mutableStateOf("1") }
     val errorMessage = remember { mutableStateOf("") }
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    var checkInDate: String? = null
-    var checkOutDate: String? = null
     val focusRequester = remember { FocusRequester() }
+    var selectedCheckInDateText = remember { mutableStateOf("") }
+    var selectedCheckOutDateText = remember { mutableStateOf("") }
 
     Surface(color = MaterialTheme.colorScheme.background) {
         LazyColumn(
@@ -146,9 +147,11 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                         dateTime = dateTime,
                         focusRequester = focusRequester,
                         clearFilters = null,
+                        selectedStartDateText = selectedCheckInDateText,
+                        selectedEndDateText = selectedCheckOutDateText,
                         onDateSelected = { checkIn, checkOut ->
-                            checkInDate = checkIn
-                            checkOutDate = checkOut
+                            selectedCheckInDateText = (checkIn ?: selectedCheckInDateText) as MutableState<String>
+                            selectedCheckOutDateText = (checkOut ?: selectedCheckOutDateText) as MutableState<String>
                         }
                     )
                 }
@@ -157,8 +160,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                 Row {
                     Button(
                         onClick = {
-                            Log.d("BookingScreen","Before navigation: roomId=$roomId, checkInDate=$checkInDate, checkOutDate=$checkOutDate, guests=${guestCount.value}")
-                            navController.navigate("payment_screen/${roomId}/${checkInDate}/${checkOutDate}/${guestCount.value}") // Go to Payment/Booking Overview screen
+                            Log.d("BookingScreen","Before navigation: roomId=$roomId, checkInDate=${selectedCheckInDateText.value}, checkOutDate=$selectedCheckOutDateText, guests=${guestCount.value}")
+                            navController.navigate("payment_screen/${roomId}/${selectedCheckInDateText.value}/${selectedCheckOutDateText.value}/${guestCount.value}") // Go to Payment/Booking Overview screen
                             Log.d("BookingScreen", "After navigation command")
                         },
                         content = { Text("Book Room") },
@@ -170,7 +173,7 @@ fun BookingScreen(navController: NavController, roomId: String?) {
             }
             Log.d(
                 "BookingScreen",
-                "Booking room ${room?.name} with ${guestCount.value} guests from $checkInDate to $checkOutDate"
+                "Booking room ${room?.name} with ${guestCount.value} guests from ${selectedCheckInDateText.value} to ${selectedCheckOutDateText}"
             )
         }
     }

@@ -162,5 +162,10 @@ object DataProvider {
             return true
         }
     }
+
+    fun updateRoomsList(rooms: List<Room>) {
+        roomsList.clear()
+        roomsList.addAll(rooms)
+    }
 }
 

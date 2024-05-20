@@ -8,12 +8,9 @@ import androidx.compose.material3.DateRangePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +25,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import kotlin.jvm.JvmInline
 
 // Saw from this YT Video: https://youtu.be/uggF_O4xe4I
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +33,8 @@ fun DateRangePicker(
     dateTime: LocalDateTime,
     focusRequester: FocusRequester,
     input: Boolean = false, //NOT USED NOW
+    selectedStartDateText: MutableState<String>,
+    selectedEndDateText: MutableState<String>,
     onDateSelected: (String?, String?) -> Unit,
     small: Boolean = false,
     clearFilters: MutableState<Boolean>?
@@ -86,6 +84,12 @@ fun DateRangePicker(
                 .fillMaxWidth(1.0f) // Fill 100% of the available width
                 .size(300.dp, 200.dp) // Set the size of the DateRangePicker
         )
+        selectedStartDateText.value = dateRangePickerState.selectedStartDateMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(formatter)
+        }.toString()
+        selectedEndDateText.value = dateRangePickerState.selectedEndDateMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(formatter)
+        }.toString()
         Log.d("SELECTED DATE_RANGE", "${
             dateRangePickerState.selectedStartDateMillis?.let {Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)} ---- " +
                 "${dateRangePickerState.selectedEndDateMillis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)}")
@@ -117,5 +121,11 @@ fun DateRangePicker(
             modifier = Modifier
                 .focusRequester(focusRequester)
         )
+        selectedStartDateText.value = dateRangePickerState.selectedStartDateMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(formatter)
+        }.toString()
+        selectedEndDateText.value = dateRangePickerState.selectedEndDateMillis?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(formatter)
+        }.toString()
     }
 }

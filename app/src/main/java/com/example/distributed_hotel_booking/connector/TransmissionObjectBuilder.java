@@ -1,6 +1,7 @@
 package com.example.distributed_hotel_booking.connector;
 
 import com.example.distributed_hotel_booking.connector.user.UserData;
+import com.example.distributed_hotel_booking.data.SearchFilter;
 
 public class TransmissionObjectBuilder {
     private TransmissionObject transmissionObject;
@@ -26,6 +27,11 @@ public class TransmissionObjectBuilder {
 
     public TransmissionObjectBuilder success(int success) {
         this.transmissionObject.setSuccess(success);
+        return this;
+    }
+
+    public TransmissionObjectBuilder searchFilter(SearchFilter searchFilter) {
+        this.transmissionObject.setSearchFilter(searchFilter);
         return this;
     }
 

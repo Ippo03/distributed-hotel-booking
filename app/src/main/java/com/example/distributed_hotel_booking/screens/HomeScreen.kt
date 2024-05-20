@@ -2,6 +2,7 @@ package com.example.distributed_hotel_booking.screens
 
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,6 +69,7 @@ import java.time.LocalDateTime
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val viewModel: HomeViewModel = viewModel();
+    //viewModel.updateRoomsList(navController, sharedViewModel)
 
     val context = LocalContext.current
 //    val calendar = Calendar.getInstance()
@@ -75,15 +77,15 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
     val searchFilter =
-        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f, 0f)) }
+        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f, 0)) }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
-    var selectedStartDateText by remember { mutableStateOf("") }
-    var selectedEndDateText by remember { mutableStateOf("") }
+    var selectedStartDateText = remember { mutableStateOf("") }
+    var selectedEndDateText = remember { mutableStateOf("") }
     val selectedArea = remember { mutableStateOf("Athens") }
     val selectedRatingState = remember { mutableIntStateOf(0) }
-    var selectedGuests by remember { mutableStateOf(1) }
+    var selectedGuests by remember { mutableIntStateOf(1) }
     var selectedPriceRange by remember { mutableStateOf(0f) }
 
     // IconButton to open dropdown
@@ -221,9 +223,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     focusRequester = focusRequester,
                     small = true,
                     clearFilters = clearFilters,
+                    selectedStartDateText = selectedStartDateText,
+                    selectedEndDateText = selectedEndDateText,
                     onDateSelected = { checkIn, checkOut ->
-                        selectedStartDateText = checkIn ?: selectedStartDateText
-                        selectedEndDateText = checkOut ?: selectedEndDateText
+                        selectedStartDateText = (checkIn ?: selectedStartDateText) as MutableState<String>
+                        selectedEndDateText = (checkOut ?: selectedEndDateText) as MutableState<String>
                     }
                 )
             }
@@ -325,18 +329,21 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 // Button for search
                 Button(
                     onClick = {
+                        Log.d("Dates", selectedStartDateText.value + " " + selectedEndDateText.value)
                         // Create a SearchFilter object with the selected values
                         searchFilter.value = SearchFilter(
                             title = searchQuery.value,
-                            dateRange = DateRange(selectedStartDateText, selectedEndDateText),
+                            dateRange = DateRange(selectedStartDateText.value, selectedEndDateText.value),
                             area = selectedArea.value,
                             numberOfGuests = selectedGuests,
                             rating = selectedRatingState.value.toFloat(),
-                            priceRange = selectedPriceRange,
+                            priceRange = selectedPriceRange.toInt(),
                         )
                         showRoomsList.value = true // Show the rooms list
                         // Print the searchFilter object *APPEARS IN LOGCAT*
                         println(searchFilter.value)
+                        viewModel.searchFilter = searchFilter.value
+                        viewModel.onSearch(navController, sharedViewModel)
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
@@ -348,8 +355,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     onClick = {
                         // Clear the search filters
                         searchQuery.value = ""
-                        selectedStartDateText = ""
-                        selectedEndDateText = ""
+                        selectedStartDateText.value = ""
+                        selectedEndDateText.value = ""
                         selectedArea.value = "Athens"
                         selectedGuests = 1
                         selectedRatingState.value = 0
@@ -381,6 +388,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 )
             }
         }
+        // items(items = sharedViewModel.roomsList) { room ->
         items(items = DataProvider.roomsList) { room ->
             RoomListItem(
                 room = room,

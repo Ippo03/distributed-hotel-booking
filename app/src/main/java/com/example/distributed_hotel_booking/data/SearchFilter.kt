@@ -6,5 +6,5 @@ data class SearchFilter(
     val area: String,
     val numberOfGuests: Int,
     val rating : Float, //Could be Int or IntRange
-    val priceRange: Float // Could be FloatRange
+    val priceRange: Int // Could be FloatRange
 )

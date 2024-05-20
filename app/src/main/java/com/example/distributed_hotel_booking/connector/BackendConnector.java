@@ -5,6 +5,9 @@ import android.util.Log;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
+
+import com.example.distributed_hotel_booking.data.Room;
 import com.google.gson.Gson;
 
 // singleton class to connect to the backend
@@ -37,7 +40,7 @@ public class BackendConnector {
         // connect to the backend
         try {
             // PUT THE IP OF THE DEVELOPMENT DEVICE HERE
-            this.socket = new Socket("192.168.186.61", 5000);
+            this.socket = new Socket("192.168.1.28", 5000);
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;
@@ -84,4 +87,11 @@ public class BackendConnector {
     public void disconnect() {
         // disconnect from the backend
     }
+
+//    public List<Room> getAllRooms() {
+//        TransmissionObject request = createTransmissionObject(TransmissionObjectType.GET_ALL_ROOMS);
+//        TransmissionObject response = sendRequest(request);
+//        // Assuming the response contains a List<Room>
+//        return response.rooms; // Obviously not final !
+//    }
 }

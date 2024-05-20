@@ -91,21 +91,25 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
             ) {
                 TextFieldUsername(
                     viewModel,
-                    modifier = Modifier.focusRequester(emailFocusRequester).onKeyEvent {
-                        if (it.key == Key.Enter) {
-                            passwordFocusRequester.requestFocus()
-                            true
-                        } else false
-                    }
+                    modifier = Modifier
+                        .focusRequester(emailFocusRequester)
+                        .onKeyEvent {
+                            if (it.key == Key.Enter) {
+                                passwordFocusRequester.requestFocus()
+                                true
+                            } else false
+                        }
                 )
                 TextFieldPassword(
                     viewModel,
-                    modifier = Modifier.focusRequester(passwordFocusRequester).onKeyEvent {
-                        if (it.key == Key.Enter) {
-                            loginButtonFocusRequester.requestFocus()
-                            true
-                        } else false
-                    }
+                    modifier = Modifier
+                        .focusRequester(passwordFocusRequester)
+                        .onKeyEvent {
+                            if (it.key == Key.Enter) {
+                                loginButtonFocusRequester.requestFocus()
+                                true
+                            } else false
+                        }
                 )
                 Button(
                     onClick = {

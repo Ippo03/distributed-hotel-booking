@@ -43,9 +43,11 @@ class LoginViewModel : ViewModel() {
                     sharedViewModel.updateUserData(response)
                     sharedViewModel.username.value = usernameText.value.text
                     sharedViewModel.showSnackbar("Login successful")
+                    // Navigate to home screen
                     navController.navigate(Screen.HomeScreen.route)
                 }
             }
         }
     }
+
 }
