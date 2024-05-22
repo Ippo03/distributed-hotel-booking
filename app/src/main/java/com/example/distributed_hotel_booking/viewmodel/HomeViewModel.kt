@@ -10,14 +10,17 @@ import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.screens.Screen
+import com.example.distributed_hotel_booking.util.getMaxDate
+import com.example.distributed_hotel_booking.util.getToday
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class HomeViewModel : ViewModel() {
-    var searchFilter = SearchFilter("", DateRange("",""), "", 0, 0f, 0)
+    var searchFilter = SearchFilter("", DateRange(getToday(), getMaxDate()), "", 0, BigDecimal.ZERO, 0)
     //var searchFilter : SearchFilter = SearchFilter()
     // Called at the start of the HomeScreen
     fun updateRoomsList(navController: NavController, sharedViewModel: SharedViewModel) {

@@ -59,10 +59,15 @@ import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
+import com.example.distributed_hotel_booking.util.getMaxDate
 import com.example.distributed_hotel_booking.util.getResourceId
+import com.example.distributed_hotel_booking.util.getToday
+import com.example.distributed_hotel_booking.util.parseDate
 import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
+import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.Calendar
 
 
 @SuppressLint("ResourceType")
@@ -77,7 +82,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
     val searchFilter =
-        remember { mutableStateOf(SearchFilter("", DateRange("", ""), "Athens", 1, 0f, 0)) }
+        remember { mutableStateOf(SearchFilter("", DateRange(getToday(), getMaxDate()), "Athens", 1, BigDecimal.ZERO, 0)) }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
@@ -332,12 +337,12 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         Log.d("Dates", selectedStartDateText.value + " " + selectedEndDateText.value)
                         // Create a SearchFilter object with the selected values
                         searchFilter.value = SearchFilter(
-                            title = searchQuery.value,
-                            dateRange = DateRange(selectedStartDateText.value, selectedEndDateText.value),
+                            roomName = searchQuery.value,
+                            dateRange = DateRange(parseDate(selectedStartDateText.value), parseDate(selectedEndDateText.value)),
                             area = selectedArea.value,
-                            numberOfGuests = selectedGuests,
-                            rating = selectedRatingState.value.toFloat(),
-                            priceRange = selectedPriceRange.toInt(),
+                            noOfGuests = selectedGuests,
+                            rating = BigDecimal.valueOf(selectedRatingState.value.toDouble()),
+                            price = selectedPriceRange.toInt(),
                         )
                         showRoomsList.value = true // Show the rooms list
                         // Print the searchFilter object *APPEARS IN LOGCAT*

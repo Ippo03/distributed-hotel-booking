@@ -40,7 +40,7 @@ public class BackendConnector {
         // connect to the backend
         try {
             // PUT THE IP OF THE DEVELOPMENT DEVICE HERE
-            this.socket = new Socket("192.168.1.28", 5000);
+            this.socket = new Socket("192.168.15.61", 5000);
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;
@@ -58,8 +58,9 @@ public class BackendConnector {
 
         // send request to the backend
         try {
+            System.out.println("Request before json " + request);
             String json = gson.toJson(request);
-            System.out.println("Json request " + json);
+            System.out.println("Request after json " + json);
 
             this.out.writeObject(json);
             this.out.flush();

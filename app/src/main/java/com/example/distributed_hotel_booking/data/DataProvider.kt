@@ -1,5 +1,6 @@
 package com.example.distributed_hotel_booking.data
 
+import com.example.distributed_hotel_booking.util.parseDate
 import java.util.Date
 
 object DataProvider {
@@ -8,7 +9,7 @@ object DataProvider {
             "1",
             "Hilton Athens",
             "Luxury hotel with Acropolis views",
-            DateRange("20/05/2024", "25/06/2024"),
+            DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
             1,
             price = 200f,
             rating = 4.5f,
@@ -17,78 +18,78 @@ object DataProvider {
             "2",
             "Grand Hyatt Athens",
             "Modern hotel near Plaka",
-            DateRange("10/06/2024", "15/07/2024"),
+            DateRange(parseDate("10-06-2024"), parseDate("15-07-2024")),
             3,
             price = 150f,
             rating = 4.0f,
         ),
-        Room(
-            "3",
-            "InterContinental Athenaeum",
-            "Elegant hotel with rooftop pool",
-            DateRange("05/07/2024", "10/08/2024"),
-            4,
-            price = 250f,
-            rating = 3.0f
-        ),
-        Room(
-            "4",
-            "Hotel Grande Bretagne",
-            "Historic hotel with Michelin restaurants",
-            DateRange("15/08/2024", "20/09/2024"),
-            1,
-            price = 200f,
-            rating = 2.8f
-        ),
-        Room(
-            "5",
-            "Electra Palace Athens",
-            "Chic hotel with rooftop restaurant",
-            DateRange("01/09/2024", "05/10/2024"),
-            2,
-            price = 350f,
-            rating = 3.2f
-        ),
-        Room(
-            "6",
-            "Athens Marriott Hotel",
-            "Contemporary hotel with fitness center",
-            DateRange("10/10/2024", "15/11/2024"),
-            4,
-            price = 280f
-        ),
-        Room(
-            "7",
-            "Wyndham Grand Athens",
-            "Sleek hotel with panoramic views",
-            DateRange("20/11/2024", "25/12/2024"),
-            4,
-            price = 260f
-        ),
-        Room(
-            "8",
-            "Divani Caravel Hotel",
-            "Upscale hotel with multiple dining options",
-            DateRange("05/12/2024", "10/01/2025"),
-            3,
-            price = 500f
-        ),
-        Room(
-            "9",
-            "Radisson Blu Park Hotel Athens",
-            "Tranquil hotel with lush gardens",
-            DateRange("15/01/2025", "20/02/2025"),
-            3,
-            price = 450f
-        ),
-        Room(
-            "10",
-            "Athenaeum Grand Hotel",
-            "Modern hotel with rooftop terrace",
-            DateRange("01/02/2025", "05/03/2025"),
-            2,
-            price = 300f
-        ),
+//        Room(
+//            "3",
+//            "InterContinental Athenaeum",
+//            "Elegant hotel with rooftop pool",
+//            DateRange(parseDate("05/07/2024"), parseDate("10/08/2024")),
+//            4,
+//            price = 250f,
+//            rating = 3.0f
+//        ),
+//        Room(
+//            "4",
+//            "Hotel Grande Bretagne",
+//            "Historic hotel with Michelin restaurants",
+//            DateRange(parseDate("15/08/2024"), parseDate("20/09/2024")),
+//            1,
+//            price = 200f,
+//            rating = 2.8f
+//        ),
+//        Room(
+//            "5",
+//            "Electra Palace Athens",
+//            "Chic hotel with rooftop restaurant",
+//            DateRange(parseDate("01/09/2024"), parseDate("05/10/2024")),
+//            2,
+//            price = 350f,
+//            rating = 3.2f
+//        ),
+//        Room(
+//            "6",
+//            "Athens Marriott Hotel",
+//            "Contemporary hotel with fitness center",
+//            DateRange(parseDate("10/10/2024"), parseDate("15/11/2024")),
+//            4,
+//            price = 280f
+//        ),
+//        Room(
+//            "7",
+//            "Wyndham Grand Athens",
+//            "Sleek hotel with panoramic views",
+//            DateRange(parseDate("20/11/2024"), parseDate("25/12/2024")),
+//            4,
+//            price = 260f
+//        ),
+//        Room(
+//            "8",
+//            "Divani Caravel Hotel",
+//            "Upscale hotel with multiple dining options",
+//            DateRange(parseDate("05/12/2024"), parseDate("10/01/2025")),
+//            3,
+//            price = 500f
+//        ),
+//        Room(
+//            "9",
+//            "Radisson Blu Park Hotel Athens",
+//            "Tranquil hotel with lush gardens",
+//            DateRange(parseDate("15/01/2025"), parseDate("20/02/2025")),
+//            3,
+//            price = 450f
+//        ),
+//        Room(
+//            "10",
+//            "Athenaeum Grand Hotel",
+//            "Modern hotel with rooftop terrace",
+//            DateRange(parseDate("01/02/2025"), parseDate("05/03/2025")),
+//            2,
+//            price = 300f
+//        ),
     )
 
     val reviewsList = mutableListOf<Review>(
