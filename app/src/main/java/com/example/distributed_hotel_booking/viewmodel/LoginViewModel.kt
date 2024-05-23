@@ -24,8 +24,8 @@ class LoginViewModel : ViewModel() {
             val transmissionObject = BackendConnector.createTransmissionObject(
                 TransmissionObjectType.LOGIN,
             )
-            transmissionObject.username = usernameText.value.text
-            transmissionObject.password = passwordText.value.text
+            transmissionObject.username = usernameText.value.text.trim()
+            transmissionObject.password = passwordText.value.text.trim()
 
             Log.d("Username and password", "${transmissionObject.username} ${transmissionObject.password}")
 
@@ -41,7 +41,7 @@ class LoginViewModel : ViewModel() {
                 if (response.success == 1) {
                     Log.d("Login", "Login successful")
                     sharedViewModel.updateUserData(response)
-                    sharedViewModel.username.value = usernameText.value.text
+                    sharedViewModel.username.value = usernameText.value.text.trim()
                     sharedViewModel.showSnackbar("Login successful")
                     // Navigate to home screen
                     navController.navigate(Screen.HomeScreen.route)

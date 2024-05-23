@@ -152,7 +152,7 @@ fun TextFieldPassword(viewModel:LoginViewModel, modifier: Modifier = Modifier) {
     OutlinedTextField(
         value = viewModel.passwordText.value,
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "passwordIcon") },
-        onValueChange = { viewModel.passwordText.value = it },
+        onValueChange = { viewModel.passwordText.value = it},
         label = { Text(text = "Password") },
         placeholder = { Text(text = "Enter your password") },
         singleLine = true,
