@@ -393,7 +393,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 )
             }
         }
-        // items(items = sharedViewModel.roomsList) { room ->
+//         items(items = sharedViewModel.roomsList) { room ->
         items(items = DataProvider.roomsList) { room ->
             RoomListItem(
                 room = room,

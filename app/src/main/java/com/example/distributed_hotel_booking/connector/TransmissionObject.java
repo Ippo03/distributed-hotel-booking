@@ -17,7 +17,7 @@ public class TransmissionObject {
 
     public String message;
 
-    //public List<Room> rooms;
+    public List<Room> rooms;
 
     public SearchFilter searchFilter;
 
@@ -40,5 +40,5 @@ public class TransmissionObject {
     }
     public void setSearchFilter(SearchFilter searchFilter) { this.searchFilter = searchFilter; }
 
-    //public void setRooms(List<Room> rooms) { this.rooms = rooms; }
+    public void setRooms(List<Room> rooms) { this.rooms = rooms; }
 }

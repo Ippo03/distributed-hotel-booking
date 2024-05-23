@@ -82,10 +82,12 @@ class HomeViewModel : ViewModel() {
             Log.d("Search", "Searching for rooms with filter: $searchFilter")
             val backendConnector = BackendConnector.getInstance()
             val response = backendConnector.sendRequest(transmissionObject)
+            Log.d("Response", response.toString())
+            sharedViewModel.roomsList = response.rooms
 
             if (response.success == 1) {
                 withContext(Dispatchers.Main) {
-                    navContoller.navigate(Screen.RoomDetailsScreen.route)
+                    navContoller.navigate(Screen.HomeScreen.route)
                 }
             }
         }

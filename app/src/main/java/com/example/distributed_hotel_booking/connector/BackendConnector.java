@@ -40,7 +40,7 @@ public class BackendConnector {
         // connect to the backend
         try {
             // PUT THE IP OF THE DEVELOPMENT DEVICE HERE
-            this.socket = new Socket("10.26.13.250", 5000); //  192.168.15.61
+            this.socket = new Socket("10.26.51.237", 5000); //  192.168.15.61
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;
@@ -64,6 +64,7 @@ public class BackendConnector {
 
             this.out.writeObject(json);
             this.out.flush();
+            Log.d("OUTSTREAM ANDROID", out.toString());
             Log.d("Connection from phone", "Request sent to the server");
             String response = (String) this.in.readObject();
             Log.d("Connection from phone", "Response received from the server");
