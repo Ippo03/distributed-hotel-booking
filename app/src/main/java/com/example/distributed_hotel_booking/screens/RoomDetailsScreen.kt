@@ -65,15 +65,15 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
 
             // Room details
             Text(
-                text = room?.name ?: "Room Name",
+                text = room?.roomName ?: "Room Name",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-            Text(
-                text = room?.description ?: "Room Description",
-                style = TextStyle(fontSize = 16.sp),
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+//            Text(
+//                text = room?.description ?: "Room Description",
+//                style = TextStyle(fontSize = 16.sp),
+//                modifier = Modifier.padding(bottom = 16.dp)
+//            )
 
             // Room details section
             Row(
@@ -88,7 +88,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                 if (room != null) {
                     RatingBar(
                         modifier = Modifier,
-                        rating = room.rating,
+                        rating = room.rating.toFloat(),
                         spaceBetween = 8.dp
                     )
                 }
@@ -100,7 +100,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = (room?.guests).toString() + " Guests",
+                    text = (room?.noOfGuests).toString() + " Guests",
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
@@ -134,10 +134,10 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                     style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-                // Review list
-                for (review in DataProvider.getReviewsByRoomId(room!!.id)) {
-                    ReviewListItem(review = review, onReviewClick = { /* Handle review click */ })
-                }
+//                // Review list
+//                for (review in DataProvider.getReviewsByRoomId(room!!.roomId)) {
+//                    ReviewListItem(review = review, onReviewClick = { /* Handle review click */ })
+//                }
             }
         }
     }

@@ -24,10 +24,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
 
 @Composable
 fun RoomListItem(
     room: Room,
+    viewModel: HomeViewModel,
     navController: NavController,
     onItemClick: () -> Unit
 ) {
@@ -52,20 +54,20 @@ fun RoomListItem(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = room.name,
+                text = room.roomName,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp
             )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = room.description,
-                fontSize = 14.sp
-            )
+//            Spacer(modifier = Modifier.height(4.dp))
+//            Text(
+//                text = room.description,
+//                fontSize = 14.sp
+//            )
         }
 
         // View button
         Button(
-            onClick = { navController.navigate("room_details_screen/${room.id}") },
+            onClick = { navController.navigate("room_details_screen/${room.roomId}") },
             modifier = Modifier.align(Alignment.CenterVertically),
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
         ) {

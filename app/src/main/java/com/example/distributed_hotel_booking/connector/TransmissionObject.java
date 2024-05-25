@@ -1,6 +1,7 @@
 package com.example.distributed_hotel_booking.connector;
 
 import com.example.distributed_hotel_booking.connector.user.UserData;
+import com.example.distributed_hotel_booking.data.Review;
 import com.example.distributed_hotel_booking.data.Room;
 import com.example.distributed_hotel_booking.data.SearchFilter;
 
@@ -21,6 +22,8 @@ public class TransmissionObject {
 
     public SearchFilter searchFilter;
 
+    public Review review;
+
     public int success;
 
     public void setType(TransmissionObjectType type) {
@@ -38,7 +41,10 @@ public class TransmissionObject {
     public void setSuccess(int success) {
         this.success = success;
     }
+
     public void setSearchFilter(SearchFilter searchFilter) { this.searchFilter = searchFilter; }
+
+    public void setReview(Review review) { this.review = review; }
 
     public void setRooms(List<Room> rooms) { this.rooms = rooms; }
 }

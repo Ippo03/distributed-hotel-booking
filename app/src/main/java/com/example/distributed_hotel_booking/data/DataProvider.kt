@@ -1,6 +1,7 @@
 package com.example.distributed_hotel_booking.data
 
 import com.example.distributed_hotel_booking.util.parseDate
+import java.math.BigDecimal
 import java.util.Date
 
 object DataProvider {
@@ -8,21 +9,29 @@ object DataProvider {
         Room(
             "1",
             "Hilton Athens",
-            "Luxury hotel with Acropolis views",
             DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
             1,
-            price = 200f,
-            rating = 4.5f,
-        ),
-        Room(
-            "2",
-            "Grand Hyatt Athens",
-            "Modern hotel near Plaka",
-            DateRange(parseDate("10-06-2024"), parseDate("15-07-2024")),
-            3,
-            price = 150f,
-            rating = 4.0f,
-        ),
+            BigDecimal.ZERO,
+        )
+    )
+//        Room(
+//            "1",
+//            "Hilton Athens",
+//            "Luxury hotel with Acropolis views",
+//            DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
+//            1,
+//            price = 200f,
+//            rating = 4.5f,
+//        ),
+//        Room(
+//            "2",
+//            "Grand Hyatt Athens",
+//            "Modern hotel near Plaka",
+//            DateRange(parseDate("10-06-2024"), parseDate("15-07-2024")),
+//            3,
+//            price = 150f,
+//            rating = 4.0f,
+//        ),
 //        Room(
 //            "3",
 //            "InterContinental Athenaeum",
@@ -90,29 +99,29 @@ object DataProvider {
 //            2,
 //            price = 300f
 //        ),
-    )
+//    )
 
     val reviewsList = mutableListOf<Review>(
-        Review("1", "1", 5, "Great hotel, amazing views!"),
-        Review("2", "1", 4, "Good location, friendly staff"),
-        Review("3", "2", 3, "Nice hotel, but a bit noisy"),
-        Review("4", "2", 4, "Clean rooms, good breakfast"),
-        Review("5", "3", 5, "Excellent service, beautiful pool"),
-        Review("6", "3", 4, "Spacious rooms, great location"),
-        Review("7", "4", 5, "Luxurious hotel, excellent food"),
-        Review("8", "4", 4, "Helpful staff, comfortable beds"),
-        Review("9", "5", 5, "Stunning views, delicious food"),
-        Review("10", "5", 4, "Modern rooms, great location"),
-        Review("11", "6", 5, "Fantastic hotel, friendly staff"),
-        Review("12", "6", 4, "Clean rooms, good facilities"),
-        Review("13", "7", 5, "Amazing views, comfortable rooms"),
-        Review("14", "7", 4, "Great location, friendly staff"),
-        Review("15", "8", 5, "Luxurious hotel, excellent food"),
-        Review("16", "8", 4, "Helpful staff, comfortable beds"),
-        Review("17", "9", 5, "Stunning views, delicious food"),
-        Review("18", "9", 4, "Modern rooms, great location"),
-        Review("19", "10", 5, "Fantastic hotel, friendly staff"),
-        Review("20", "10", 4, "Clean rooms, good facilities"),
+        Review("1", roomsList[0], 5, "Great hotel, amazing views!"),
+        Review("2", roomsList[0], 4, "Good location, friendly staff"),
+        Review("3", roomsList[0], 3, "Nice hotel, but a bit noisy"),
+        Review("4", roomsList[0], 4, "Clean rooms, good breakfast"),
+        Review("5", roomsList[0], 5, "Excellent service, beautiful pool"),
+        Review("6", roomsList[0], 4, "Spacious rooms, great location"),
+        Review("7", roomsList[0], 5, "Luxurious hotel, excellent food"),
+//        Review("8", "4", 4, "Helpful staff, comfortable beds"),
+//        Review("9", "5", 5, "Stunning views, delicious food"),
+//        Review("10", "5", 4, "Modern rooms, great location"),
+//        Review("11", "6", 5, "Fantastic hotel, friendly staff"),
+//        Review("12", "6", 4, "Clean rooms, good facilities"),
+//        Review("13", "7", 5, "Amazing views, comfortable rooms"),
+//        Review("14", "7", 4, "Great location, friendly staff"),
+//        Review("15", "8", 5, "Luxurious hotel, excellent food"),
+//        Review("16", "8", 4, "Helpful staff, comfortable beds"),
+//        Review("17", "9", 5, "Stunning views, delicious food"),
+//        Review("18", "9", 4, "Modern rooms, great location"),
+//        Review("19", "10", 5, "Fantastic hotel, friendly staff"),
+//        Review("20", "10", 4, "Clean rooms, good facilities"),
     )
 
     val bookingsList = mutableListOf<Booking>(
@@ -128,12 +137,16 @@ object DataProvider {
         Booking("2", "10", Date(2025, 2, 1), Date(2025, 2, 5), 2, 600f),
     )
 
-    fun addRoom(newRoom: Room) {
-        roomsList.add(newRoom)
+//    fun addRoom(newRoom: Room) {
+//        roomsList.add(newRoom)
+//    }
+//
+    fun getRoomById(roomId: String?): Room? {
+        return roomsList.firstOrNull { it.roomId == roomId }
     }
 
-    fun getRoomById(roomId: String?): Room? {
-        return roomsList.firstOrNull { it.id == roomId }
+    fun getRoomByName(roomName: String): Room? {
+        return roomsList.firstOrNull { it.roomName == roomName }
     }
 
     fun getBookingsByRoomId(roomId: String): List<Booking> {
@@ -148,25 +161,25 @@ object DataProvider {
     }
 
     fun getReviewsByRoomId(roomId: String): List<Review> {
-        return reviewsList.filter { it.roomId == roomId }
+        return reviewsList.filter { it.room.roomId == roomId }
     }
 
     fun getBookingsByUserId(userId: String): List<Booking> {
         return bookingsList.filter { it.userId == userId }
     }
-
-    fun addBooking(booking: Booking): Boolean {
-        if (bookingsIntersect(booking)) {
-            return false
-        } else {
-            bookingsList.add(booking)
-            return true
-        }
-    }
-
-    fun updateRoomsList(rooms: List<Room>) {
-        roomsList.clear()
-        roomsList.addAll(rooms)
-    }
+//
+//    fun addBooking(booking: Booking): Boolean {
+//        if (bookingsIntersect(booking)) {
+//            return false
+//        } else {
+//            bookingsList.add(booking)
+//            return true
+//        }
+//    }
+//
+//    fun updateRoomsList(rooms: List<Room>) {
+//        roomsList.clear()
+//        roomsList.addAll(rooms)
+//    }
 }
 

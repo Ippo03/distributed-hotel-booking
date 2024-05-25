@@ -9,13 +9,18 @@ import java.util.List;
 
 import com.example.distributed_hotel_booking.data.Room;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.Locale;
+import java.util.TimeZone;
+
 
 // singleton class to connect to the backend
 public class BackendConnector {
     private static BackendConnector instance = null;
     private Socket socket;
 
-    private static final Gson gson = new Gson();
+    private static Gson gson = new Gson();
 
     private boolean isConnected;
     private ObjectOutputStream out;
@@ -40,7 +45,7 @@ public class BackendConnector {
         // connect to the backend
         try {
             // PUT THE IP OF THE DEVELOPMENT DEVICE HERE
-            this.socket = new Socket("10.26.51.237", 5000); //  192.168.15.61
+            this.socket = new Socket("192.168.246.61", 5000); //  192.168.15.61
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;
@@ -59,6 +64,9 @@ public class BackendConnector {
         // send request to the backend
         try {
             System.out.println("Request before json " + request);
+            gson = new GsonBuilder()
+                    .setDateFormat("yyyy-MM-dd")
+                    .create();
             String json = gson.toJson(request);
             System.out.println("Request after json " + json);
 
@@ -68,6 +76,7 @@ public class BackendConnector {
             Log.d("Connection from phone", "Request sent to the server");
             String response = (String) this.in.readObject();
             Log.d("Connection from phone", "Response received from the server");
+            Log.d("Response", response);
 
             return decodeResponse(response);
         } catch (Exception e) {
@@ -77,6 +86,8 @@ public class BackendConnector {
     }
 
     public static TransmissionObject decodeResponse(String response) {
+        Log.d("Right before decoding", "im here");
+        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
         return gson.fromJson(response, TransmissionObject.class);
     }
 
@@ -89,11 +100,4 @@ public class BackendConnector {
     public void disconnect() {
         // disconnect from the backend
     }
-
-//    public List<Room> getAllRooms() {
-//        TransmissionObject request = createTransmissionObject(TransmissionObjectType.GET_ALL_ROOMS);
-//        TransmissionObject response = sendRequest(request);
-//        // Assuming the response contains a List<Room>
-//        return response.rooms; // Obviously not final !
-//    }
 }

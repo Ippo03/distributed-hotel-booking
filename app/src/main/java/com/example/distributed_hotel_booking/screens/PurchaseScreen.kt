@@ -45,14 +45,14 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
     val checkInDate = LocalDate.parse(startDate, formatter)
     val checkOutDate = LocalDate.parse(endDate, formatter)
     Log.d("DATES PARSED", "${checkInDate} - ${checkOutDate}")
-    val roomPrice = room?.price ?: 0f
+//    val roomPrice = room?.price ?: 0f
     val guestCount = guests?.toInt()
 
     val daysBetween = ChronoUnit.DAYS.between(checkInDate, checkOutDate)
     Log.d("PaymentScreen", "Days between: $daysBetween")
-    Log.d("PaymentScreen", "Room price per Night: $roomPrice")
-    val total = roomPrice * daysBetween
-    Log.d("PaymentScreen", "Total: $total")
+//    Log.d("PaymentScreen", "Room price per Night: $roomPrice")
+//    val total = roomPrice * daysBetween
+//    Log.d("PaymentScreen", "Total: $total")
     Surface {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -65,7 +65,7 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
                 modifier = Modifier.padding(16.dp)
             )
             Text(
-                text = "Room Name: ${room?.name}",
+                text = "Room Name: ${room?.roomName}",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(16.dp)
             )
@@ -83,17 +83,17 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
                 text = "Number of Guests : $guests",
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(16.dp))
-            Text(
-                text = "Total Amount: $total",
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(16.dp))
+//            Text(
+//                text = "Total Amount: $total",
+//                style = MaterialTheme.typography.headlineSmall,
+//                modifier = Modifier.padding(16.dp))
             Button(
                 onClick = {
                     // Create a new Booking object
-                    Log.d("ROOM", "${room?.name}")
-                    val booking = Booking("1", room!!.id, checkInDate.toDate(), checkOutDate.toDate(), guestCount, total!!)
-                    // Book the room
-                    bookRoom(navController, booking)
+//                    Log.d("ROOM", "${room?.roomName}")
+//                    val booking = Booking("1", room!!.roomId, checkInDate.toDate(), checkOutDate.toDate(), guestCount, total!!)
+//                    // Book the room
+//                    bookRoom(navController, booking)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,22 +106,22 @@ fun PaymentScreen(navController: NavController, roomId:String?, startDate: Strin
 }
 
 fun bookRoom(navController: NavController, newBooking: Booking) {
-    // Try to book the room
-    val bookingSuccessful = DataProvider.addBooking(booking = newBooking)
-
-    if (bookingSuccessful) {
-        // If the booking was successful, show a success message and navigate to the My Bookings screen
-        Toast.makeText(navController.context, "Your booking was successful. Enjoy your stay !", Toast.LENGTH_LONG).show()
-        navController.navigate("user_bookings_screen") {
-            popUpTo("user_home_screen") { inclusive = false }
-        }
-    } else {
-        // If the booking was unsuccessful, show an error message and navigate to the RoomDetailsScreen
-        Toast.makeText(navController.context, "Booking was unsuccessful. Please try again.", Toast.LENGTH_LONG).show()
-        navController.navigate("room_details_screen/${newBooking.roomId}"){
-            popUpTo("room_details_screen/${newBooking.roomId}"){ inclusive = true }
-        }
-    }
+//    // Try to book the room
+//    val bookingSuccessful = DataProvider.addBooking(booking = newBooking)
+//
+//    if (bookingSuccessful) {
+//        // If the booking was successful, show a success message and navigate to the My Bookings screen
+//        Toast.makeText(navController.context, "Your booking was successful. Enjoy your stay !", Toast.LENGTH_LONG).show()
+//        navController.navigate("user_bookings_screen") {
+//            popUpTo("user_home_screen") { inclusive = false }
+//        }
+//    } else {
+//        // If the booking was unsuccessful, show an error message and navigate to the RoomDetailsScreen
+//        Toast.makeText(navController.context, "Booking was unsuccessful. Please try again.", Toast.LENGTH_LONG).show()
+//        navController.navigate("room_details_screen/${newBooking.roomId}"){
+//            popUpTo("room_details_screen/${newBooking.roomId}"){ inclusive = true }
+//        }
+//    }
 }
 
 fun LocalDate.toDate(): Date {

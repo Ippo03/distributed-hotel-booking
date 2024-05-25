@@ -4,6 +4,7 @@ import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
 
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -46,6 +48,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
@@ -56,6 +59,7 @@ import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
+import com.example.distributed_hotel_booking.data.Review
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
@@ -70,7 +74,7 @@ import java.time.LocalDateTime
 import java.util.Calendar
 
 
-@SuppressLint("ResourceType")
+@SuppressLint("ResourceType", "UnrememberedMutableState")
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val viewModel: HomeViewModel = viewModel();
@@ -83,6 +87,17 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val clearFilters = remember { mutableStateOf(false) }
     val searchFilter =
         remember { mutableStateOf(SearchFilter("", DateRange(getToday(), getMaxDate()), "Athens", 1, BigDecimal.ZERO, 0)) }
+
+    // TEMP CODE FOR DEBUUGING
+    val room = Room(
+        "1",
+        "Hilton Athens",
+        DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
+        1,
+        BigDecimal.ZERO,
+    )
+    val review = remember { mutableStateOf(Review("1", room, 0, "")) }
+    // TEMP CODE FOR DEBUUGING
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
@@ -393,14 +408,49 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 )
             }
         }
-//         items(items = sharedViewModel.roomsList) { room ->
-        items(items = DataProvider.roomsList) { room ->
+        item {
+            var commentTextState by remember { mutableStateOf(TextFieldValue("")) }
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("Rate this room:", fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+
+                Text("Leave a comment:", fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+                BasicTextField(
+                    value = commentTextState,
+                    onValueChange = { newComment -> commentTextState = newComment },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(8.dp)
+                        .border(1.dp, Color.Gray)
+                        .padding(8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        // Handle the submit action, e.g., send the review to a server or update the state
+                        println("Rating: $selectedRatingState, Comment: ${commentTextState.text}")
+                        viewModel.review = Review("1", room, selectedRatingState.intValue, commentTextState.text)
+                        viewModel.onReview(navController, viewModel)
+                    },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text(text = "Submit")
+                }
+            }
+        }
+         items(items = sharedViewModel.roomsList) { room ->
+//        items(items = DataProvider.roomsList) { room ->
             RoomListItem(
                 room = room,
+                viewModel = viewModel,
                 navController = navController,
                 onItemClick = {
+                    Log.d("Room Clicked", "Room ${room.roomId} clicked");
                     // Navigate to the room details screen and pass the roomId as an argument
-                    navController.navigate("${Screen.RoomDetailsScreen.route}/${room.id}")
+                    navController.navigate("${Screen.RoomDetailsScreen.route}/${room.roomId}")
                 }
             )
         }

@@ -44,8 +44,8 @@ fun BookingScreen(navController: NavController, roomId: String?) {
 
     Log.d("BookingScreen", "Booking room with id $roomId")
     val room = DataProvider.getRoomById(roomId)
-    val maxGuests = room?.guests
-    val pricePerNight = room?.price
+    val maxGuests = room?.noOfGuests
+//    val pricePerNight = room?.price
     val dateTime = LocalDateTime.now()
     // Create a mutable state for the TextField value
     val guestCount = remember { mutableStateOf("1") }
@@ -73,16 +73,16 @@ fun BookingScreen(navController: NavController, roomId: String?) {
             item {
                 Row {
                     Text(
-                        text = room?.name ?: "Room not found",
+                        text = room?.roomName ?: "Room not found",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    Text(
-                        text = "$pricePerNight €/night",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(16.dp)
-                    )
+//                    Text(
+//                        text = "$pricePerNight €/night",
+//                        style = MaterialTheme.typography.bodyLarge,
+//                        modifier = Modifier.padding(16.dp)
+//                    )
                 }
             }
             item {
@@ -141,21 +141,21 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                     )
                 }
             }
-            item {
-                Box(modifier = Modifier.aspectRatio(1.0f)) {
-                    DateRangePicker(
-                        dateTime = dateTime,
-                        focusRequester = focusRequester,
-                        clearFilters = null,
-                        selectedStartDateText = selectedCheckInDateText,
-                        selectedEndDateText = selectedCheckOutDateText,
-                        onDateSelected = { checkIn, checkOut ->
-                            selectedCheckInDateText = (checkIn ?: selectedCheckInDateText) as MutableState<String>
-                            selectedCheckOutDateText = (checkOut ?: selectedCheckOutDateText) as MutableState<String>
-                        }
-                    )
-                }
-            }
+//            item {
+//                Box(modifier = Modifier.aspectRatio(1.0f)) {
+//                    DateRangePicker(
+//                        dateTime = dateTime,
+//                        focusRequester = focusRequester,
+//                        clearFilters = null,
+//                        selectedStartDateText = selectedCheckInDateText,
+//                        selectedEndDateText = selectedCheckOutDateText,
+//                        onDateSelected = { checkIn, checkOut ->
+//                            selectedCheckInDateText = (checkIn ?: selectedCheckInDateText) as MutableState<String>
+//                            selectedCheckOutDateText = (checkOut ?: selectedCheckOutDateText) as MutableState<String>
+//                        }
+//                    )
+//                }
+//            }
             item{
                 Row {
                     Button(
@@ -173,7 +173,7 @@ fun BookingScreen(navController: NavController, roomId: String?) {
             }
             Log.d(
                 "BookingScreen",
-                "Booking room ${room?.name} with ${guestCount.value} guests from ${selectedCheckInDateText.value} to ${selectedCheckOutDateText}"
+                "Booking room ${room?.roomName} with ${guestCount.value} guests from ${selectedCheckInDateText.value} to ${selectedCheckOutDateText}"
             )
         }
     }

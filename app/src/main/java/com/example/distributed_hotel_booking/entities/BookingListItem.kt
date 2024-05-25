@@ -77,7 +77,7 @@ fun BookingListItem(
             // Hotel name
             var roomName = DataProvider.getRoomById(booking.roomId)
             Text(
-                text = roomName?.name ?: "Room Name",
+                text = roomName?.roomName ?: "Room Name",
                 style = TextStyle(fontSize = 20.sp, color = Color.Gray),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
