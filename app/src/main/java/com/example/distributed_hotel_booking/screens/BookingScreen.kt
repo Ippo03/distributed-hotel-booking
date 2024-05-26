@@ -1,7 +1,9 @@
 package com.example.distributed_hotel_booking.screens
 
+import android.icu.text.SimpleDateFormat
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,27 +35,38 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.DataProvider
+import com.example.distributed_hotel_booking.data.DateRange
+import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.util.parseDate
+import com.example.distributed_hotel_booking.viewmodel.BookingViewModel
+import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookingScreen(navController: NavController, roomId: String?) {
-
-    Log.d("BookingScreen", "Booking room with id $roomId")
-    val room = DataProvider.getRoomById(roomId)
-    val maxGuests = room?.noOfGuests
-//    val pricePerNight = room?.price
+fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    val viewModel: BookingViewModel = viewModel()
+    viewModel.booking.userId = sharedViewModel.userId.toString()
+    viewModel.booking.room = sharedViewModel.selectedRoom
+    Log.d("BookingScreen", "Booking room with id ${viewModel.booking.room?.roomId}")
+    val maxGuests = viewModel.booking.room?.noOfGuests
+    val pricePerNight = viewModel.booking.room?.price
     val dateTime = LocalDateTime.now()
     // Create a mutable state for the TextField value
     val guestCount = remember { mutableStateOf("1") }
     val errorMessage = remember { mutableStateOf("") }
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy") // for date picker
+    val log_formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss") // for log output only
     val focusRequester = remember { FocusRequester() }
-    var selectedCheckInDateText = remember { mutableStateOf("") }
-    var selectedCheckOutDateText = remember { mutableStateOf("") }
+    val selectedCheckInDateText = remember { mutableStateOf("") }
+    val selectedCheckOutDateText = remember { mutableStateOf("") }
+    val totalAmount = remember { mutableStateOf(Booking.calculateTotal(viewModel.booking))}
 
     Surface(color = MaterialTheme.colorScheme.background) {
         LazyColumn(
@@ -73,59 +86,33 @@ fun BookingScreen(navController: NavController, roomId: String?) {
             item {
                 Row {
                     Text(
-                        text = room?.roomName ?: "Room not found",
+                        text = viewModel.booking.room?.roomName ?: "Room not found",
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(16.dp)
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-//                    Text(
-//                        text = "$pricePerNight €/night",
-//                        style = MaterialTheme.typography.bodyLarge,
-//                        modifier = Modifier.padding(16.dp)
-//                    )
+                    Text(
+                        text = "$pricePerNight €/night",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
             item {
                 Row {
-//                    TextField(
-//                        value = guestCount.value, // Use the state as the TextField value
-//                        singleLine = true,
-//                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                        onValueChange = { newValue: String ->
-//                            // Check if the entered number of guests exceeds the room's capacity
-//                            if (newValue.toIntOrNull() != null && newValue.toInt() > (maxGuests
-//                                    ?: 0)
-//                            ) {
-//                                errorMessage.value = "The room's capacity is $maxGuests guests"
-//                            } else {
-//                                errorMessage.value = ""
-//                            }
-//                            guestCount.value = newValue
-//                        },
-//                        label = { Text(text = "Enter number of guests") },
-//                        modifier = Modifier
-//                            .padding(16.dp)
-//                            .wrapContentSize()
-//                            .onKeyEvent {
-//                                if (it.key == Key.Enter) {
-//                                    focusRequester.requestFocus(); true
-//                                } else false
-//                            },
-//                        isError = errorMessage.value.isNotEmpty(), // Show an error if the error message is not empty
-//                        supportingText = { if (errorMessage.value.isNotEmpty()) Text(text = errorMessage.value) } // Show the error message
-//                    )
                     OutlinedTextField(
                         value = guestCount.value, // Use the state as the TextField value
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = { newValue: String ->
                             // Check if the entered number of guests exceeds the room's capacity
-                            if (newValue.toIntOrNull() != null && newValue.toInt() > (maxGuests ?: 0)) {
+                            if (newValue.isNotEmpty() && newValue.toIntOrNull() != null && newValue.toInt() > (maxGuests ?: 0)) {
                                 errorMessage.value = "The room's capacity is $maxGuests guests"
                             } else {
                                 errorMessage.value = ""
                             }
                             guestCount.value = newValue
+                            viewModel.booking.guests = newValue.toIntOrNull() ?: 0
                         },
                         label = { Text(text = "Enter number of guests") },
                         modifier = Modifier
@@ -141,28 +128,36 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                     )
                 }
             }
-//            item {
-//                Box(modifier = Modifier.aspectRatio(1.0f)) {
-//                    DateRangePicker(
-//                        dateTime = dateTime,
-//                        focusRequester = focusRequester,
-//                        clearFilters = null,
-//                        selectedStartDateText = selectedCheckInDateText,
-//                        selectedEndDateText = selectedCheckOutDateText,
-//                        onDateSelected = { checkIn, checkOut ->
-//                            selectedCheckInDateText = (checkIn ?: selectedCheckInDateText) as MutableState<String>
-//                            selectedCheckOutDateText = (checkOut ?: selectedCheckOutDateText) as MutableState<String>
-//                        }
-//                    )
-//                }
-//            }
+            item {
+                Box(modifier = Modifier.aspectRatio(1.0f)) {
+                    DateRangePicker(
+                        dateTime = dateTime,
+                        focusRequester = focusRequester,
+                        clearFilters = null,
+                        selectedStartDateText = selectedCheckInDateText,
+                        selectedEndDateText = selectedCheckOutDateText,
+                        onDateSelected = { checkIn, checkOut ->
+                            selectedCheckInDateText.value = checkIn ?: selectedCheckInDateText.value
+                            selectedCheckOutDateText.value = checkOut ?: selectedCheckOutDateText.value
+                            viewModel.booking.dateRange = DateRange(parseDate(selectedCheckInDateText.value), parseDate(selectedCheckOutDateText.value))
+                            Booking.calculateTotal(viewModel.booking)
+                            totalAmount.value = viewModel.booking.total!!
+                        }
+                    )
+                }
+            }
+            item {
+                Text(
+                    text = "Total amount: " + totalAmount.value.toString() + " €",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(16.dp))
+            }
             item{
                 Row {
                     Button(
                         onClick = {
-                            Log.d("BookingScreen","Before navigation: roomId=$roomId, checkInDate=${selectedCheckInDateText.value}, checkOutDate=$selectedCheckOutDateText, guests=${guestCount.value}")
-                            navController.navigate("payment_screen/${roomId}/${selectedCheckInDateText.value}/${selectedCheckOutDateText.value}/${guestCount.value}") // Go to Payment/Booking Overview screen
-                            Log.d("BookingScreen", "After navigation command")
+                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.room?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
+                            viewModel.onBook(navController, sharedViewModel)
                         },
                         content = { Text("Book Room") },
                         modifier = Modifier
@@ -171,10 +166,28 @@ fun BookingScreen(navController: NavController, roomId: String?) {
                     )
                 }
             }
-            Log.d(
-                "BookingScreen",
-                "Booking room ${room?.roomName} with ${guestCount.value} guests from ${selectedCheckInDateText.value} to ${selectedCheckOutDateText}"
-            )
         }
     }
+}
+//TODO: NOT WORKING YET NEED TO CONFIGURE
+fun showBookingResult(navController: NavController, success: Int, message: String) {
+        if (success == 1) {
+            // If the booking was successful, show a success message and navigate to the My Bookings screen
+            Toast.makeText(
+                navController.context,
+                "Your booking was successful. Enjoy your stay !",
+                Toast.LENGTH_LONG
+            ).show()
+            navController.navigate(Screen.HomeScreen.route) {
+                popUpTo(Screen.HomeScreen.route) { inclusive = false }
+            }
+        } else {
+            // If the booking was unsuccessful, show an error message and navigate to the RoomDetailsScreen
+            Toast.makeText(
+                navController.context,
+                "Booking was unsuccessful. Please try again.",
+                Toast.LENGTH_LONG
+            ).show()
+            // navController.navigate(Screen.BookingScreen.route) -> maybe no need to force recompose of BookingScreen
+        }
 }

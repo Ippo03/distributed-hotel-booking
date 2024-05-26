@@ -1,15 +1,14 @@
 package com.example.distributed_hotel_booking.viewmodel
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.connector.BackendConnector
 import com.example.distributed_hotel_booking.connector.TransmissionObjectBuilder
 import com.example.distributed_hotel_booking.connector.TransmissionObjectType
-import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Review
+import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.screens.Screen
 import com.example.distributed_hotel_booking.util.getMaxDate
@@ -23,35 +22,8 @@ import java.math.BigDecimal
 
 class HomeViewModel : ViewModel() {
     var searchFilter = SearchFilter("", DateRange(getToday(), getMaxDate()), "", 0, BigDecimal.ZERO, 0)
-    var review = Review("", DataProvider.roomsList[0], 0, "");
-    //var searchFilter : SearchFilter = SearchFilter()
-    // Called at the start of the HomeScreen
-    fun updateRoomsList(navController: NavController, sharedViewModel: SharedViewModel) {
-        val scope = CoroutineScope(Dispatchers.IO)
-        scope.launch {
-            val backendConnector = BackendConnector.getInstance()
-            val transmissionObject = BackendConnector.createTransmissionObject(
-                TransmissionObjectType.GET_ALL_ROOMS,
-            )
-
-            val response = backendConnector.sendRequest(transmissionObject)
-            Log.d("Response", response.toString());
-
-            withContext(Dispatchers.Main) {
-                if (response == null) {
-                    sharedViewModel.showSnackbar("Failed to connect to server")
-                    return@withContext
-                }
-
-                if (response.success == 1) {
-                    Log.d("Retrieve rooms", "Rooms retrieved successfully")
-                    // Update the DataProvider/roomsList
-                    //sharedViewModel.roomsList = response.rooms;
-                    Log.d("Rooms", sharedViewModel.roomsList.toString())
-                }
-            }
-        }
-    }
+    // TODO: TO BE MOVED TO THE REVIEW SCREEN (and corresponding viewModel probably - will see)
+    var review = Review("", null, 0, "");
 
     fun onLogout(navController: NavController, sharedViewModel: SharedViewModel) {
         val scope = CoroutineScope(Dispatchers.IO)
@@ -93,10 +65,19 @@ class HomeViewModel : ViewModel() {
 
             if (response.success == 1) {
                 withContext(Dispatchers.Main) {
+                    // "ReCompose" the HomeScreen
                     navContoller.navigate(Screen.HomeScreen.route)
                 }
             }
         }
+    }
+
+    // Update the selected room in the SharedViewModel and navigate to the room details screen
+    fun onContinue(navController: NavController, sharedViewModel: SharedViewModel, room: Room) {
+        sharedViewModel.selectedRoom = room
+        Log.d("HOMEVIEWMODEL-> ON_CONTINUE", "Selected room: ${sharedViewModel.selectedRoom?.roomName}, Clicked Room: ${room.roomName}")
+        Log.d("HOMEVIEWMODEL -> LOGGED USER", "ID OF LOGGED IN USER: ${sharedViewModel.userData.userId}")
+        navController.navigate(Screen.RoomDetailsScreen.route)
     }
 
     fun onReview(navController: NavController, homeViewModel: HomeViewModel) {

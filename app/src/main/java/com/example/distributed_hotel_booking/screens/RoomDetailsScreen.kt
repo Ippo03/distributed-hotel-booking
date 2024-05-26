@@ -1,5 +1,6 @@
 package com.example.distributed_hotel_booking.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,15 +18,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.R
-import com.example.distributed_hotel_booking.entities.ReviewListItem
+import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
 @Composable
-fun RoomDetailsScreen(navController: NavController, roomId: String?) {
-    val room = DataProvider.getRoomById(roomId)
+fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+
     Surface(color = Color.White) {
         Column(
             modifier = Modifier
@@ -65,7 +67,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
 
             // Room details
             Text(
-                text = room?.roomName ?: "Room Name",
+                text = sharedViewModel.selectedRoom?.roomName ?: "Room Name",
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -85,12 +87,14 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
-                if (room != null) {
-                    RatingBar(
-                        modifier = Modifier,
-                        rating = room.rating.toFloat(),
-                        spaceBetween = 8.dp
-                    )
+                if (sharedViewModel.selectedRoom != null) {
+                    sharedViewModel.selectedRoom?.rating?.let {
+                        RatingBar(
+                            modifier = Modifier,
+                            rating = it.toFloat(),
+                            spaceBetween = 8.dp
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(
@@ -100,7 +104,7 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = (room?.noOfGuests).toString() + " Guests",
+                    text = (sharedViewModel.selectedRoom?.noOfGuests).toString() + " Guests",
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
@@ -110,7 +114,10 @@ fun RoomDetailsScreen(navController: NavController, roomId: String?) {
 
             // Book button
             Button(
-                onClick = { navController.navigate("booking_screen/${roomId}") },
+                onClick = {
+                    // Navigate to booking screen
+                    navController.navigate(Screen.BookingScreen.route)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)

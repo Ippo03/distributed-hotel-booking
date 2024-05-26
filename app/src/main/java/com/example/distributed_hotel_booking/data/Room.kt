@@ -10,9 +10,9 @@ data class Room(
     val noOfGuests: Int,
     val rating: BigDecimal,
     val noOfReviews: Int = 0,
+    val price: Float = 0f,
     val roomImagePath: String = "",
-    val bookings: List<Booking> = emptyList(),
-//    val price: Float = 0f,
+    val bookings: List<Booking> = emptyList()
 )
 
 //fun bookingsOverlap(booking1: Booking, booking2: Booking): Boolean {

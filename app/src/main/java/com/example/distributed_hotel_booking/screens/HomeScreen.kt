@@ -57,7 +57,6 @@ import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.components.UserRatingBar
-import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Review
 import com.example.distributed_hotel_booking.data.Room
@@ -71,7 +70,6 @@ import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.Calendar
 
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
@@ -442,15 +440,12 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
             }
         }
          items(items = sharedViewModel.roomsList) { room ->
-//        items(items = DataProvider.roomsList) { room ->
             RoomListItem(
                 room = room,
                 viewModel = viewModel,
                 navController = navController,
                 onItemClick = {
-                    Log.d("Room Clicked", "Room ${room.roomId} clicked");
-                    // Navigate to the room details screen and pass the roomId as an argument
-                    navController.navigate("${Screen.RoomDetailsScreen.route}/${room.roomId}")
+                    viewModel.onContinue(navController, sharedViewModel, room)
                 }
             )
         }

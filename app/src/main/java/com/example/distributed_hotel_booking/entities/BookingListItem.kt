@@ -43,8 +43,8 @@ fun BookingListItem(
     onReviewClick: (Booking) -> Unit
 ) {
     val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
-    val checkIn = dateFormat.format(booking.checkInDate)
-    val checkOut = dateFormat.format(booking.checkOutDate)
+    val checkIn = dateFormat.format(booking.dateRange?.startDate ?: "") // TODO: Fix this - handle null date
+    val checkOut = dateFormat.format(booking.dateRange?.endDate ?: "")
     val dateRangeText = "From $checkIn to $checkOut"
 
     // State variable to track whether the popup is shown
@@ -75,9 +75,9 @@ fun BookingListItem(
             Spacer(modifier = Modifier.height(16.dp)) // Add space between photo and content
 
             // Hotel name
-            var roomName = DataProvider.getRoomById(booking.roomId)
+            var roomName = booking.room?.roomName
             Text(
-                text = roomName?.roomName ?: "Room Name",
+                text = roomName?:"Room Name",
                 style = TextStyle(fontSize = 20.sp, color = Color.Gray),
                 modifier = Modifier.padding(bottom = 8.dp)
             )

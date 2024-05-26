@@ -5,15 +5,15 @@ import java.math.BigDecimal
 import java.util.Date
 
 object DataProvider {
-    val roomsList = mutableListOf<Room>(
-        Room(
-            "1",
-            "Hilton Athens",
-            DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
-            1,
-            BigDecimal.ZERO,
-        )
-    )
+//    val roomsList = mutableListOf<Room>(
+//        Room(
+//            "1",
+//            "Hilton Athens",
+//            DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
+//            1,
+//            BigDecimal.ZERO,
+//        )
+//    )
 //        Room(
 //            "1",
 //            "Hilton Athens",
@@ -101,14 +101,14 @@ object DataProvider {
 //        ),
 //    )
 
-    val reviewsList = mutableListOf<Review>(
-        Review("1", roomsList[0], 5, "Great hotel, amazing views!"),
-        Review("2", roomsList[0], 4, "Good location, friendly staff"),
-        Review("3", roomsList[0], 3, "Nice hotel, but a bit noisy"),
-        Review("4", roomsList[0], 4, "Clean rooms, good breakfast"),
-        Review("5", roomsList[0], 5, "Excellent service, beautiful pool"),
-        Review("6", roomsList[0], 4, "Spacious rooms, great location"),
-        Review("7", roomsList[0], 5, "Luxurious hotel, excellent food"),
+//    val reviewsList = mutableListOf<Review>(
+//        Review("1", roomsList[0], 5, "Great hotel, amazing views!"),
+//        Review("2", roomsList[0], 4, "Good location, friendly staff"),
+//        Review("3", roomsList[0], 3, "Nice hotel, but a bit noisy"),
+//        Review("4", roomsList[0], 4, "Clean rooms, good breakfast"),
+//        Review("5", roomsList[0], 5, "Excellent service, beautiful pool"),
+//        Review("6", roomsList[0], 4, "Spacious rooms, great location"),
+//        Review("7", roomsList[0], 5, "Luxurious hotel, excellent food"),
 //        Review("8", "4", 4, "Helpful staff, comfortable beds"),
 //        Review("9", "5", 5, "Stunning views, delicious food"),
 //        Review("10", "5", 4, "Modern rooms, great location"),
@@ -122,51 +122,51 @@ object DataProvider {
 //        Review("18", "9", 4, "Modern rooms, great location"),
 //        Review("19", "10", 5, "Fantastic hotel, friendly staff"),
 //        Review("20", "10", 4, "Clean rooms, good facilities"),
-    )
+//    )
 
-    val bookingsList = mutableListOf<Booking>(
-        Booking("1", "1", Date(2024, 5, 20), Date(2024, 5, 25), 2, 400f),
-        Booking("1", "2", Date(2024, 6, 10), Date(2024, 6, 15), 3, 450f),
-        Booking("1", "3", Date(2024, 7, 5), Date(2024, 7, 10), 4, 1000f),
-        Booking("1", "4", Date(2024, 8, 15), Date(2024, 8, 20), 1, 200f),
-        Booking("1", "5", Date(2024, 9, 1), Date(2024, 9, 5), 2, 700f),
-        Booking("2", "6", Date(2024, 10, 10), Date(2024, 10, 15), 4, 1120f),
-        Booking("2", "7", Date(2024, 11, 20), Date(2024, 11, 25), 4, 1040f),
-        Booking("2", "8", Date(2024, 12, 5), Date(2024, 12, 10), 3, 1500f),
-        Booking("2", "9", Date(2025, 1, 15), Date(2025, 1, 20), 3, 1350f),
-        Booking("2", "10", Date(2025, 2, 1), Date(2025, 2, 5), 2, 600f),
-    )
+//    val bookingsList = mutableListOf<Booking>(
+//        Booking("1", "1", Date(2024, 5, 20), Date(2024, 5, 25), 2, 400f),
+//        Booking("1", "2", Date(2024, 6, 10), Date(2024, 6, 15), 3, 450f),
+//        Booking("1", "3", Date(2024, 7, 5), Date(2024, 7, 10), 4, 1000f),
+//        Booking("1", "4", Date(2024, 8, 15), Date(2024, 8, 20), 1, 200f),
+//        Booking("1", "5", Date(2024, 9, 1), Date(2024, 9, 5), 2, 700f),
+//        Booking("2", "6", Date(2024, 10, 10), Date(2024, 10, 15), 4, 1120f),
+//        Booking("2", "7", Date(2024, 11, 20), Date(2024, 11, 25), 4, 1040f),
+//        Booking("2", "8", Date(2024, 12, 5), Date(2024, 12, 10), 3, 1500f),
+//        Booking("2", "9", Date(2025, 1, 15), Date(2025, 1, 20), 3, 1350f),
+//        Booking("2", "10", Date(2025, 2, 1), Date(2025, 2, 5), 2, 600f),
+//    )
 
 //    fun addRoom(newRoom: Room) {
 //        roomsList.add(newRoom)
 //    }
 //
-    fun getRoomById(roomId: String?): Room? {
-        return roomsList.firstOrNull { it.roomId == roomId }
-    }
-
-    fun getRoomByName(roomName: String): Room? {
-        return roomsList.firstOrNull { it.roomName == roomName }
-    }
-
-    fun getBookingsByRoomId(roomId: String): List<Booking> {
-        return bookingsList.filter { it.roomId == roomId }
-    }
-
-    fun getBookingsByDateRange(checkInDate: Date, checkOutDate: Date): List<Booking> {
-        return bookingsList.filter {
-            (it.checkInDate?.before(checkOutDate) ?: false) && (it.checkOutDate?.after(checkInDate)
-                ?: false)
-        }
-    }
-
-    fun getReviewsByRoomId(roomId: String): List<Review> {
-        return reviewsList.filter { it.room.roomId == roomId }
-    }
-
-    fun getBookingsByUserId(userId: String): List<Booking> {
-        return bookingsList.filter { it.userId == userId }
-    }
+//    fun getRoomById(roomId: String?): Room? {
+//        return roomsList.firstOrNull { it.roomId == roomId }
+//    }
+//
+//    fun getRoomByName(roomName: String): Room? {
+//        return roomsList.firstOrNull { it.roomName == roomName }
+//    }
+//
+//    fun getBookingsByRoomId(roomId: String): List<Booking> {
+//        return bookingsList.filter { it.roomId == roomId }
+//    }
+//
+//    fun getBookingsByDateRange(checkInDate: Date, checkOutDate: Date): List<Booking> {
+//        return bookingsList.filter {
+//            (it.checkInDate?.before(checkOutDate) ?: false) && (it.checkOutDate?.after(checkInDate)
+//                ?: false)
+//        }
+//    }
+//
+//    fun getReviewsByRoomId(roomId: String): List<Review> {
+//        return reviewsList.filter { it.room.roomId == roomId }
+//    }
+//
+//    fun getBookingsByUserId(userId: String): List<Booking> {
+//        return bookingsList.filter { it.userId == userId }
+//    }
 //
 //    fun addBooking(booking: Booking): Boolean {
 //        if (bookingsIntersect(booking)) {

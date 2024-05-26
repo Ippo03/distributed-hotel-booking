@@ -1,12 +1,24 @@
 package com.example.distributed_hotel_booking.data
 
-import java.util.Date
+import android.icu.math.BigDecimal
+import java.math.RoundingMode
+import java.time.temporal.ChronoUnit
 
-data class Booking (
-    val userId: String,
-    val roomId: String,
-    val checkInDate: Date?,
-    val checkOutDate: Date?,
-    val guests: Int?=1,
-    val total: Float? = 0f
-)
+
+data class Booking(
+    var userId: String,
+    var room: Room?,
+    var dateRange: DateRange?,
+    var guests: Int?=1,
+    var total: Float? = 0f
+) {
+    companion object {
+        fun calculateTotal(booking: Booking): Float {
+            booking.total = (BigDecimal.valueOf(booking.room?.price?.toDouble() ?: 0.0)
+                .multiply(BigDecimal.valueOf(booking.dateRange?.getDays()?.toLong() ?: 0L))
+                .setScale(2)).toFloat()
+            return booking.total as Float
+        }
+    }
+}
+

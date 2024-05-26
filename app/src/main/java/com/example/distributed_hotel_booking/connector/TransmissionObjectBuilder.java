@@ -1,8 +1,12 @@
 package com.example.distributed_hotel_booking.connector;
 
 import com.example.distributed_hotel_booking.connector.user.UserData;
+import com.example.distributed_hotel_booking.data.Booking;
 import com.example.distributed_hotel_booking.data.Review;
 import com.example.distributed_hotel_booking.data.SearchFilter;
+import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
 
 public class TransmissionObjectBuilder {
     private TransmissionObject transmissionObject;
@@ -38,6 +42,11 @@ public class TransmissionObjectBuilder {
 
     public TransmissionObjectBuilder review(Review review) {
         this.transmissionObject.setReview(review);
+        return this;
+    }
+
+    public TransmissionObjectBuilder booking(Booking booking) {
+        this.transmissionObject.setBooking(booking);
         return this;
     }
 

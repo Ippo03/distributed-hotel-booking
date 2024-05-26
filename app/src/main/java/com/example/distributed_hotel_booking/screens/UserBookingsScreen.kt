@@ -17,9 +17,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.entities.BookingListItem
+import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
 @Composable
-fun UserBookingsScreen(navController: NavController) {
+fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,13 +33,14 @@ fun UserBookingsScreen(navController: NavController) {
         )
 
         val userId = "1"
-        val userBookings = remember { DataProvider.getBookingsByUserId(userId) }
-
-        LazyColumn {
-            items(userBookings) { booking ->
-                BookingListItem(booking = booking, onReviewClick = {})
-                Divider() // Add divider between booking items
-            }
-        }
+        //TODO: Get user bookings from the backend using the user's UserData I guess (or can we have them in the sharedViewModel?)
+//        val userBookings = remember { DataProvider.getBookingsByUserId(userId) }
+//
+//        LazyColumn {
+//            items(userBookings) { booking ->
+//                BookingListItem(booking = booking, onReviewClick = {})
+//                Divider() // Add divider between booking items
+//            }
+//        }
     }
 }
