@@ -6,7 +6,7 @@ import java.time.temporal.ChronoUnit
 
 
 data class Booking(
-    var userId: String,
+    var userId: Int,
     var room: Room?,
     var dateRange: DateRange?,
     var guests: Int?=1,

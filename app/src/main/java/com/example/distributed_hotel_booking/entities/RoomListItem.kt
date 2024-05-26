@@ -1,5 +1,6 @@
 package com.example.distributed_hotel_booking.entities
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,20 +24,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.screens.Screen
 import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
+import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
+import java.math.BigDecimal
+import java.time.Instant
+import java.util.Date
 
 @Composable
 fun RoomListItem(
     room: Room,
-    viewModel: HomeViewModel,
+    sharedViewModel: SharedViewModel,
     navController: NavController,
-    onItemClick: () -> Unit
+//    onItemClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onItemClick)
+//            .clickable(onClick = onItemClick)
             .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
         // Room photo
@@ -67,7 +74,12 @@ fun RoomListItem(
 
         // View button
         Button(
-            onClick = { navController.navigate("room_details_screen/${room.roomId}") },
+            onClick = {
+                sharedViewModel.selectedRoom = room
+                Log.d("RoomListItem", "Selected room: $sharedViewModel.selectedRoom")
+                navController.navigate(Screen.RoomDetailsScreen.route)
+            },
+//            onClick = { navController.navigate("room_details_screen/${room.roomId}") },
             modifier = Modifier.align(Alignment.CenterVertically),
             contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
         ) {

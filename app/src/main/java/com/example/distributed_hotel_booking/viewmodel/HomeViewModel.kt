@@ -23,7 +23,7 @@ import java.math.BigDecimal
 class HomeViewModel : ViewModel() {
     var searchFilter = SearchFilter("", DateRange(getToday(), getMaxDate()), "", 0, BigDecimal.ZERO, 0)
     // TODO: TO BE MOVED TO THE REVIEW SCREEN (and corresponding viewModel probably - will see)
-    var review = Review("", null, 0, "");
+    var review = Review(0, null, 0, "");
 
     fun onLogout(navController: NavController, sharedViewModel: SharedViewModel) {
         val scope = CoroutineScope(Dispatchers.IO)
@@ -72,13 +72,12 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    // Update the selected room in the SharedViewModel and navigate to the room details screen
-    fun onContinue(navController: NavController, sharedViewModel: SharedViewModel, room: Room) {
-        sharedViewModel.selectedRoom = room
-        Log.d("HOMEVIEWMODEL-> ON_CONTINUE", "Selected room: ${sharedViewModel.selectedRoom?.roomName}, Clicked Room: ${room.roomName}")
-        Log.d("HOMEVIEWMODEL -> LOGGED USER", "ID OF LOGGED IN USER: ${sharedViewModel.userData.userId}")
-        navController.navigate(Screen.RoomDetailsScreen.route)
-    }
+//    // Update the selected room in the SharedViewModel and navigate to the room details screen
+//    fun onProceedToRoomDetails(navController: NavController, sharedViewModel: SharedViewModel) {
+//        Log.d("HOMEVIEWMODEL-> ON_CONTINUE", "Selected room: ${sharedViewModel.selectedRoom.roomName})")
+//        Log.d("HOMEVIEWMODEL -> LOGGED USER", "ID OF LOGGED IN USER: ${sharedViewModel.userData.userId}")
+//        navController.navigate(Screen.RoomDetailsScreen.route)
+//    }
 
     fun onReview(navController: NavController, homeViewModel: HomeViewModel) {
         Log.d("Review", "Review button clicked")

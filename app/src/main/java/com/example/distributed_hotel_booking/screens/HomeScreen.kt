@@ -78,7 +78,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val viewModel: HomeViewModel = viewModel();
     //viewModel.updateRoomsList(navController, sharedViewModel)
 
-    val context = LocalContext.current
 //    val calendar = Calendar.getInstance()
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
@@ -88,13 +87,13 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
 
     // TEMP CODE FOR DEBUUGING
     val room = Room(
-        "1",
-        "Hilton Athens",
+        "8",
+        "Presidential Suite",
         DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
         1,
         BigDecimal.ZERO,
     )
-    val review = remember { mutableStateOf(Review("1", room, 0, "")) }
+    val review = remember { mutableStateOf(Review(0, room, 0, "")) }
     // TEMP CODE FOR DEBUUGING
 
     // Filter selected values
@@ -430,7 +429,13 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     onClick = {
                         // Handle the submit action, e.g., send the review to a server or update the state
                         println("Rating: $selectedRatingState, Comment: ${commentTextState.text}")
-                        viewModel.review = Review("1", room, selectedRatingState.intValue, commentTextState.text)
+                        viewModel.review =
+                            Review(
+                                sharedViewModel.userId.value,
+                                room,
+                                selectedRatingState.intValue,
+                                commentTextState.text
+                            )
                         viewModel.onReview(navController, viewModel)
                     },
                     modifier = Modifier.align(Alignment.End)
@@ -440,13 +445,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
             }
         }
          items(items = sharedViewModel.roomsList) { room ->
+             Log.d("Room", room.toString())
             RoomListItem(
                 room = room,
-                viewModel = viewModel,
+                sharedViewModel = sharedViewModel,
                 navController = navController,
-                onItemClick = {
-                    viewModel.onContinue(navController, sharedViewModel, room)
-                }
             )
         }
     }

@@ -27,6 +27,9 @@ import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
 @Composable
 fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewModel) {
+    // Get the selected room from the shared view model
+    val selectedRoom = sharedViewModel.selectedRoom
+    Log.d("RoomDetailsScreen", "Selected room: $selectedRoom")
 
     Surface(color = Color.White) {
         Column(
@@ -67,7 +70,7 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
 
             // Room details
             Text(
-                text = sharedViewModel.selectedRoom?.roomName ?: "Room Name",
+                text = selectedRoom.roomName,
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -87,8 +90,8 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
-                if (sharedViewModel.selectedRoom != null) {
-                    sharedViewModel.selectedRoom?.rating?.let {
+                if (selectedRoom != null) {
+                    selectedRoom.rating?.let {
                         RatingBar(
                             modifier = Modifier,
                             rating = it.toFloat(),
@@ -104,7 +107,7 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = (sharedViewModel.selectedRoom?.noOfGuests).toString() + " Guests",
+                    text = (selectedRoom.noOfGuests).toString() + " Guests",
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
