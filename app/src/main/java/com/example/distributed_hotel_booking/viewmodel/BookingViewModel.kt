@@ -1,6 +1,8 @@
 package com.example.distributed_hotel_booking.viewmodel
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.connector.BackendConnector
@@ -58,7 +60,7 @@ class BookingViewModel : ViewModel() {
 //       showBookingResult(navController, success, message)
 //    }
 
-    fun onBook(navController: NavController, sharedViewModel: SharedViewModel) {
+    fun onBook(navController: NavController, sharedViewModel: SharedViewModel, context: Context) {
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
             val transmissionObject = TransmissionObjectBuilder()
@@ -71,15 +73,32 @@ class BookingViewModel : ViewModel() {
             val response = backendConnector.sendRequest(transmissionObject)
             Log.d("Response", response.toString())
 
-            if (response.success == 1) {
-                withContext(Dispatchers.Main) {
-                    sharedViewModel.showSnackbar("Booking successful")
-                    navController.navigate(Screen.HomeScreen.route)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    sharedViewModel.showSnackbar("Booking failed")
-                    navController.navigate(Screen.BookingScreen.route)
+//            if (response.success == 1) {
+//                withContext(Dispatchers.Main) {
+//                    sharedViewModel.showSnackbar(response.message)
+//                    navController.navigate(Screen.HomeScreen.route) {
+//                        popUpTo(Screen.HomeScreen.route) { inclusive = true }
+//                    }
+//                }
+//            } else {
+//                withContext(Dispatchers.Main) {
+//                    sharedViewModel.showSnackbar(response.message)
+//                    navController.navigate(Screen.BookingScreen.route) {
+//                        popUpTo(Screen.BookingScreen.route) { inclusive = true }
+//                    }
+//                }
+//            }
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
+                if (response.success == 1) {
+                    navController.navigate(Screen.HomeScreen.route) {
+                        popUpTo(Screen.HomeScreen.route) { inclusive = true }
+                    }
+                } else {
+                    navController.navigate(Screen.BookingScreen.route) {
+                        popUpTo(Screen.BookingScreen.route) { inclusive = true }
+                    }
                 }
             }
         }

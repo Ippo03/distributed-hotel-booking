@@ -36,7 +36,7 @@ class SharedViewModel : ViewModel() {
     // added or deleted & new bookings + reviews made
     // Maybe done in the background (in the DateProvider ?)
 
-    var selectedRoom = Room("", "", DateRange(Date.from(Instant.now()), Date.from(Instant.now())),0, BigDecimal.ZERO)
+    var selectedRoom = Room("", "", DateRange(Date.from(Instant.now()), Date.from(Instant.now())),0, BigDecimal.ZERO, 0f)
 
     private val snackbarChannel = Channel<String>(Channel.BUFFERED)
     val snackbarFlow = snackbarChannel.receiveAsFlow()
@@ -56,7 +56,7 @@ class SharedViewModel : ViewModel() {
         userId = mutableStateOf(0)
         username = mutableStateOf("")
         userData = UserData()
-        selectedRoom = Room("", "", DateRange(Date.from(Instant.now()), Date.from(Instant.now())),0, BigDecimal.ZERO)
+        selectedRoom = Room("", "", DateRange(Date.from(Instant.now()), Date.from(Instant.now())),0, BigDecimal.ZERO, 0f)
     }
 
 }

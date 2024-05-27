@@ -9,22 +9,14 @@ data class Room(
     val availableDateRange: DateRange,
     val noOfGuests: Int,
     val rating: BigDecimal,
+    val price: Float,
     val noOfReviews: Int = 0,
-    val price: Float = 0f,
     val roomImagePath: String = "",
     val bookings: List<Booking> = emptyList()
-)
-
-//fun bookingsOverlap(booking1: Booking, booking2: Booking): Boolean {
-//    return booking1.checkInDate?.before(booking2.checkOutDate) == true && booking1.checkOutDate?.after(booking2.checkInDate) == true
-//}
-//fun bookingsIntersect(newBooking: Booking): Boolean {
-//    for (booking in DataProvider.bookingsList) {
-//        if (newBooking.roomId == booking.roomId && bookingsOverlap(newBooking, booking)) {
-//            return true
-//        }
-//    }
-//    return false
-//}
+) {
+    override fun toString(): String {
+        return "Room(roomId='$roomId', roomName='$roomName', availableDateRange=$availableDateRange, noOfGuests=$noOfGuests, rating=$rating, price=$price, noOfReviews=$noOfReviews, roomImagePath='$roomImagePath', bookings=$bookings)"
+    }
+}
 
 

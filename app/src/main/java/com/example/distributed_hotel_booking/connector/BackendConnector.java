@@ -45,7 +45,7 @@ public class BackendConnector {
         // connect to the backend
         try {
             // PUT THE IP OF THE DEVELOPMENT DEVICE HERE
-            this.socket = new Socket("192.168.246.61", 5000); //  192.168.15.61
+            this.socket = new Socket("192.168.1.36", 5000);
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;

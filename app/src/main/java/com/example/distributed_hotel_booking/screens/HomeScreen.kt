@@ -92,6 +92,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
         1,
         BigDecimal.ZERO,
+        200f
     )
     val review = remember { mutableStateOf(Review(0, room, 0, "")) }
     // TEMP CODE FOR DEBUUGING

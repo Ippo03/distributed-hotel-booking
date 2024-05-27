@@ -76,6 +76,7 @@ fun RoomListItem(
         Button(
             onClick = {
                 sharedViewModel.selectedRoom = room
+                Log.d("RoomListItem", "Selected room Price: ${room.price}")
                 Log.d("RoomListItem", "Selected room: $sharedViewModel.selectedRoom")
                 navController.navigate(Screen.RoomDetailsScreen.route)
             },
