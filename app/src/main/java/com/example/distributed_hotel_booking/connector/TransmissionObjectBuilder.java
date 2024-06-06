@@ -2,6 +2,7 @@ package com.example.distributed_hotel_booking.connector;
 
 import com.example.distributed_hotel_booking.connector.user.UserData;
 import com.example.distributed_hotel_booking.data.Booking;
+import com.example.distributed_hotel_booking.data.DateRange;
 import com.example.distributed_hotel_booking.data.Review;
 import com.example.distributed_hotel_booking.data.SearchFilter;
 import com.google.gson.Gson;
@@ -47,6 +48,11 @@ public class TransmissionObjectBuilder {
 
     public TransmissionObjectBuilder booking(Booking booking) {
         this.transmissionObject.setBooking(booking);
+        return this;
+    }
+
+    public TransmissionObjectBuilder bookingDates(DateRange bookingDates) {
+        this.transmissionObject.setBookingDates(bookingDates);
         return this;
     }
 

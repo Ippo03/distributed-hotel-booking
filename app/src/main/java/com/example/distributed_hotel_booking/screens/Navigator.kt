@@ -24,8 +24,8 @@ fun Navigator(sharedViewModel: SharedViewModel) {
         composable(Screen.HomeScreen.route) { HomeScreen(navController, sharedViewModel) }
         composable(Screen.UserBookingsScreen.route) { UserBookingsScreen(navController, sharedViewModel) }
         composable(Screen.RoomDetailsScreen.route) {RoomDetailsScreen(navController, sharedViewModel)}
-
         composable(Screen.BookingScreen.route) { BookingScreen(navController, sharedViewModel) }
+
 //        composable(
 //            "${Screen.BookingScreen.route}/{roomId}", // Define the argument in the route
 //            arguments = listOf(navArgument("roomId") {

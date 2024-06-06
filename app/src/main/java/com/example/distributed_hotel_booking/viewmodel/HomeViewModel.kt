@@ -22,8 +22,6 @@ import java.math.BigDecimal
 
 class HomeViewModel : ViewModel() {
     var searchFilter = SearchFilter("", DateRange(getToday(), getMaxDate()), "", 0, BigDecimal.ZERO, 0)
-    // TODO: TO BE MOVED TO THE REVIEW SCREEN (and corresponding viewModel probably - will see)
-    var review = Review(0, null, 0, "");
 
     fun onLogout(navController: NavController, sharedViewModel: SharedViewModel) {
         val scope = CoroutineScope(Dispatchers.IO)
@@ -41,7 +39,7 @@ class HomeViewModel : ViewModel() {
                     navController.navigate(Screen.LoginScreen.route)
                 }
 
-                delay(5000)
+                delay(1000)
 
                 sharedViewModel.clearData()
             }
@@ -72,35 +70,4 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-//    // Update the selected room in the SharedViewModel and navigate to the room details screen
-//    fun onProceedToRoomDetails(navController: NavController, sharedViewModel: SharedViewModel) {
-//        Log.d("HOMEVIEWMODEL-> ON_CONTINUE", "Selected room: ${sharedViewModel.selectedRoom.roomName})")
-//        Log.d("HOMEVIEWMODEL -> LOGGED USER", "ID OF LOGGED IN USER: ${sharedViewModel.userData.userId}")
-//        navController.navigate(Screen.RoomDetailsScreen.route)
-//    }
-
-    fun onReview(navController: NavController, homeViewModel: HomeViewModel) {
-        Log.d("Review", "Review button clicked")
-        val scope = CoroutineScope(Dispatchers.IO)
-        scope.launch {
-            val transmissionObject = TransmissionObjectBuilder()
-                .type(TransmissionObjectType.REVIEW)
-                .review(review)
-                .build()
-
-            Log.d("Review", "Reviewing room with review: $review");
-            val backendConnector = BackendConnector.getInstance()
-            val response = backendConnector.sendRequest(transmissionObject)
-
-            if (response.success == 1) {
-                // Show Snackbar with the message from the response
-                withContext(Dispatchers.Main) {
-                    val message = response.message // Assuming message is the field containing the response message
-                    Log.d("Review", "Review successful: $message")
-                    // Navigate to HomeScreen
-                    navController.navigate(Screen.HomeScreen.route)
-                }
-            }
-        }
-    }
 }

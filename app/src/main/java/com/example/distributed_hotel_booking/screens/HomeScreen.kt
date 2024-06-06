@@ -3,6 +3,7 @@ package com.example.distributed_hotel_booking.screens
 import com.example.distributed_hotel_booking.components.DateRangePicker
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.material3.Surface
@@ -70,37 +71,25 @@ import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val viewModel: HomeViewModel = viewModel();
-    //viewModel.updateRoomsList(navController, sharedViewModel)
-
-//    val calendar = Calendar.getInstance()
+    Log.d("HOMESCREEN", sharedViewModel.roomsList.isEmpty().toString())
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
-    val searchFilter =
-        remember { mutableStateOf(SearchFilter("", DateRange(getToday(), getMaxDate()), "Athens", 1, BigDecimal.ZERO, 0)) }
-
-    // TEMP CODE FOR DEBUUGING
-    val room = Room(
-        "8",
-        "Presidential Suite",
-        DateRange(parseDate("20-05-2024"), parseDate("25-06-2024")),
-        1,
-        BigDecimal.ZERO,
-        200f
-    )
-    val review = remember { mutableStateOf(Review(0, room, 0, "")) }
-    // TEMP CODE FOR DEBUUGING
+    val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange(getToday(), getMaxDate()), "Athens", 1, BigDecimal.ZERO, 0)) }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
-    var selectedStartDateText = remember { mutableStateOf("") }
+    var selectedStartDateText = remember { mutableStateOf("")}
     var selectedEndDateText = remember { mutableStateOf("") }
+
     val selectedArea = remember { mutableStateOf("Athens") }
     val selectedRatingState = remember { mutableIntStateOf(0) }
     var selectedGuests by remember { mutableIntStateOf(1) }
@@ -110,7 +99,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     var showMenu by remember { mutableStateOf(false) }
     // Handle the search result list visibility
     val showRoomsList = remember { mutableStateOf(true) }
-    // Fetching current year, month and day
+
+    // Block the back button press
+    BackHandler {
+        // Does nothing
+    }
 
     // Elements of the User Home Screen
     LazyColumn(
@@ -179,8 +172,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                 modifier = Modifier
                                     .padding(top = 8.dp)
                                     .width(140.dp)
-                                    .background(Color.Black)
-                                    .shadow(elevation = 8.dp, shape = MaterialTheme.shapes.medium)
+                                    .background(Color.Transparent)
+                                    .border(0.5.dp, Color.Gray, shape = MaterialTheme.shapes.medium)
                                     .clip(MaterialTheme.shapes.medium)
                             ) {
                                 // Your dropdown menu content here
@@ -193,6 +186,14 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text("My Bookings")
+                                }
+                                Button(onClick = {
+                                    // Navigate to "MyReviews" destination
+                                    showMenu = false
+                                    navController.navigate("user_reviews_screen")
+                                }, modifier = Modifier.fillMaxWidth())
+                                {
+                                    Text("My Reviews")
                                 }
                                 Button(
                                     onClick = {
@@ -406,45 +407,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 )
             }
         }
-        item {
-            var commentTextState by remember { mutableStateOf(TextFieldValue("")) }
-
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text("Rate this room:", fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-
-                Text("Leave a comment:", fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-                BasicTextField(
-                    value = commentTextState,
-                    onValueChange = { newComment -> commentTextState = newComment },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .padding(8.dp)
-                        .border(1.dp, Color.Gray)
-                        .padding(8.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        // Handle the submit action, e.g., send the review to a server or update the state
-                        println("Rating: $selectedRatingState, Comment: ${commentTextState.text}")
-                        viewModel.review =
-                            Review(
-                                sharedViewModel.userId.value,
-                                room,
-                                selectedRatingState.intValue,
-                                commentTextState.text
-                            )
-                        viewModel.onReview(navController, viewModel)
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(text = "Submit")
-                }
-            }
-        }
          items(items = sharedViewModel.roomsList) { room ->
              Log.d("Room", room.toString())
             RoomListItem(
@@ -455,33 +417,3 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         }
     }
 }
-
-//TODO:
-@Composable
-fun RoomsList(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    rooms: List<Room>
-) {
-
-}
-
-//@Preview
-//@Composable
-//fun UserHomeScreenPreview() {
-//    UserHomeScreen(navController = NavController(LocalContext.current))
-//}
-
-
-/*
- * This is the user home screen of the app
- */
-// It should contain a search bar
-// It should contain a date picker
-// It should contain radio buttons for selecting the number of guests
-// It should contain a rating bar for selecting the minimum rating of the hotel
-// It should contain a button to search for hotels
-// It should contain a list of hotels
-// The user can search for hotels by entering the name, location, check-in date, check-out date, number of guests, and minimum rating
-// The user can view the list of hotels that match the search criteria
-// The user can click on a hotel to view more details about the hotel

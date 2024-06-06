@@ -54,21 +54,14 @@ import java.time.format.DateTimeFormatter
 fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
     val viewModel: BookingViewModel = viewModel()
+    viewModel.booking.userId = sharedViewModel.userId.value
+    viewModel.booking.room = sharedViewModel.selectedRoom // TODO: TO BE REMOVED FROM BOOKING OBJECT COMPLETED, OR ONLY A ROOMINFO OBJECT OR ONLY ROOMNAME ?
 
     Log.d("BookingScreen", "Selected room: ${sharedViewModel.selectedRoom}")
 
     // get the user id from the shared view model
     val userId = sharedViewModel.userId.value
     Log.d("BookingScreen", "User id: $userId")
-
-//    // create booking object
-//    viewModel.booking.userId = userId.toString()
-//    viewModel.booking.room = selectedRoom
-//    Log.d("BookingScreen", "Booking room with id ${viewModel.booking.room.roomId}")
-
-
-//    viewModel.booking.userId = sharedViewModel.userId.toString()
-//    viewModel.booking.room = sharedViewModel.selectedRoom
 
     val maxGuests = sharedViewModel.selectedRoom.noOfGuests
     val pricePerNight = sharedViewModel.selectedRoom.price
@@ -183,7 +176,7 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                             )
                             viewModel.booking = booking
                             Log.d("onBook", "Booking room with booking: $booking")
-//                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.room?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
+                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.room?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
                             viewModel.onBook(navController, sharedViewModel, context)
                         },
                         content = { Text("Book Room") },
@@ -195,26 +188,4 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
             }
         }
     }
-}
-//TODO: NOT WORKING YET NEED TO CONFIGURE
-fun showBookingResult(navController: NavController, success: Int, message: String) {
-        if (success == 1) {
-            // If the booking was successful, show a success message and navigate to the My Bookings screen
-            Toast.makeText(
-                navController.context,
-                "Your booking was successful. Enjoy your stay !",
-                Toast.LENGTH_LONG
-            ).show()
-            navController.navigate(Screen.HomeScreen.route) {
-                popUpTo(Screen.HomeScreen.route) { inclusive = false }
-            }
-        } else {
-            // If the booking was unsuccessful, show an error message and navigate to the RoomDetailsScreen
-            Toast.makeText(
-                navController.context,
-                "Booking was unsuccessful. Please try again.",
-                Toast.LENGTH_LONG
-            ).show()
-            // navController.navigate(Screen.BookingScreen.route) -> maybe no need to force recompose of BookingScreen
-        }
 }

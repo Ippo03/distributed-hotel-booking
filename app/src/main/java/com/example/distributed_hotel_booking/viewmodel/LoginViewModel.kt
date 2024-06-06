@@ -30,7 +30,7 @@ class LoginViewModel : ViewModel() {
             Log.d("Username and password", "${transmissionObject.username} ${transmissionObject.password}")
 
             val response = backendConnector.sendRequest(transmissionObject)
-            Log.d("Response", response.toString());
+            Log.d("Decoded Response", response.toString());
 
             withContext(Dispatchers.Main) {
                 if (response == null) {
@@ -45,6 +45,7 @@ class LoginViewModel : ViewModel() {
                     sharedViewModel.showSnackbar("Login successful")
                     // Navigate to home screen
                     navController.navigate(Screen.HomeScreen.route)
+                    sharedViewModel.roomsList.clear() // Clear the list of rooms
                 }
             }
         }

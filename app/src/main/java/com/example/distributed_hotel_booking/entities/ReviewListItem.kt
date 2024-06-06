@@ -26,6 +26,11 @@ import com.example.distributed_hotel_booking.data.Review
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.sp
+import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.RatingBar
 
 
@@ -46,7 +51,11 @@ fun ReviewListItem(
                 .clip(CircleShape)
                 .background(Color.Gray) // Placeholder color
         ) {
-            // Placeholder content for avatar
+            Image(
+                painter = painterResource(id = R.drawable.man), // TODO: TO BE DONE WITH THE USER'S PROFILE PIC
+                contentDescription = "User Avatar",
+                modifier = Modifier.fillMaxSize()
+            )
         }
 //        Image(
 //            painter = rememberImagePainter(review.userAvatarUrl),
@@ -56,6 +65,11 @@ fun ReviewListItem(
 //                .clip(CircleShape)
 //                .border(1.dp, Color.Gray, CircleShape) // Add border to avatar
 //        )
+
+        Text( //PLACEHOLDER AS OF NOW
+            text = "User's Name", //review.userId, // Display the userId -> TODO: ADD IT TO THE REVIEW VIA THE BOOKING
+            fontSize = 14.sp
+        )
 
         Spacer(modifier = Modifier.width(16.dp)) // Add space between avatar and content
 
@@ -74,7 +88,7 @@ fun ReviewListItem(
             // Comment
             Text(
                 text = review.comment,
-                maxLines = 2,
+                maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
         }

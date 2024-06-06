@@ -12,7 +12,7 @@ data class Room(
     val price: Float,
     val noOfReviews: Int = 0,
     val roomImagePath: String = "",
-    val bookings: List<Booking> = emptyList()
+    var bookings: List<Booking> = emptyList()
 ) {
     override fun toString(): String {
         return "Room(roomId='$roomId', roomName='$roomName', availableDateRange=$availableDateRange, noOfGuests=$noOfGuests, rating=$rating, price=$price, noOfReviews=$noOfReviews, roomImagePath='$roomImagePath', bookings=$bookings)"

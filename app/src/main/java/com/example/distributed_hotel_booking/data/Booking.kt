@@ -8,10 +8,11 @@ import java.time.temporal.ChronoUnit
 
 data class Booking(
     var userId: Int,
-    var room: Room?,
+    var room: Room?, // TODO: Maybe should remove and the relationship should be Room -> Bookings (Have A User) -> A review (of the corresponding User that made the booking) . Not List of Reviews in User !
     var dateRange: DateRange?,
-    var guests: Int?=1,
-    var total: Float? = 0f
+    var guests: Int? = 1,
+    var total: Float? = 0f,
+    var review : Review? = null
 ) {
     companion object {
         fun calculateTotal(booking: Booking): Float {

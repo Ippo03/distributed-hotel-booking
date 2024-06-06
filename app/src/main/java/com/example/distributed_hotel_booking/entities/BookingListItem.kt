@@ -1,22 +1,25 @@
 package com.example.distributed_hotel_booking.entities
 
+import android.icu.util.Calendar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,8 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.Booking
-import com.example.distributed_hotel_booking.data.DataProvider
+import com.example.distributed_hotel_booking.data.Review
+import com.example.distributed_hotel_booking.data.RoomInfo
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -40,20 +45,25 @@ import java.util.Locale
 @Composable
 fun BookingListItem(
     booking: Booking,
-    onReviewClick: (Booking) -> Unit
+    onReviewClick: (Review) -> Unit,
+    onDeleteClick: (Review) -> Unit,
+    onEditClick: (Review) -> Unit
 ) {
     val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
     val checkIn = dateFormat.format(booking.dateRange?.startDate ?: "") // TODO: Fix this - handle null date
     val checkOut = dateFormat.format(booking.dateRange?.endDate ?: "")
     val dateRangeText = "From $checkIn to $checkOut"
+    // Check if the booking end date has passed
+    val isBookingCompleted = booking.dateRange?.endDate?.before(Calendar.getInstance().time) ?: false
+    val noReview = booking.review == null || booking.review?.rating == -1
 
     // State variable to track whether the popup is shown
-    var showPopup by remember { mutableStateOf(false) }
+    var showPopup = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .clickable { /* Handle item click */ }
-            .padding(16.dp)
+            .padding(12.dp)
             .fillMaxWidth(),
 //        elevation = 8.dp,
         shape = RoundedCornerShape(16.dp) // Custom shape
@@ -91,29 +101,55 @@ fun BookingListItem(
 
             // Total amount paid
             Text(
-                text = "Total Amount Paid: ${booking.total}",
+                text = "Total Amount Paid: ${booking.total} €",
                 style = TextStyle(fontSize = 14.sp, color = Color.Gray),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Review button
-            Button(
-                onClick = { showPopup = true },
-                colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
-                modifier = Modifier.align(Alignment.End) // Align button to the end of the column
-            ) {
-                Text(
-                    "Review",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                )
+            // Review button (only if the booking is completed)
+            //if (isBookingCompleted) { // TODO: Remove for test purposes
+            if (noReview) {
+                Button(
+                    onClick = { showPopup.value = true },
+                    colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
+                    modifier = Modifier.align(Alignment.End) // Align button to the end of the column
+                ) {
+                    Text(
+                        "Review",
+                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    )
+                }
+            } else {
+                Button(
+                    onClick = { showPopup.value = true },
+                    colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
+                    modifier = Modifier.align(Alignment.End) // Align button to the end of the column
+                ) {
+                    Text(
+                        "View Review",
+                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    )
+                }
             }
+            //}
+            if (showPopup.value) {
+                if (noReview) { // Open popup to review
+                    ReviewPopup(onReview = { grade, description ->
+                        // Create a review object
+                        val review = Review(grade, description) // In the viewModel before sending the review to the backend, we will add the room info to the review object from the sharedViewModel
+                        // Pass the review data to the callback function
+                        onReviewClick(review)
+                    }, showPopup = showPopup)
+                } else{ // Open popup to view and edit/delete tour submitted review
+                    ReviewPopup(review = booking.review,
+                        onReview = { _, _ ->
+                        // Create a review object
+                        val review = booking.review!!
+                        // Pass the review data to the callback function
+                        onReviewClick(review)
+                    }, onDelete = onDeleteClick, onEdit = onEditClick, showPopup = showPopup, isEditing = true)
+                }
 
-            if (showPopup) {
-                ReviewPopup(onReviewSubmitted = { grade, description ->
-                    // Pass the review data to the callback function
-                    onReviewClick(booking)
-                    showPopup = false
-                })
             }
         }
     }
@@ -121,36 +157,42 @@ fun BookingListItem(
 
 @Composable
 fun ReviewPopup(
-    onReviewSubmitted: (String, String) -> Unit
+    review: Review? = null,
+    onReview: (Int, String) -> Unit,
+    onDelete: (Review) -> Unit = {},
+    onEdit: (Review) -> Unit = {},
+    showPopup: MutableState<Boolean>,
+    isEditing: Boolean = false
 ) {
     // State variables to hold user input
-    var grade by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+    var grade = remember { mutableIntStateOf(review?.rating ?: 0) }
+    var description by remember { mutableStateOf(review?.comment ?: "") }
 
     // Add some padding around the popup
-    Spacer(modifier = Modifier.height(16.dp))
+    Spacer(modifier = Modifier.height(6.dp))
 
     Card(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 8.dp)
             .fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp), // Custom shape
-//        backgroundColor = Color.White
+        shape = RoundedCornerShape(12.dp),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
             Text(
                 text = "Leave a Review",
                 style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 16.dp)
             )
-            TextField(
-                value = grade,
-                onValueChange = { grade = it },
-                label = { Text("Grade") },
-                modifier = Modifier.fillMaxWidth()
+            Text(
+                text = "Rate your experience",
+                style = TextStyle(fontSize = 16.sp, color = Color.Gray),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
+
+            UserRatingBar(ratingState = grade)
+
             TextField(
                 value = description,
                 onValueChange = { description = it },
@@ -158,20 +200,78 @@ fun ReviewPopup(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    // Pass the user input to the callback function
-                    onReviewSubmitted(grade, description)
-                },
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text("Submit")
+
+            if (isEditing) {
+                Row (Modifier.fillMaxWidth()) {
+                    Button(
+                        modifier = Modifier
+                            //.padding(end = 8.dp)
+                            .weight(1.2f), // Increase weight for more space
+                        onClick = {
+                            showPopup.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White)
+                    ) {
+                        Text("Cancel", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                    }
+                    Spacer(modifier = Modifier.width(4.dp)) // Add space between the buttons
+                    Button(
+                        modifier = Modifier
+                            //.padding(start = 6.dp, end = 6.dp)
+                            .weight(1f), // Distribute the available space equally among the buttons,
+                        onClick = {
+                            onDelete(Review(-1, "")) // Invalid review to indicate deletion in the backend -> Review in this booking turned to NULL.
+                            showPopup.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White)
+                    ) {
+                        Text("Delete", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                    }
+                    Spacer(modifier = Modifier.width(4.dp)) // Add space between the buttons
+                    Button(
+                        modifier = Modifier
+                            //.padding(start = 8.dp)
+                            .weight(1.2f), // Increase weight for more space
+                        onClick = {
+                            onEdit(Review(grade.value, description)) // Update the review in the backend
+                            showPopup.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White)
+                    ) {
+                        Text("Update", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                    }
+                }
+            } else {
+                Row {
+                    Button(
+                        modifier = Modifier.weight(1f), // Distribute the available space equally among the buttons,
+                        onClick = {
+                            grade.value = 0
+                            description = ""
+                            showPopup.value = false
+                        },
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
+                    ) {
+                        Text("Cancel", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                    }
+                    Spacer(modifier = Modifier.width(10.dp)) // Add space between the buttons
+                    Button(
+                        modifier = Modifier.weight(1f), // Distribute the available space equally among the buttons,
+                        onClick = {
+                            // Pass the user input to the callback function
+                            onReview(grade.value, description)
+                        },
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
+                    ) {
+                        Text("Submit", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                    }
+                }
             }
         }
-    }
 
-    // Add some padding below the popup
-    Spacer(modifier = Modifier.height(16.dp))
+        // Add some padding below the popup
+        Spacer(modifier = Modifier.height(10.dp))
+    }
 }
 
 

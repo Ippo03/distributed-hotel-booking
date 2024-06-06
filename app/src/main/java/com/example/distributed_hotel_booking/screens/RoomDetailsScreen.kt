@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.entities.ReviewListItem
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
 @Composable
@@ -144,10 +145,16 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                     style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
-//                // Review list
-//                for (review in DataProvider.getReviewsByRoomId(room!!.roomId)) {
-//                    ReviewListItem(review = review, onReviewClick = { /* Handle review click */ })
-//                }
+                // Review list
+                for (booking in selectedRoom.bookings) {
+                    if (booking.review != null) {
+                        ReviewListItem(
+                            review = booking.review!!,
+                            onReviewClick = { /* Handle review click */ }
+                            // TODO: idea-> If User's Id, then show edit button and/or delete button OR JUST DO NOTHING
+                        )
+                    }
+                }
             }
         }
     }

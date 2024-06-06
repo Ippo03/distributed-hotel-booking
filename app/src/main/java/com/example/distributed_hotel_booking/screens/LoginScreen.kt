@@ -160,9 +160,3 @@ fun TextFieldPassword(viewModel:LoginViewModel, modifier: Modifier = Modifier) {
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun LoginScreenPreview() {
-//    LoginScreen(navController = rememberNavController(), viewModel)
-//}
-
