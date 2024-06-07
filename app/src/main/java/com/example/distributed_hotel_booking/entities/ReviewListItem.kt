@@ -47,12 +47,10 @@ fun ReviewListItem(
             .padding(16.dp)
     ) {
         // Avatar
-//      CircularAvatar(imageResource = getProfilePicture(review.userData.profilePicture))
-        CircularAvatar(imageResource = getProfilePicture("man"))
+        CircularAvatar(image = review.userData.profilePicture)
 
         Text( //PLACEHOLDER AS OF NOW
-            text = "User's Name",
-//            text = review.userData.username, //review.userId, // Display the userId -> TODO: ADD IT TO THE REVIEW VIA THE BOOKING
+            text = review.userData.username,
             fontSize = 14.sp
         )
 

@@ -43,6 +43,7 @@ import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.data.RoomInfo
 import com.example.distributed_hotel_booking.util.parseDate
 import com.example.distributed_hotel_booking.viewmodel.BookingViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
@@ -54,13 +55,13 @@ import java.time.format.DateTimeFormatter
 fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
     val viewModel: BookingViewModel = viewModel()
-    viewModel.booking.userId = sharedViewModel.userId.value
-    viewModel.booking.room = sharedViewModel.selectedRoom // TODO: TO BE REMOVED FROM BOOKING OBJECT COMPLETED, OR ONLY A ROOMINFO OBJECT OR ONLY ROOMNAME ?
+    viewModel.booking.userData = sharedViewModel.userData
+    viewModel.booking.roomInfo = RoomInfo(sharedViewModel.selectedRoom.roomId, sharedViewModel.selectedRoom.roomName, sharedViewModel.selectedRoom.roomImage)
 
     Log.d("BookingScreen", "Selected room: ${sharedViewModel.selectedRoom}")
 
     // get the user id from the shared view model
-    val userId = sharedViewModel.userId.value
+    val userId = sharedViewModel.userData.userId
     Log.d("BookingScreen", "User id: $userId")
 
     val maxGuests = sharedViewModel.selectedRoom.noOfGuests
@@ -75,7 +76,7 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
     val focusRequester = remember { FocusRequester() }
     val selectedCheckInDateText = remember { mutableStateOf("") }
     val selectedCheckOutDateText = remember { mutableStateOf("") }
-    val totalAmount = remember { mutableStateOf(Booking.calculateTotal(viewModel.booking))}
+    val totalAmount = remember { mutableStateOf(Booking.calculateTotal(viewModel.booking, sharedViewModel.selectedRoom.price))}
 
     Surface(color = MaterialTheme.colorScheme.background) {
         LazyColumn(
@@ -149,7 +150,7 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                             selectedCheckOutDateText.value = checkOut ?: selectedCheckOutDateText.value
                             viewModel.booking.dateRange = DateRange(parseDate(selectedCheckInDateText.value), parseDate(selectedCheckOutDateText.value))
                             Log.d("BOOKING SCREEN", "Selected dates: ${viewModel.booking.dateRange?.startDate} - ${viewModel.booking.dateRange?.endDate}")
-                            Booking.calculateTotal(viewModel.booking)
+                            Booking.calculateTotal(viewModel.booking, sharedViewModel.selectedRoom.price)
                             totalAmount.value = viewModel.booking.total!!
                             Log.d("BOOKING SCREEN", "TOTAL: ${viewModel.booking.total}")
                             Log.d("BOOKING SCREEN", "AMOUNT: ${totalAmount.value}")
@@ -168,15 +169,15 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                     Button(
                         onClick = {
                             val booking = Booking(
-                                userId,
-                                sharedViewModel.selectedRoom,
+                                viewModel.booking.userData,
+                                viewModel.booking.roomInfo,
                                 viewModel.booking.dateRange,
                                 guestCount.value.toInt(),
                                 viewModel.booking.total
                             )
                             viewModel.booking = booking
                             Log.d("onBook", "Booking room with booking: $booking")
-                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.room?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
+                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.roomInfo?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
                             viewModel.onBook(navController, sharedViewModel, context)
                         },
                         content = { Text("Book Room") },

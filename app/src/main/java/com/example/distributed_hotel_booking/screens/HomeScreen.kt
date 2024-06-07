@@ -135,12 +135,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Circular Avatar
-//                CircularAvatar(imageResource = R.drawable.${sharedViewModel.getRandomProfilePicture()}))
-                CircularAvatar(imageResource = getProfilePicture(sharedViewModel.userProfilePicture.value))
+                CircularAvatar(image = sharedViewModel.userData.profilePicture) // TODO: change to be able to display the image as a byte array
 
                 // Hello user message
                 Text(
-                    text = "Hello, ${sharedViewModel.username.value}!",
+                    text = "Hello, ${sharedViewModel.userData.username}!",
                     style = TextStyle(
                         fontFamily = FontFamily.Serif,
                         fontWeight = FontWeight.Bold,

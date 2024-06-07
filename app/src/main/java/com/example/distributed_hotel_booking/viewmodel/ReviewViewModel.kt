@@ -22,8 +22,8 @@ class ReviewViewModel : ViewModel() {
         Log.d("Review", "Review button clicked")
         // Check if the rating is between 1 and 5 (inclusive)
         if (currentReview.rating != null && currentReview.rating in 1..5) {
-            Log.d("REVIEW FROM SHARED VIEW MODEL", " NAME -> ${sharedViewModel.selectedBooking.room?.roomName} and ID ->  ${sharedViewModel.selectedBooking.room?.roomId}")
-            currentReview.roomInfo = RoomInfo(sharedViewModel.selectedBooking.room!!.roomId, sharedViewModel.selectedBooking.room!!.roomName)
+            Log.d("REVIEW FROM SHARED VIEW MODEL", " NAME -> ${sharedViewModel.selectedBooking.roomInfo?.roomName} and ID ->  ${sharedViewModel.selectedBooking.roomInfo?.roomId}")
+            currentReview.roomInfo = sharedViewModel.selectedBooking.roomInfo!!
             Log.d("REVIEW TO SEND", " NAME -> ${currentReview.roomInfo?.roomName} and ID ->  ${currentReview.roomInfo?.roomId}")
             val scope = CoroutineScope(Dispatchers.IO)
             scope.launch {
@@ -36,7 +36,7 @@ class ReviewViewModel : ViewModel() {
                 Log.d("Review", "Sending review to backend: $currentReview")
                 val backendConnector = BackendConnector.getInstance()
                 val response = backendConnector.sendRequest(transmissionObject)
-                Log.d("ON Review", "Reviewed ${sharedViewModel.selectedBooking.room?.roomName} with review: $currentReview")
+                Log.d("ON Review", "Reviewed ${sharedViewModel.selectedBooking.roomInfo?.roomName} with review: $currentReview")
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
                     if (response.success == 1) {
@@ -58,11 +58,11 @@ class ReviewViewModel : ViewModel() {
         if (currentReview.rating != null && currentReview.rating in 1..5) {
             Log.d(
                 "REVIEW FROM SHARED VIEW MODEL",
-                " NAME -> ${sharedViewModel.selectedBooking.room?.roomName} and ID ->  ${sharedViewModel.selectedBooking.room?.roomId}"
+                " NAME -> ${sharedViewModel.selectedBooking.roomInfo?.roomName} and ID ->  ${sharedViewModel.selectedBooking.roomInfo?.roomId}"
             )
             currentReview.roomInfo = RoomInfo(
-                sharedViewModel.selectedBooking.room!!.roomId,
-                sharedViewModel.selectedBooking.room!!.roomName
+                sharedViewModel.selectedBooking.roomInfo!!.roomId,
+                sharedViewModel.selectedBooking.roomInfo!!.roomName
             )
             val scope = CoroutineScope(Dispatchers.IO)
             scope.launch {
@@ -77,7 +77,7 @@ class ReviewViewModel : ViewModel() {
                 val response = backendConnector.sendRequest(transmissionObject)
                 Log.d(
                     "ON Update Review",
-                    "Updated review of ${sharedViewModel.selectedBooking.room?.roomName} with review: $currentReview"
+                    "Updated review of ${sharedViewModel.selectedBooking.roomInfo?.roomName} with review: $currentReview"
                 )
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
@@ -100,8 +100,8 @@ class ReviewViewModel : ViewModel() {
 
     fun onDelete(navController: NavController, sharedViewModel: SharedViewModel,  context: Context, currentReview: Review) {
         Log.d("Review", "Delete button clicked")
-        Log.d("REVIEW FROM SHARED VIEW MODEL", " NAME -> ${sharedViewModel.selectedBooking.room?.roomName} and ID ->  ${sharedViewModel.selectedBooking.room?.roomId}")
-        currentReview.roomInfo = RoomInfo(sharedViewModel.selectedBooking.room!!.roomId, sharedViewModel.selectedBooking.room!!.roomName)
+        Log.d("REVIEW FROM SHARED VIEW MODEL", " NAME -> ${sharedViewModel.selectedBooking.roomInfo?.roomName} and ID ->  ${sharedViewModel.selectedBooking.roomInfo?.roomId}")
+        currentReview.roomInfo = RoomInfo(sharedViewModel.selectedBooking.roomInfo!!.roomId, sharedViewModel.selectedBooking.roomInfo!!.roomName)
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
             val transmissionObject = TransmissionObjectBuilder()
@@ -113,7 +113,7 @@ class ReviewViewModel : ViewModel() {
             Log.d("Review", "Sending invalid review to backend: $currentReview")
             val backendConnector = BackendConnector.getInstance()
             val response = backendConnector.sendRequest(transmissionObject)
-            Log.d("ON Delete Review", "Delete review of ${sharedViewModel.selectedBooking.room?.roomName} and is now null")
+            Log.d("ON Delete Review", "Delete review of ${sharedViewModel.selectedBooking.roomInfo?.roomName} and is now null")
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
                 if (response.success == 1) {

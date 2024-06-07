@@ -9,6 +9,8 @@ import com.example.distributed_hotel_booking.connector.BackendConnector
 import com.example.distributed_hotel_booking.connector.TransmissionObjectBuilder
 import com.example.distributed_hotel_booking.connector.TransmissionObjectType
 import com.example.distributed_hotel_booking.data.Booking
+import com.example.distributed_hotel_booking.data.RoomInfo
+import com.example.distributed_hotel_booking.data.UserData
 import com.example.distributed_hotel_booking.screens.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class BookingViewModel : ViewModel() {
-    var booking = Booking(0, null, null, null,0f) // TODO: REMOVE ROOM FROM BOOKING OBJECT OR CHANGE TO NULL OR ONLY ROOMINFO OBJECT OR ONLY ROOMNAME
+    var booking = Booking(UserData(), RoomInfo(), null, null,0f) // TODO: REMOVE ROOM FROM BOOKING OBJECT OR CHANGE TO NULL OR ONLY ROOMINFO OBJECT OR ONLY ROOMNAME
 
     fun onBook(navController: NavController, sharedViewModel: SharedViewModel, context: Context) {
         val scope = CoroutineScope(Dispatchers.IO)

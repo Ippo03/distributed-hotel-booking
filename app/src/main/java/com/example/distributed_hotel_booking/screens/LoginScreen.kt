@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -47,6 +48,8 @@ import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 @Composable
 fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel) {
     val viewModel: LoginViewModel = viewModel()
+
+    val context = LocalContext.current
 
     val emailFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
@@ -113,7 +116,7 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                 )
                 Button(
                     onClick = {
-                        viewModel.onLogin(navController, sharedViewModel)
+                        viewModel.onLogin(navController, sharedViewModel, context)
                     },
                     modifier = Modifier
                         .padding(16.dp)
@@ -143,7 +146,8 @@ fun TextFieldUsername(viewModel: LoginViewModel, modifier: Modifier = Modifier) 
         label = { Text(text = "Username") },
         placeholder = { Text(text = "Enter your username") },
         singleLine = true,
-        modifier = modifier
+        modifier = modifier,
+        isError = viewModel.usernameError.value.isNotEmpty()
     )
 }
 
@@ -156,7 +160,8 @@ fun TextFieldPassword(viewModel:LoginViewModel, modifier: Modifier = Modifier) {
         label = { Text(text = "Password") },
         placeholder = { Text(text = "Enter your password") },
         singleLine = true,
-        modifier = modifier
+        modifier = modifier,
+        isError = viewModel.passwordError.value.isNotEmpty()
     )
 }
 

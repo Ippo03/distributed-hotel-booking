@@ -2,23 +2,20 @@ package com.example.distributed_hotel_booking.data
 
 import android.icu.math.BigDecimal
 import android.util.Log
-import java.math.RoundingMode
-import java.time.temporal.ChronoUnit
 
 
 data class Booking(
-    var userId: Int,
-    var room: Room?, // TODO: Maybe should remove and the relationship should be Room -> Bookings (Have A User) -> A review (of the corresponding User that made the booking) . Not List of Reviews in User !
+    var userData: UserData?,
+    var roomInfo: RoomInfo?,
     var dateRange: DateRange?,
     var guests: Int? = 1,
     var total: Float? = 0f,
     var review : Review? = null
 ) {
     companion object {
-        fun calculateTotal(booking: Booking): Float {
-            Log.d("Booking", "Room price: ${booking.room?.price}")
+        fun calculateTotal(booking: Booking, roomPrice: Float): Float {
             Log.d("Booking", "Number of days: ${booking.dateRange?.getDays()}")
-            booking.total = (BigDecimal.valueOf(booking.room?.price?.toDouble() ?: 0.0)
+            booking.total = (BigDecimal.valueOf(roomPrice.toDouble() ?: 0.0)
                 .multiply(BigDecimal.valueOf(booking.dateRange?.getDays()?.toLong() ?: 0L))
                 .setScale(2)).toFloat()
             Log.d("Booking", "Total: ${booking.total}")

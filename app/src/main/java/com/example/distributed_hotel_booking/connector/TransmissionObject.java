@@ -1,6 +1,6 @@
 package com.example.distributed_hotel_booking.connector;
 
-import com.example.distributed_hotel_booking.connector.user.UserData;
+import com.example.distributed_hotel_booking.data.UserData;
 import com.example.distributed_hotel_booking.data.Booking;
 import com.example.distributed_hotel_booking.data.DateRange;
 import com.example.distributed_hotel_booking.data.Review;

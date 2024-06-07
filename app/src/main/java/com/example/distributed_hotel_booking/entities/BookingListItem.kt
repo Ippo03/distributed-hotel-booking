@@ -39,6 +39,7 @@ import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.Review
 import com.example.distributed_hotel_booking.data.RoomInfo
+import com.example.distributed_hotel_booking.data.UserData
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -74,7 +75,7 @@ fun BookingListItem(
         ) {
             // Room photo
             ByteArrayImage(
-                imageBytes = booking.room!!.roomImage,
+                imageBytes = booking.roomInfo!!.roomImage,
                 contentDescription = null,
                 modifier = Modifier
                     .height(200.dp)
@@ -86,7 +87,7 @@ fun BookingListItem(
             Spacer(modifier = Modifier.height(16.dp)) // Add space between photo and content
 
             // Hotel name
-            var roomName = booking.room?.roomName
+            var roomName = booking.roomInfo?.roomName
             Text(
                 text = roomName?:"Room Name",
                 style = TextStyle(fontSize = 20.sp, color = Color.Gray),
@@ -137,7 +138,7 @@ fun BookingListItem(
                 if (noReview) { // Open popup to review
                     ReviewPopup(onReview = { grade, description ->
                         // Create a review object
-                        val review = Review(grade, description, ) // In the viewModel before sending the review to the backend, we will add the room info to the review object from the sharedViewModel
+                        val review = Review(booking.userData!!, grade, description, booking.roomInfo!!) // In the viewModel before sending the review to the backend, we will add the room info to the review object from the sharedViewModel
                         // Pass the review data to the callback function
                         onReviewClick(review)
                     }, showPopup = showPopup)
@@ -213,7 +214,7 @@ fun ReviewPopup(
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
                     ) {
-                        Text("Cancel", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                        Text("Cancel", style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
                     }
                     Spacer(modifier = Modifier.width(4.dp)) // Add space between the buttons
                     Button(
@@ -221,12 +222,12 @@ fun ReviewPopup(
                             //.padding(start = 6.dp, end = 6.dp)
                             .weight(1f), // Distribute the available space equally among the buttons,
                         onClick = {
-                            onDelete(Review(-1, "")) // Invalid review to indicate deletion in the backend -> Review in this booking turned to NULL.
+                            onDelete(Review(UserData(), grade.value, description, RoomInfo())) // Invalid review to indicate deletion in the backend -> Review in this booking turned to NULL.
                             showPopup.value = false
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
                     ) {
-                        Text("Delete", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                        Text("Delete", style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
                     }
                     Spacer(modifier = Modifier.width(4.dp)) // Add space between the buttons
                     Button(
@@ -234,12 +235,12 @@ fun ReviewPopup(
                             //.padding(start = 8.dp)
                             .weight(1.2f), // Increase weight for more space
                         onClick = {
-                            onEdit(Review(grade.value, description)) // Update the review in the backend
+                            onEdit(Review(review?.userData!!, grade.value, description, review?.roomInfo!!)) // Update the review in the backend
                             showPopup.value = false
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
                     ) {
-                        Text("Update", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                        Text("Update", style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
                     }
                 }
             } else {
@@ -253,7 +254,7 @@ fun ReviewPopup(
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
                     ) {
-                        Text("Cancel", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                        Text("Cancel", style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
                     }
                     Spacer(modifier = Modifier.width(10.dp)) // Add space between the buttons
                     Button(
@@ -264,7 +265,7 @@ fun ReviewPopup(
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
                     ) {
-                        Text("Submit", style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold))
+                        Text("Submit", style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold))
                     }
                 }
             }

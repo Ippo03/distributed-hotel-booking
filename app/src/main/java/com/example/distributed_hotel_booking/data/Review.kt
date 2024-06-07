@@ -1,9 +1,8 @@
 package com.example.distributed_hotel_booking.data
 
-import com.example.distributed_hotel_booking.connector.user.UserData
-
 data class Review(
+    var userData: UserData = UserData(),
     val rating: Int,
     val comment: String,
-    var roomInfo: RoomInfo = RoomInfo("",""),
+    var roomInfo: RoomInfo = RoomInfo(),
 )

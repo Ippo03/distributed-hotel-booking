@@ -1,6 +1,8 @@
 package com.example.distributed_hotel_booking.viewmodel
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
@@ -17,7 +19,10 @@ class LoginViewModel : ViewModel() {
     var usernameText = mutableStateOf(TextFieldValue(""))
     var passwordText = mutableStateOf(TextFieldValue(""))
 
-    fun onLogin(navController: NavController, sharedViewModel: SharedViewModel) {
+    var usernameError = mutableStateOf("")
+    var passwordError = mutableStateOf("")
+
+    fun onLogin(navController: NavController, sharedViewModel: SharedViewModel, context: Context) {
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
             val backendConnector = BackendConnector.getInstance()
@@ -41,14 +46,19 @@ class LoginViewModel : ViewModel() {
                 if (response.success == 1) {
                     Log.d("Login", "Login successful")
                     sharedViewModel.updateUserData(response)
-                    sharedViewModel.username.value = usernameText.value.text.trim()
-                    sharedViewModel.showSnackbar("Login successful")
+                    Toast.makeText(context, "Login was successful!", Toast.LENGTH_SHORT).show()
                     // Navigate to home screen
                     navController.navigate(Screen.HomeScreen.route)
                     sharedViewModel.roomsList.clear() // Clear the list of rooms
                 } else if (response.success == 0) {
                     Log.d("Login", "Login failed")
-                    sharedViewModel.showSnackbar("Login failed! Please try again.")
+                    // Display error messages
+                    usernameError.value = "Invalid username"
+                    passwordError.value = "Invalid password"
+                    // Clear the text fields
+                    usernameText.value = TextFieldValue("")
+                    passwordText.value = TextFieldValue("")
+                    Toast.makeText(context, "Login failed! Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
