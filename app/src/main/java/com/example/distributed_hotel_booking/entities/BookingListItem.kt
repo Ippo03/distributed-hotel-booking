@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.components.ByteArrayImage
 import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.Review
@@ -72,14 +73,14 @@ fun BookingListItem(
             modifier = Modifier.padding(16.dp)
         ) {
             // Room photo
-            Image(
-                painter = painterResource(id = R.drawable.hotel_1), // Replace with actual image resource (booking.room.photoI
+            ByteArrayImage(
+                imageBytes = booking.room!!.roomImage,
                 contentDescription = null,
                 modifier = Modifier
                     .height(200.dp)
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(16.dp)), // Custom shape
-                contentScale = ContentScale.Crop // Adjust content scale as needed
+//                contentScale = ContentScale.Crop // Adjust content scale as needed
             )
 
             Spacer(modifier = Modifier.height(16.dp)) // Add space between photo and content
@@ -136,7 +137,7 @@ fun BookingListItem(
                 if (noReview) { // Open popup to review
                     ReviewPopup(onReview = { grade, description ->
                         // Create a review object
-                        val review = Review(grade, description) // In the viewModel before sending the review to the backend, we will add the room info to the review object from the sharedViewModel
+                        val review = Review(grade, description, ) // In the viewModel before sending the review to the backend, we will add the room info to the review object from the sharedViewModel
                         // Pass the review data to the callback function
                         onReviewClick(review)
                     }, showPopup = showPopup)

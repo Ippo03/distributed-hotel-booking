@@ -46,6 +46,9 @@ class LoginViewModel : ViewModel() {
                     // Navigate to home screen
                     navController.navigate(Screen.HomeScreen.route)
                     sharedViewModel.roomsList.clear() // Clear the list of rooms
+                } else if (response.success == 0) {
+                    Log.d("Login", "Login failed")
+                    sharedViewModel.showSnackbar("Login failed! Please try again.")
                 }
             }
         }

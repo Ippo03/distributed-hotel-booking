@@ -31,7 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.components.CircularAvatar
 import com.example.distributed_hotel_booking.components.RatingBar
+import com.example.distributed_hotel_booking.util.getProfilePicture
 
 
 @Composable
@@ -45,29 +47,12 @@ fun ReviewListItem(
             .padding(16.dp)
     ) {
         // Avatar
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .clip(CircleShape)
-                .background(Color.Gray) // Placeholder color
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.man), // TODO: TO BE DONE WITH THE USER'S PROFILE PIC
-                contentDescription = "User Avatar",
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-//        Image(
-//            painter = rememberImagePainter(review.userAvatarUrl),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .size(48.dp)
-//                .clip(CircleShape)
-//                .border(1.dp, Color.Gray, CircleShape) // Add border to avatar
-//        )
+//      CircularAvatar(imageResource = getProfilePicture(review.userData.profilePicture))
+        CircularAvatar(imageResource = getProfilePicture("man"))
 
         Text( //PLACEHOLDER AS OF NOW
-            text = "User's Name", //review.userId, // Display the userId -> TODO: ADD IT TO THE REVIEW VIA THE BOOKING
+            text = "User's Name",
+//            text = review.userData.username, //review.userId, // Display the userId -> TODO: ADD IT TO THE REVIEW VIA THE BOOKING
             fontSize = 14.sp
         )
 

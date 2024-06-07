@@ -16,6 +16,26 @@ fun getResourceId(resourceId: String): Int {
     }
 }
 
+fun getProfilePicture(tag: String): Int {
+    return when (tag) {
+        "man" -> R.drawable.man
+        "bald_man" -> R.drawable.bald_man
+        "girl" -> R.drawable.girl
+        else -> throw IllegalArgumentException("Invalid profile picture tag: $tag")
+    }
+}
+
+// get random profile picture from drawable
+fun getRandomProfilePicture(): String {
+    val profilePictures = listOf(
+        // add drawable names here
+        "man",
+        "bald_man",
+        "girl",
+    )
+    return profilePictures.random()
+}
+
 fun parseDate(dateStr: String): Date {
     val format = SimpleDateFormat("dd-MM-yyyy")
     Log.d("Formatted date", format.parse(dateStr).toString())

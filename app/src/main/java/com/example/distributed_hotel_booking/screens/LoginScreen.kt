@@ -64,7 +64,7 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
             // Display a welcome message
             Row {
                 Text(
-                    text = "Welcome to Hotel Booking !",
+                    text = "Welcome to Bookaro!",
                     color = Color.Black,
                     fontSize = 24.sp,
                     modifier = Modifier
@@ -79,7 +79,7 @@ fun LoginScreen(navController: NavController, sharedViewModel : SharedViewModel)
                     .align(Alignment.CenterHorizontally)
             ){
                 Image(
-                    painter = painterResource(id = R.drawable.booking_logo),
+                    painter = painterResource(id = R.drawable.bookaro_logo),
                     contentDescription = "app logo"
                 )
             }

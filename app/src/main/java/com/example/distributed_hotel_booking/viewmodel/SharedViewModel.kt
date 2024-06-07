@@ -18,6 +18,7 @@ import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Review
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.RoomInfo
+import com.example.distributed_hotel_booking.util.getRandomProfilePicture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +32,7 @@ import java.util.Date
 class SharedViewModel : ViewModel() {
     var userId = mutableStateOf(0)
     var username = mutableStateOf("")
+    var userProfilePicture = mutableStateOf("")
 
     // late init
     var userData: UserData = UserData()
@@ -68,6 +70,7 @@ class SharedViewModel : ViewModel() {
 
     fun updateUserData(transmissionObject: TransmissionObject) {
         userId.value = transmissionObject.userData.id
+        userProfilePicture.value = getRandomProfilePicture()
         this.userData = transmissionObject.userData
     }
 
@@ -89,7 +92,6 @@ class SharedViewModel : ViewModel() {
     }
 
     fun updateBookings() {
-
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
             val transmissionObject = TransmissionObjectBuilder()
@@ -107,6 +109,7 @@ class SharedViewModel : ViewModel() {
             }
         }
     }
+
 
     // TODO: TO DELETE --> THE ABOVE METHOD ALREADY DOES (OR SHOULD DO) WHAT WE NEED
 //    fun updateReviews() {

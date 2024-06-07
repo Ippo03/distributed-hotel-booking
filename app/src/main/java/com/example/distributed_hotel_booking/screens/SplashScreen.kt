@@ -62,7 +62,7 @@ fun SplashScreen(navController: NavController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             // Logo image with animation
             Image(
-                painter = painterResource(id = R.drawable.booking_logo), // Replace with your logo image
+                painter = painterResource(id = R.drawable.bookaro_logo), // Replace with your logo image
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(200.dp)

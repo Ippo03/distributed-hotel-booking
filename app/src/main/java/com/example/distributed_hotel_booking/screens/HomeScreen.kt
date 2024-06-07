@@ -55,6 +55,8 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.components.CircularAvatar
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.components.UserRatingBar
@@ -64,6 +66,7 @@ import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
 import com.example.distributed_hotel_booking.util.getMaxDate
+import com.example.distributed_hotel_booking.util.getProfilePicture
 import com.example.distributed_hotel_booking.util.getResourceId
 import com.example.distributed_hotel_booking.util.getToday
 import com.example.distributed_hotel_booking.util.parseDate
@@ -121,14 +124,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Circular Avatar
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray) // Placeholder color
-                ) {
-                    // Placeholder content for avatar
-                }
+//                CircularAvatar(imageResource = R.drawable.${sharedViewModel.getRandomProfilePicture()}))
+                CircularAvatar(imageResource = getProfilePicture(sharedViewModel.userProfilePicture.value))
 
                 // Hello user message
                 Text(
@@ -186,14 +183,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Text("My Bookings")
-                                }
-                                Button(onClick = {
-                                    // Navigate to "MyReviews" destination
-                                    showMenu = false
-                                    navController.navigate("user_reviews_screen")
-                                }, modifier = Modifier.fillMaxWidth())
-                                {
-                                    Text("My Reviews")
                                 }
                                 Button(
                                     onClick = {

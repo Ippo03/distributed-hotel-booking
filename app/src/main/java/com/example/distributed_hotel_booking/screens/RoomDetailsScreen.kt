@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.R
+import com.example.distributed_hotel_booking.components.ByteArrayImage
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.entities.ReviewListItem
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
@@ -44,14 +45,14 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.hotel_1),
+                ByteArrayImage(
+                    imageBytes = selectedRoom.roomImage,
                     contentDescription = "Room photo",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .clip(shape = RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Crop
+//                    contentScale = ContentScale.Crop
                 )
                 Box(
                     modifier = Modifier
