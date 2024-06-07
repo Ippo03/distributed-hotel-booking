@@ -9,7 +9,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/bookaro_logo"
-        android:label="@string/app_name"
+        android:label="@string/Bookaro"
         android:roundIcon="@drawable/bookaro_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Distributed_hotel_booking"
@@ -42,7 +42,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/Bookaro"
             android:theme="@style/Theme.Distributed_hotel_booking">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -29,6 +29,8 @@ fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedView
 
 // Handle the back button press
     BackHandler {
+        // Clear the userBookings in the SharedViewModel
+        sharedViewModel.userBookings.clear()
         // Clear the roomsList in the SharedViewModel
         sharedViewModel.roomsList.clear()
         // Pop the UserBookingsScreen from the back stack to return to the HomeScreen

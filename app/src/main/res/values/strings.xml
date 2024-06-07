@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">distributed_hotel_booking</string>
+    <string name="Bookaro">Bookaro</string>
     <string name="title_activity_chatbot_activity.kt">ChatbotActivity.kt</string>
     <string name="title_activity_user_home_screen">UserHomeScreen</string>
     <string name="title_activity_manager_home_screen">ManagerHomeScreen</string>
