@@ -86,11 +86,22 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
-    val searchFilter = remember { mutableStateOf(SearchFilter("", DateRange(getToday(), getMaxDate()), "Athens", 1, BigDecimal.ZERO, 0)) }
+    val searchFilter = remember {
+        mutableStateOf(
+            SearchFilter(
+                "",
+                DateRange(getToday(), getMaxDate()),
+                "Athens",
+                1,
+                BigDecimal.ZERO,
+                0
+            )
+        )
+    }
 
     // Filter selected values
     val searchQuery = remember { mutableStateOf("") }
-    var selectedStartDateText = remember { mutableStateOf("")}
+    var selectedStartDateText = remember { mutableStateOf("") }
     var selectedEndDateText = remember { mutableStateOf("") }
 
     val selectedArea = remember { mutableStateOf("Athens") }
@@ -234,8 +245,10 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     selectedStartDateText = selectedStartDateText,
                     selectedEndDateText = selectedEndDateText,
                     onDateSelected = { checkIn, checkOut ->
-                        selectedStartDateText = (checkIn ?: selectedStartDateText) as MutableState<String>
-                        selectedEndDateText = (checkOut ?: selectedEndDateText) as MutableState<String>
+                        selectedStartDateText =
+                            (checkIn ?: selectedStartDateText) as MutableState<String>
+                        selectedEndDateText =
+                            (checkOut ?: selectedEndDateText) as MutableState<String>
                     }
                 )
             }
@@ -256,7 +269,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 ) {
                     // Dropdown menu for selecting the area
                     SimpleDropdown(
-                        items = listOf("Athens", "Thessaloniki", "Heraclio"),
+                        items = listOf("Athens", "Thessaloniki", "Heraclion", "Patras"),
                         selectedItem = selectedArea
                     )
 
@@ -337,11 +350,17 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 // Button for search
                 Button(
                     onClick = {
-                        Log.d("Dates", selectedStartDateText.value + " " + selectedEndDateText.value)
+                        Log.d(
+                            "Dates",
+                            selectedStartDateText.value + " " + selectedEndDateText.value
+                        )
                         // Create a SearchFilter object with the selected values
                         searchFilter.value = SearchFilter(
                             roomName = searchQuery.value,
-                            dateRange = DateRange(parseDate(selectedStartDateText.value), parseDate(selectedEndDateText.value)),
+                            dateRange = DateRange(
+                                parseDate(selectedStartDateText.value),
+                                parseDate(selectedEndDateText.value)
+                            ),
                             area = selectedArea.value,
                             noOfGuests = selectedGuests,
                             rating = BigDecimal.valueOf(selectedRatingState.value.toDouble()),
@@ -380,29 +399,34 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         }
         //TODO:
         // MAYBE TO BE SHOWN FULLY ONLY WHEN THE SEARCH BUTTON IS PRESSED, ELSE HIDE IT BUT BE ABLE TO CLOSE IT AND OPEN IT BY SCROLLING
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // List of hotels
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = "Hotels Found:",
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                )
+            if (sharedViewModel.roomsList.isEmpty()) {
+                // Display "Search for rooms" message when the list is empty
+                item {
+                    Text(
+                        text = "No Rooms. Explore!",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    )
+                }
+            } else {
+                item {
+                // List of hotels {
+                    Text(
+                        text = "Hotels Found:",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                    )
+                }
+                items(items = sharedViewModel.roomsList) { room ->
+                    Log.d("Room", room.toString())
+                    RoomListItem(
+                        room = room,
+                        sharedViewModel = sharedViewModel,
+                        navController = navController,
+                    )
+                }
             }
         }
-         items(items = sharedViewModel.roomsList) { room ->
-             Log.d("Room", room.toString())
-            RoomListItem(
-                room = room,
-                sharedViewModel = sharedViewModel,
-                navController = navController,
-            )
-        }
     }
-}
