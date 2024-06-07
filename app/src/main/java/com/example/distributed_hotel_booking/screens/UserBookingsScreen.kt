@@ -10,6 +10,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -41,25 +42,49 @@ fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedView
         sharedViewModel.updateBookings()
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(
-            text = "My Bookings:",
-            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-        //TODO: Get user bookings from the backend using the user's UserData I guess (or can we have them in the sharedViewModel?)
-        LazyColumn {
+        if (sharedViewModel.userBookings.isEmpty()) {
+            item {
+                Text(
+                    text = "You have no bookings",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(bottom = 16.dp),
+                )
+            }
+        } else {
+            item {
+                Text(
+                    text = "My Bookings:",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
             items(sharedViewModel.userBookings) { booking ->
                 BookingListItem(
                     booking = booking, onReviewClick = { review ->
                         sharedViewModel.updateSelectedBooking(booking)
-                        viewModel.onReview(navController, sharedViewModel, context, review) },
-                    onDeleteClick = { review -> viewModel.onDelete(navController, sharedViewModel, context, review)},
-                    onEditClick = { review -> viewModel.onUpdate(navController, sharedViewModel, context, review)})
+                        viewModel.onReview(navController, sharedViewModel, context, review)
+                    },
+                    onDeleteClick = { review ->
+                        viewModel.onDelete(
+                            navController,
+                            sharedViewModel,
+                            context,
+                            review
+                        )
+                    },
+                    onEditClick = { review ->
+                        viewModel.onUpdate(
+                            navController,
+                            sharedViewModel,
+                            context,
+                            review
+                        )
+                    })
                 Divider() // Add divider between booking items
             }
         }

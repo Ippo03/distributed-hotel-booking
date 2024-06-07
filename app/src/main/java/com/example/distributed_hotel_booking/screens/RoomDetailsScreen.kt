@@ -3,6 +3,8 @@ package com.example.distributed_hotel_booking.screens
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
@@ -136,28 +138,49 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
             }
 
             // Reviews section
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp)
             ) {
-                Text(
-                    text = "Reviews",
-                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
+            if (!hasReviews(sharedViewModel.selectedRoom)) {
+                // Display "Search for rooms" message when the list is empty
+                item {
+                    Text(
+                        text = "No Reviews Yet.",
+                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    )
+                }
+            } else {
+                item {
+                    // List of reviews
+                    Text(
+                        text = "Reviews",
+                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+                }
+
                 // Review list
-                for (booking in selectedRoom.bookings) {
-                    if (booking.review != null) {
-                        ReviewListItem(
-                            review = booking.review!!,
-                            onReviewClick = { /* Handle review click */ }
-                            // TODO: idea-> If User's Id, then show edit button and/or delete button OR JUST DO NOTHING
-                        )
-                    }
+                items(selectedRoom.bookings) { booking ->
+                    ReviewListItem(
+                        review = booking.review!!,
+                        onReviewClick = { /* Handle review click */ }
+                        // TODO: idea-> If User's Id, then show edit button and/or delete button OR JUST DO NOTHING
+                    )
+                }
                 }
             }
         }
     }
+}
+
+fun hasReviews(room: Room): Boolean {
+    for (booking in room.bookings) {
+        if (booking.review != null) {
+            return true
+        }
+    }
+    return false
 }
 
