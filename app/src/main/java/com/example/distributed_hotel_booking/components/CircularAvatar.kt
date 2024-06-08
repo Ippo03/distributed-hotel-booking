@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 fun CircularAvatar(image: ByteArray) { //imageResource: Int
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(50.dp)
             .clip(CircleShape)
             .background(Color.Gray) // Placeholder color
     ) {
@@ -31,13 +31,6 @@ fun CircularAvatar(image: ByteArray) { //imageResource: Int
                 .fillMaxWidth()
                 .height(200.dp)
                 .clip(shape = RoundedCornerShape(8.dp)),
-//                    contentScale = ContentScale.Crop
         )
-//        Image(
-//            painter = painterResource(id = imageResource), // Your image resource
-//            contentDescription = "Avatar",
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier.size(40.dp)
-//        )
     }
 }

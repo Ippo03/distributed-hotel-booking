@@ -25,7 +25,9 @@ import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.components.RatingBar
 import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.ByteArrayImage
+import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.Room
+import com.example.distributed_hotel_booking.data.UserData
 import com.example.distributed_hotel_booking.entities.ReviewListItem
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 
@@ -162,8 +164,9 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                 }
 
                 // Review list
-                items(selectedRoom.bookings) { booking ->
+                items(reOrderReviews(selectedRoom.bookings, sharedViewModel.userData)) { booking ->
                     ReviewListItem(
+                        currentUser = sharedViewModel.userData,
                         review = booking.review!!,
                         onReviewClick = { /* Handle review click */ }
                         // TODO: idea-> If User's Id, then show edit button and/or delete button OR JUST DO NOTHING
@@ -173,6 +176,24 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
             }
         }
     }
+}
+
+fun reOrderReviews(bookings: List<Booking>, currentUser: UserData): List<Booking> {
+    val bookingsCopy = bookings.toMutableList() // Create a copy of the list - to avoid modifying the original list
+    var currentUserBookings = emptyList<Booking>()
+    val iterator = bookingsCopy.iterator() // Use an iterator to avoid ConcurrentModificationException
+
+    while (iterator.hasNext()) {
+        val booking = iterator.next()
+        if (booking.review?.userData?.username == currentUser.username) {
+            iterator.remove() // Remove the booking from the copy of the list
+            currentUserBookings = currentUserBookings.plus(booking)
+        }
+    }
+
+    currentUserBookings = currentUserBookings.sortedByDescending { it.review?.date }
+    val sortedBookings = currentUserBookings.plus(bookingsCopy).sortedByDescending { it.review?.date }
+    return sortedBookings
 }
 
 fun hasReviews(room: Room): Boolean {

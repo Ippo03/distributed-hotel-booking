@@ -59,6 +59,9 @@ fun BookingListItem(
     val isBookingCompleted = booking.dateRange?.endDate?.before(Calendar.getInstance().time) ?: false
     val noReview = booking.review == null || booking.review?.rating == -1
 
+    // Date formatter to display date in a specific format
+    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+
     // State variable to track whether the popup is shown
     var showPopup = remember { mutableStateOf(false) }
 
@@ -143,6 +146,15 @@ fun BookingListItem(
                         onReviewClick(review)
                     }, showPopup = showPopup)
                 } else{ // Open popup to view and edit/delete tour submitted review
+                    Text(
+                        text = " Last updated on : ${formatter.format(booking.review?.date)}.",
+                        style = TextStyle(fontSize = 8.sp, color = Color.Gray),
+                        maxLines = 1,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 4.dp, bottom = 2.dp)
+                            .padding(horizontal = 2.dp)
+                    )
                     ReviewPopup(review = booking.review,
                         onReview = { _, _ ->
                         // Create a review object
@@ -222,7 +234,7 @@ fun ReviewPopup(
                             //.padding(start = 6.dp, end = 6.dp)
                             .weight(1f), // Distribute the available space equally among the buttons,
                         onClick = {
-                            onDelete(Review(UserData(), grade.value, description, RoomInfo())) // Invalid review to indicate deletion in the backend -> Review in this booking turned to NULL.
+                            onDelete(Review(UserData(), grade.value, description.trim(), RoomInfo())) // Invalid review to indicate deletion in the backend -> Review in this booking turned to NULL.
                             showPopup.value = false
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
@@ -235,7 +247,7 @@ fun ReviewPopup(
                             //.padding(start = 8.dp)
                             .weight(1.2f), // Increase weight for more space
                         onClick = {
-                            onEdit(Review(review?.userData!!, grade.value, description, review?.roomInfo!!)) // Update the review in the backend
+                            onEdit(Review(review?.userData!!, grade.value, description.trim(), review?.roomInfo!!)) // Update the review in the backend
                             showPopup.value = false
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
@@ -261,7 +273,7 @@ fun ReviewPopup(
                         modifier = Modifier.weight(1f), // Distribute the available space equally among the buttons,
                         onClick = {
                             // Pass the user input to the callback function
-                            onReview(grade.value, description)
+                            onReview(grade.value, description.trim())
                         },
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White), // Custom button colors
                     ) {

@@ -27,17 +27,23 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.CircularAvatar
 import com.example.distributed_hotel_booking.components.RatingBar
+import com.example.distributed_hotel_booking.data.UserData
 import com.example.distributed_hotel_booking.util.getProfilePicture
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @Composable
 fun ReviewListItem(
+    currentUser: UserData,
     review: Review,
     onReviewClick: (Review) -> Unit
 ) {
@@ -45,16 +51,27 @@ fun ReviewListItem(
         modifier = Modifier
             .clickable { onReviewClick(review) }
             .padding(16.dp)
+            .fillMaxWidth()
     ) {
         // Avatar
         CircularAvatar(image = review.userData.profilePicture)
 
-        Text( //PLACEHOLDER AS OF NOW
-            text = review.userData.username,
-            fontSize = 14.sp
-        )
+        Spacer(modifier = Modifier.width(8.dp)) // Add space between avatar and content
 
-        Spacer(modifier = Modifier.width(16.dp)) // Add space between avatar and content
+        if (review.userData.username == currentUser.username) {
+            Text(
+                text = "You",
+                fontSize = 18.sp,
+                color = Color.Red
+            )
+        } else {
+            Text(
+                text = review.userData.username,
+                fontSize = 18.sp
+            )
+        }
+
+        Spacer(modifier = Modifier.width(20.dp)) // Add space between avatar and content
 
         Column {
             // Star rating
@@ -64,15 +81,23 @@ fun ReviewListItem(
                     rating = review.rating.toFloat(),
                     spaceBetween = 6.dp
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                // Date formatter to display date in a specific format
+                val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+                Text(
+                    text = " Last updated on : ${formatter.format(review.date)}.",
+                    style = TextStyle(fontSize = 10.sp, color = Color.Gray),
+                )
             }
 
-            Spacer(modifier = Modifier.height(8.dp)) // Add space between star rating and comment
+            Spacer(modifier = Modifier.height(12.dp)) // Add space between star rating and comment
 
             // Comment
             Text(
                 text = review.comment,
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 14.sp
             )
         }
     }
