@@ -55,22 +55,7 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                         .fillMaxWidth()
                         .height(200.dp)
                         .clip(shape = RoundedCornerShape(8.dp)),
-//                    contentScale = ContentScale.Crop
                 )
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(16.dp)
-//                        .background(color = Color.Black.copy(alpha = 0.6f))
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                ) {
-                    Text(
-                        text = "Special Offer!",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
             }
 
             // Room details

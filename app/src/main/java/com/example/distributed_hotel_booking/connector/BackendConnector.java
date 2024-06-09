@@ -39,7 +39,7 @@ public class BackendConnector {
     public void connectToServer() {
         // connect to the backend
         try {
-            this.socket = new Socket("192.168.31.61", 5001);
+            this.socket = new Socket("192.168.1.8", 5001);
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
             this.isConnected = true;
