@@ -2,7 +2,7 @@ package com.example.distributed_hotel_booking.data
 
 import java.util.Objects
 
-public class RoomInfo(var roomId: String = "", var roomName: String = "", var roomImage: ByteArray = ByteArray(0)) {
+class RoomInfo(var roomId: String = "", var roomName: String = "", var roomImage: ByteArray = ByteArray(0)) {
 
     override fun hashCode(): Int {
         val hash = Objects.hash(roomName)

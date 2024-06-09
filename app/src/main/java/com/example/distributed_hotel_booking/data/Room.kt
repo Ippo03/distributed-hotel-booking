@@ -5,7 +5,6 @@ import java.math.BigDecimal
 data class Room(
     val roomId: String,
     val roomName: String,
-//    val description: String,
     val availableDateRange: DateRange,
     val noOfGuests: Int,
     val rating: BigDecimal,

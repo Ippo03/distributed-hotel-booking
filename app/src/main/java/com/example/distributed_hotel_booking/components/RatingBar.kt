@@ -7,12 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.Dp
@@ -25,7 +21,6 @@ fun RatingBar(
     rating: Float,
     spaceBetween: Dp = 0.dp
 ) {
-    // Could also try other images for the stars
     val image = ImageBitmap.imageResource(id = R.drawable.star_half_empty)
     val imageFull = ImageBitmap.imageResource(id = R.drawable.star)
     val imageEmpty = ImageBitmap.imageResource(id = R.drawable.empty_star_resized)

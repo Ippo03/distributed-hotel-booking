@@ -11,28 +11,18 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class TransmissionObject {
-    //General
     public TransmissionObjectType type;
     public String message;
-
     public int success;
-    // Login
     public String username;
     public String password;
     public UserData userData;
-    // Search
     public List<Room> rooms;
     public SearchFilter searchFilter;
-    // Review
     public Review review;
-    // Booking
     public Booking booking;
-    // User's Bookings
     public List<Booking> userBookings;
-
     public DateRange bookingDates;
-    // User's Reviews
-    public List<Review> userReviews;
 
     public void setType(TransmissionObjectType type) {
         this.type = type;

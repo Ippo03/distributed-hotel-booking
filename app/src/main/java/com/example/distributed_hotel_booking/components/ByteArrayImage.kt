@@ -18,8 +18,6 @@ fun ByteArrayImage(imageBytes: ByteArray, contentDescription: String?, modifier:
             modifier = modifier,
             contentScale = ContentScale.Fit
         )
-    } else {
-        // Handle error case if unable to decode byte array
     }
 }
 
@@ -28,7 +26,6 @@ private fun byteArrayToBitmap(imageBytes: ByteArray): ImageBitmap? {
         val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         bitmap?.asImageBitmap()
     } catch (e: Exception) {
-        // Handle error case if unable to decode byte array
         null
     }
 }

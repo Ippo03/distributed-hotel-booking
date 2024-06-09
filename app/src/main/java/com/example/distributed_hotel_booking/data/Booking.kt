@@ -14,11 +14,9 @@ data class Booking(
 ) {
     companion object {
         fun calculateTotal(booking: Booking, roomPrice: Float): Float {
-            Log.d("Booking", "Number of days: ${booking.dateRange?.getDays()}")
             booking.total = (BigDecimal.valueOf(roomPrice.toDouble() ?: 0.0)
                 .multiply(BigDecimal.valueOf(booking.dateRange?.getDays()?.toLong() ?: 0L))
                 .setScale(2)).toFloat()
-            Log.d("Booking", "Total: ${booking.total}")
             return booking.total as Float
         }
     }

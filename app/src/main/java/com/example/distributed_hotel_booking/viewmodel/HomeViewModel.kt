@@ -7,8 +7,6 @@ import com.example.distributed_hotel_booking.connector.BackendConnector
 import com.example.distributed_hotel_booking.connector.TransmissionObjectBuilder
 import com.example.distributed_hotel_booking.connector.TransmissionObjectType
 import com.example.distributed_hotel_booking.data.DateRange
-import com.example.distributed_hotel_booking.data.Review
-import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.screens.Screen
 import com.example.distributed_hotel_booking.util.getMaxDate
@@ -55,15 +53,11 @@ class HomeViewModel : ViewModel() {
             Log.d("Search", "Searching for rooms with filter: $searchFilter")
             val backendConnector = BackendConnector.getInstance()
             val response = backendConnector.sendRequest(transmissionObject)
-            Log.d("Response", response.toString())
-            for (room in response.rooms) {
-                Log.d("Room", room.toString())
-            }
+
             sharedViewModel.roomsList = response.rooms
 
             if (response.success == 1) {
                 withContext(Dispatchers.Main) {
-                    // "ReCompose" the HomeScreen
                     navContoller.navigate(Screen.HomeScreen.route)
                 }
             }

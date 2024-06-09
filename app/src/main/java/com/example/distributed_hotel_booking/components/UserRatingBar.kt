@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-// From: https://github.com/kenruizinoue/UserRatingBarComposable
 @Composable
 fun UserRatingBar(
     modifier: Modifier = Modifier,

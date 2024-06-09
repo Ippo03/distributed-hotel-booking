@@ -26,13 +26,12 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-// Saw from this YT Video: https://youtu.be/uggF_O4xe4I
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangePicker(
     dateTime: LocalDateTime,
     focusRequester: FocusRequester,
-    input: Boolean = false, //NOT USED NOW
+    input: Boolean = false,
     selectedStartDateText: MutableState<String>,
     selectedEndDateText: MutableState<String>,
     onDateSelected: (String?, String?) -> Unit,
@@ -50,6 +49,7 @@ fun DateRangePicker(
             yearRange = (dateTime.year .. dateTime.year + 1)
         ))
     }
+
     // For the ClearFilters Button to work on the DateRangePicker in the UserHomeScreen
     LaunchedEffect(clearFilters?.value) {
         if (clearFilters?.value == true) {
@@ -62,10 +62,6 @@ fun DateRangePicker(
             )
             clearFilters.value = false // Reset the clearFilters value
             focusRequester.requestFocus() // Request focus on the DateRangePicker
-            Log.d("DateRangePickerState", "Clearing DateRangePicker")
-            Log.d("CLEAR FILTERS PRESSED", "${
-                dateRangePickerState.selectedStartDateMillis?.let {Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)} ---- " +
-                    "${dateRangePickerState.selectedEndDateMillis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)}")
         }
     }
 
@@ -90,10 +86,6 @@ fun DateRangePicker(
         selectedEndDateText.value = dateRangePickerState.selectedEndDateMillis?.let {
             Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(formatter)
         }.toString()
-        Log.d("SELECTED DATE_RANGE", "${
-            dateRangePickerState.selectedStartDateMillis?.let {Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)} ---- " +
-                "${dateRangePickerState.selectedEndDateMillis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()}?.format(displayFormatter)}")
-        Log.d("DateRangePicker", "Small DateRangePicker-EXECUTED")
     } else { // For BookingScreen
         DateRangePicker(
             state = dateRangePickerState,
@@ -111,7 +103,6 @@ fun DateRangePicker(
                     val checkOutDate = endDate.format(formatter)
                     onDateSelected(checkInDate, checkOutDate)
                     Text("${startDate.format(displayFormatter)} - ${endDate.format(displayFormatter)}", maxLines = 1, textAlign = TextAlign.Center)
-                    Log.d("DateRangePicker", "Check-in: $checkInDate, Check-out: $checkOutDate")
                 }
             },
             dateValidator = { date ->

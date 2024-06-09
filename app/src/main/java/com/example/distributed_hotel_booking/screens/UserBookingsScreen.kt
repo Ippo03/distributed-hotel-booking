@@ -27,7 +27,7 @@ fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedView
     val context = LocalContext.current
     val viewModel = ReviewViewModel()
 
-// Handle the back button press
+    // Handle the back button press
     BackHandler {
         // Clear the userBookings in the SharedViewModel
         sharedViewModel.userBookings.clear()
@@ -35,8 +35,6 @@ fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedView
         sharedViewModel.roomsList.clear()
         // Pop the UserBookingsScreen from the back stack to return to the HomeScreen
         navController.popBackStack()
-//        // Navigate back to the HomeScreen
-//        navController.navigate(Screen.HomeScreen.route)
     }
 
 
@@ -87,7 +85,7 @@ fun UserBookingsScreen(navController: NavController, sharedViewModel: SharedView
                             review
                         )
                     })
-                Divider() // Add divider between booking items
+                Divider()
             }
         }
     }

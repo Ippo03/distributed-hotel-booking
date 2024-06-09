@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,35 +37,27 @@ import androidx.compose.runtime.*
 
 import androidx.compose.foundation.lazy.items
 
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.R
 import com.example.distributed_hotel_booking.components.CircularAvatar
 import com.example.distributed_hotel_booking.components.GridSelector
 import com.example.distributed_hotel_booking.components.SimpleDropdown
 import com.example.distributed_hotel_booking.components.UserRatingBar
 import com.example.distributed_hotel_booking.data.DateRange
-import com.example.distributed_hotel_booking.data.Review
-import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.SearchFilter
 import com.example.distributed_hotel_booking.entities.RoomListItem
 import com.example.distributed_hotel_booking.util.getMaxDate
-import com.example.distributed_hotel_booking.util.getProfilePicture
 import com.example.distributed_hotel_booking.util.getResourceId
 import com.example.distributed_hotel_booking.util.getToday
 import com.example.distributed_hotel_booking.util.parseDate
@@ -74,15 +65,12 @@ import com.example.distributed_hotel_booking.viewmodel.HomeViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
-
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
 @Composable
 fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
-    val viewModel: HomeViewModel = viewModel();
-    Log.d("HOMESCREEN", sharedViewModel.roomsList.isEmpty().toString())
+    val viewModel: HomeViewModel = viewModel()
+
     val dateTime = LocalDateTime.now()
     val focusRequester = remember { FocusRequester() }
     val clearFilters = remember { mutableStateOf(false) }
@@ -135,7 +123,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Circular Avatar
-                CircularAvatar(image = sharedViewModel.userData.profilePicture) // TODO: change to be able to display the image as a byte array
+                CircularAvatar(image = sharedViewModel.userData.profilePicture)
 
                 // Hello user message
                 Text(
@@ -146,7 +134,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         fontSize = 20.sp,
                         letterSpacing = 1.5.sp,
                     ),
-                    modifier = Modifier.padding(start = 14.dp) // Add padding between avatar and text
+                    modifier = Modifier.padding(start = 14.dp)
                 )
 
                 // Spacer to push the icon to the right
@@ -155,12 +143,11 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 // IconButton to open dropdown
                 IconButton(
                     onClick = { showMenu = !showMenu },
-//                modifier = Modifier.padding(top = 4.dp) // Add padding to the end (right) of the IconButton
                 ) {
                     Icon(Icons.Filled.Menu, contentDescription = "Open menu")
                 }
 
-                // Dropdown menu (WE CAN MAKE THIS CUSTOMIZABLE)
+                // Dropdown menu
                 if (showMenu) {
                     Box(
                         modifier = Modifier
@@ -183,7 +170,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     .border(0.5.dp, Color.Gray, shape = MaterialTheme.shapes.medium)
                                     .clip(MaterialTheme.shapes.medium)
                             ) {
-                                // Your dropdown menu content here
                                 Button(
                                     onClick = {
                                         // Navigate to "MyBookings" destination
@@ -198,7 +184,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     onClick = {
                                         // Log out action
                                         showMenu = false
-                                        // apply backend logic
                                         viewModel.onLogout(navController, sharedViewModel)
                                     },
                                     modifier = Modifier.fillMaxWidth()
@@ -251,9 +236,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     }
                 )
             }
-            //TODO:
-            // MAYBE COULD HAVE THE DATE RANGE PICKER SCROLL TO THE DEFAULT DATES WHEN THE CLEAR FILTERS BUTTON IS PRESSED -> LAZYCOLUMN, scrollToItem(atIndex)
-            // Possible Solution for DateRange highlighter bug. First Scroll to an older/unavailable date and then immediately(next line of code) scroll to the default/current date (today + 3 days).
         }
         item {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -294,8 +276,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                 onValueChange = { newValue ->
                                     selectedPriceRange = newValue
                                 },
-                                valueRange = 0f..500f, // Define your range according to your needs
-                                steps = 10, // Define the number of discrete steps
+                                valueRange = 0f..500f,
+                                steps = 10,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
@@ -307,7 +289,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                                     .offset(
                                         x = (selectedPriceRange / 500f * 60.dp) - 2.dp,
                                         y = 4.dp
-                                    ) // or -4.dp and 2.dp
+                                    )
                             )
                         }
                     }
@@ -349,10 +331,6 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 // Button for search
                 Button(
                     onClick = {
-                        Log.d(
-                            "Dates",
-                            selectedStartDateText.value + " " + selectedEndDateText.value
-                        )
                         // Create a SearchFilter object with the selected values
                         searchFilter.value = SearchFilter(
                             roomName = searchQuery.value,
@@ -365,9 +343,7 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                             rating = BigDecimal.valueOf(selectedRatingState.value.toDouble()),
                             price = selectedPriceRange.toInt(),
                         )
-                        showRoomsList.value = true // Show the rooms list
-                        // Print the searchFilter object *APPEARS IN LOGCAT*
-                        println(searchFilter.value)
+                        showRoomsList.value = true
                         viewModel.searchFilter = searchFilter.value
                         viewModel.onSearch(navController, sharedViewModel)
                     },
@@ -387,8 +363,8 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                         selectedGuests = 1
                         selectedRatingState.value = 0
                         selectedPriceRange = 0f
-                        clearFilters.value = !clearFilters.value // For the DateRangePicker
-                        showRoomsList.value = false // Hide the rooms list
+                        clearFilters.value = !clearFilters.value
+                        showRoomsList.value = false
                     },
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
@@ -396,36 +372,32 @@ fun HomeScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 }
             }
         }
-        //TODO:
-        // MAYBE TO BE SHOWN FULLY ONLY WHEN THE SEARCH BUTTON IS PRESSED, ELSE HIDE IT BUT BE ABLE TO CLOSE IT AND OPEN IT BY SCROLLING
-
-            if (sharedViewModel.roomsList.isEmpty()) {
-                // Display "Search for rooms" message when the list is empty
-                item {
-                    Text(
-                        text = "No Rooms. Explore!",
-                        style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        if (sharedViewModel.roomsList.isEmpty()) {
+            // Display "Explore" message when the list is empty
+            item {
+                Text(
+                    text = "No Rooms. Explore!",
+                    style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                )
+            }
+        } else {
+            item {
+                Text(
+                    text = "Hotels Found:",
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
                     )
-                }
-            } else {
-                item {
-                // List of hotels {
-                    Text(
-                        text = "Hotels Found:",
-                        style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
-                        )
-                    )
-                }
-                items(items = sharedViewModel.roomsList) { room ->
-                    Log.d("Room", room.toString())
-                    RoomListItem(
-                        room = room,
-                        sharedViewModel = sharedViewModel,
-                        navController = navController,
-                    )
-                }
+                )
+            }
+            items(items = sharedViewModel.roomsList) { room ->
+                Log.d("Room", room.toString())
+                RoomListItem(
+                    room = room,
+                    sharedViewModel = sharedViewModel,
+                    navController = navController,
+                )
             }
         }
     }
+}

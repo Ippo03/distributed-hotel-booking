@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SplashScreen(navController: NavController) {
-    // Animatable for controlling the scale of the logo
     val scale = remember { Animatable(0f) }
 
     // Launch the animation when the composable is first drawn
@@ -51,7 +50,6 @@ fun SplashScreen(navController: NavController) {
         }
     }
 
-//     Composable content of the splash screen
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -62,7 +60,7 @@ fun SplashScreen(navController: NavController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             // Logo image with animation
             Image(
-                painter = painterResource(id = R.drawable.bookaro_logo), // Replace with your logo image
+                painter = painterResource(id = R.drawable.bookaro_logo),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(200.dp)
@@ -71,18 +69,17 @@ fun SplashScreen(navController: NavController) {
             // Title text
             Text(
                 text = "Your Title Here",
-                fontSize = 24.sp, // Adjust the font size
-                fontWeight = FontWeight.Bold, // Use a bold font weight
-                color = Color.White, // Set text color to white
-                textAlign = TextAlign.Center, // Center align the text
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+                textAlign = TextAlign.Center,
                 // Add a shadow effect
                 modifier = Modifier.shadow(
-                    elevation = 4.dp, // Shadow elevation
-                    shape = CircleShape, // Shape of the shadow
-                    clip = false // Clip the shadow to the text bounds
+                    elevation = 4.dp,
+                    shape = CircleShape,
+                    clip = false 
                 )
             )
-
         }
     }
 }

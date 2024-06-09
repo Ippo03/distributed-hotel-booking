@@ -1,6 +1,6 @@
 package com.example.distributed_hotel_booking.data
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 
@@ -9,5 +9,5 @@ data class Review(
     val rating: Int,
     val comment: String,
     var roomInfo: RoomInfo = RoomInfo(),
-    val date: Date = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant())
+    val date: Date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())
 )

@@ -2,8 +2,6 @@ package com.example.distributed_hotel_booking.screens
 
 import android.icu.text.SimpleDateFormat
 import com.example.distributed_hotel_booking.components.DateRangePicker
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,13 +16,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,21 +32,16 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.distributed_hotel_booking.data.Booking
-import com.example.distributed_hotel_booking.data.DataProvider
 import com.example.distributed_hotel_booking.data.DateRange
-import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.RoomInfo
 import com.example.distributed_hotel_booking.util.parseDate
 import com.example.distributed_hotel_booking.viewmodel.BookingViewModel
 import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val context = LocalContext.current
@@ -58,12 +49,7 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
     viewModel.booking.userData = sharedViewModel.userData
     viewModel.booking.roomInfo = RoomInfo(sharedViewModel.selectedRoom.roomId, sharedViewModel.selectedRoom.roomName, sharedViewModel.selectedRoom.roomImage)
 
-    Log.d("BookingScreen", "Selected room: ${sharedViewModel.selectedRoom}")
-
-    // get the user id from the shared view model
-    val userId = sharedViewModel.userData.userId
-    Log.d("BookingScreen", "User id: $userId")
-
+    // Get the room's capacity and price
     val maxGuests = sharedViewModel.selectedRoom.noOfGuests
     val pricePerNight = sharedViewModel.selectedRoom.price
     val dateTime = LocalDateTime.now()
@@ -71,8 +57,6 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
     // Create a mutable state for the TextField value
     val guestCount = remember { mutableStateOf("1") }
     val errorMessage = remember { mutableStateOf("") }
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy") // for date picker
-    val log_formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss") // for log output only
     val focusRequester = remember { FocusRequester() }
     val selectedCheckInDateText = remember { mutableStateOf("") }
     val selectedCheckOutDateText = remember { mutableStateOf("") }
@@ -111,7 +95,7 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
             item {
                 Row {
                     OutlinedTextField(
-                        value = guestCount.value, // Use the state as the TextField value
+                        value = guestCount.value,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = { newValue: String ->
@@ -132,8 +116,8 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                                     focusRequester.requestFocus(); true
                                 } else false
                             },
-                        isError = errorMessage.value.isNotEmpty(), // Show an error if the error message is not empty
-                        supportingText = {Text(text = errorMessage.value) } // Show the error message
+                        isError = errorMessage.value.isNotEmpty(),
+                        supportingText = {Text(text = errorMessage.value) }
                     )
                 }
             }
@@ -149,11 +133,8 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                             selectedCheckInDateText.value = checkIn ?: selectedCheckInDateText.value
                             selectedCheckOutDateText.value = checkOut ?: selectedCheckOutDateText.value
                             viewModel.booking.dateRange = DateRange(parseDate(selectedCheckInDateText.value), parseDate(selectedCheckOutDateText.value))
-                            Log.d("BOOKING SCREEN", "Selected dates: ${viewModel.booking.dateRange?.startDate} - ${viewModel.booking.dateRange?.endDate}")
                             Booking.calculateTotal(viewModel.booking, sharedViewModel.selectedRoom.price)
                             totalAmount.value = viewModel.booking.total!!
-                            Log.d("BOOKING SCREEN", "TOTAL: ${viewModel.booking.total}")
-                            Log.d("BOOKING SCREEN", "AMOUNT: ${totalAmount.value}")
                         }
                     )
                 }
@@ -176,8 +157,6 @@ fun BookingScreen(navController: NavController, sharedViewModel: SharedViewModel
                                 viewModel.booking.total
                             )
                             viewModel.booking = booking
-                            Log.d("onBook", "Booking room with booking: $booking")
-                            Log.d("BookingScreen","Before navigation: roomId=${viewModel.booking.roomInfo?.roomId}, checkInDate=${log_formatter.format(viewModel.booking.dateRange?.startDate)}, checkOutDate=${log_formatter.format(viewModel.booking.dateRange?.endDate)}, guests=${viewModel.booking.guests}, total=${viewModel.booking.total}")
                             viewModel.onBook(navController, sharedViewModel, context)
                         },
                         content = { Text("Book Room") },

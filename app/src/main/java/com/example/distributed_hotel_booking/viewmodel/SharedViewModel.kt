@@ -14,7 +14,6 @@ import com.example.distributed_hotel_booking.data.Booking
 import com.example.distributed_hotel_booking.data.DateRange
 import com.example.distributed_hotel_booking.data.Room
 import com.example.distributed_hotel_booking.data.RoomInfo
-import com.example.distributed_hotel_booking.util.getRandomProfilePicture
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -47,7 +46,6 @@ class SharedViewModel : ViewModel() {
     )
 
     private val snackbarChannel = Channel<String>(Channel.BUFFERED)
-    val snackbarFlow = snackbarChannel.receiveAsFlow()
 
     fun showSnackbar(message: String) {
         viewModelScope.launch {
@@ -86,7 +84,6 @@ class SharedViewModel : ViewModel() {
             if (response.userBookings != null) {
                 this@SharedViewModel.userBookings.clear()
                 this@SharedViewModel.userBookings.addAll(response.userBookings)
-                Log.d("User Bookings", userBookings.toString())
             } else {
                 Log.d("User Bookings", "No bookings found")
             }

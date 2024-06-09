@@ -5,6 +5,7 @@ import com.example.distributed_hotel_booking.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 fun getResourceId(resourceId: String): Int {
     return when (resourceId) {
@@ -16,24 +17,28 @@ fun getResourceId(resourceId: String): Int {
     }
 }
 
-fun getProfilePicture(tag: String): Int {
-    return when (tag) {
-        "man" -> R.drawable.man
-        "bald_man" -> R.drawable.bald_man
-        "girl" -> R.drawable.girl
-        else -> throw IllegalArgumentException("Invalid profile picture tag: $tag")
-    }
-}
+fun getTimeAgo(date: Date): String {
+    val now = Date()
+    Log.d("Now", now.toString())
+    Log.d("Date", date.toString())
+    val diffInMillis = now.time - date.time
 
-// get random profile picture from drawable
-fun getRandomProfilePicture(): String {
-    val profilePictures = listOf(
-        // add drawable names here
-        "man",
-        "bald_man",
-        "girl",
-    )
-    return profilePictures.random()
+    Log.d("Diff in millis", diffInMillis.toString())
+
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+    val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+    val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+
+    Log.d("Minutes", minutes.toString())
+    Log.d("Hours", hours.toString())
+    Log.d("Days", days.toString())
+
+    return when {
+        minutes < 1 -> "just now"
+        minutes < 60 -> "$minutes minute${if (minutes == 1L) "" else "s"} ago"
+        hours < 24 -> "$hours hour${if (hours == 1L) "" else "s"} ago"
+        else -> "$days day${if (days == 1L) "" else "s"} ago"
+    }
 }
 
 fun parseDate(dateStr: String): Date {

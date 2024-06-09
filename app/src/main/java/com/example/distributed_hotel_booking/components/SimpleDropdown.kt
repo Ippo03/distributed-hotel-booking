@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.distributed_hotel_booking.R
 
 @Composable
@@ -63,7 +62,6 @@ fun SimpleDropdown(
                     text = {
                         Text(
                             text = item,
-//                            fontSize = 12.sp // Set the font size to a smaller value (adjust as needed)
                         )
                     },
                     onClick = {

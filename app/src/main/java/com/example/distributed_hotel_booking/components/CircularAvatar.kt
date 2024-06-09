@@ -1,6 +1,5 @@
 package com.example.distributed_hotel_booking.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,17 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CircularAvatar(image: ByteArray) { //imageResource: Int
+fun CircularAvatar(image: ByteArray) {
     Box(
         modifier = Modifier
             .size(50.dp)
             .clip(CircleShape)
-            .background(Color.Gray) // Placeholder color
+            .background(Color.Gray)
     ) {
         ByteArrayImage(
             imageBytes = image,

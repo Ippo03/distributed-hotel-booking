@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class BookingViewModel : ViewModel() {
-    var booking = Booking(UserData(), RoomInfo(), null, null,0f) // TODO: REMOVE ROOM FROM BOOKING OBJECT OR CHANGE TO NULL OR ONLY ROOMINFO OBJECT OR ONLY ROOMNAME
+    var booking = Booking(UserData(), RoomInfo(), null, null,0f)
 
     fun onBook(navController: NavController, sharedViewModel: SharedViewModel, context: Context) {
         val scope = CoroutineScope(Dispatchers.IO)
@@ -31,7 +31,6 @@ class BookingViewModel : ViewModel() {
             Log.d("Book", "Booking room with booking: $booking")
             val backendConnector = BackendConnector.getInstance()
             val response = backendConnector.sendRequest(transmissionObject)
-            Log.d("Response", response.toString())
 
             withContext(Dispatchers.Main) {
                 Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
@@ -47,6 +46,5 @@ class BookingViewModel : ViewModel() {
                 }
             }
         }
-
     }
 }

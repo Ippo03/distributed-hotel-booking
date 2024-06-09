@@ -35,7 +35,6 @@ import com.example.distributed_hotel_booking.viewmodel.SharedViewModel
 fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     // Get the selected room from the shared view model
     val selectedRoom = sharedViewModel.selectedRoom
-    Log.d("RoomDetailsScreen", "Selected room: $selectedRoom")
 
     Surface(color = Color.White) {
         Column(
@@ -80,19 +79,13 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                 style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
                 modifier = Modifier.padding(bottom = 8.dp)
             )
-//            Text(
-//                text = room?.description ?: "Room Description",
-//                style = TextStyle(fontSize = 16.sp),
-//                modifier = Modifier.padding(bottom = 16.dp)
-//            )
-
             // Room details section
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Rating: ", //+ room?.rating.toString(),
+                    text = "Rating: ",
                     style = TextStyle(fontSize = 16.sp),
                     modifier = Modifier.padding(end = 16.dp)
                 )
@@ -168,8 +161,7 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
                     ReviewListItem(
                         currentUser = sharedViewModel.userData,
                         review = booking.review!!,
-                        onReviewClick = { /* Handle review click */ }
-                        // TODO: idea-> If User's Id, then show edit button and/or delete button OR JUST DO NOTHING
+                        onReviewClick = {}
                     )
                 }
                 }
@@ -179,14 +171,14 @@ fun RoomDetailsScreen(navController: NavController, sharedViewModel: SharedViewM
 }
 
 fun reOrderReviews(bookings: List<Booking>, currentUser: UserData): List<Booking> {
-    val bookingsCopy = bookings.toMutableList() // Create a copy of the list - to avoid modifying the original list
+    val bookingsCopy = bookings.toMutableList()
     var currentUserBookings = emptyList<Booking>()
-    val iterator = bookingsCopy.iterator() // Use an iterator to avoid ConcurrentModificationException
+    val iterator = bookingsCopy.iterator()
 
     while (iterator.hasNext()) {
         val booking = iterator.next()
         if (booking.review?.userData?.username == currentUser.username) {
-            iterator.remove() // Remove the booking from the copy of the list
+            iterator.remove()
             currentUserBookings = currentUserBookings.plus(booking)
         }
     }
