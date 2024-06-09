@@ -121,13 +121,16 @@ fun BookingListItem(
                 if (noReview) { // Open popup to review
                     ReviewPopup(onReview = { grade, description ->
                         // Create a review object
-                        val review = Review(booking.userData!!, grade, description, booking.roomInfo!!)
+                        val review =
+                            Review(booking.userData!!, grade, description, booking.roomInfo!!)
                         // Pass the review data to the callback function
                         onReviewClick(review)
                     }, showPopup = showPopup)
-                } else{ // Open popup to view and edit/delete tour submitted review
+                } else {
+                    val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+                    // Open popup to view and edit/delete tour submitted review
                     Text(
-                        text = getTimeAgo(booking.review?.date!!),
+                        text = "Last updated on: ${formatter.format(booking.review?.date!!)}",
                         style = TextStyle(fontSize = 8.sp, color = Color.Gray),
                         maxLines = 1,
                         modifier = Modifier
@@ -137,13 +140,17 @@ fun BookingListItem(
                     )
                     ReviewPopup(review = booking.review,
                         onReview = { _, _ ->
-                        // Create a review object
-                        val review = booking.review!!
-                        // Pass the review data to the callback function
-                        onReviewClick(review)
-                    }, onDelete = onDeleteClick, onEdit = onEditClick, showPopup = showPopup, isEditing = true)
+                            // Create a review object
+                            val review = booking.review!!
+                            // Pass the review data to the callback function
+                            onReviewClick(review)
+                        },
+                        onDelete = onDeleteClick,
+                        onEdit = onEditClick,
+                        showPopup = showPopup,
+                        isEditing = true
+                    )
                 }
-
             }
         }
     }

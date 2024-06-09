@@ -62,7 +62,7 @@ fun ReviewListItem(
                 // Date formatter to display date in a specific format
                 val formatter = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
                 Text(
-                    text = formatter.format(review.date),
+                    text = "Last updated on: ${formatter.format(review.date)}",
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
