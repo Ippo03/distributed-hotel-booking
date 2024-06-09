@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -15,22 +16,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.distributed_hotel_booking.R
-import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.distributed_hotel_booking.R
+import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController) {
     val scale = remember { Animatable(0f) }
+    val showText = remember { Animatable(0f) }
 
     // Launch the animation when the composable is first drawn
     LaunchedEffect(Unit) {
@@ -42,7 +44,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         // Delay for a short period before navigating to the next screen
-        delay(500)
+        delay(1000)
         // Navigate to the next screen
         navController.navigate(Screen.LoginScreen.route) {
             // Pop the splash screen off the back stack
@@ -66,21 +68,25 @@ fun SplashScreen(navController: NavController) {
                     .size(200.dp)
                     .scale(scale.value)
             )
-            // Title text
-            Text(
-                text = "Your Title Here",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                // Add a shadow effect
-                modifier = Modifier.shadow(
-                    elevation = 4.dp,
-                    shape = CircleShape,
-                    clip = false 
+
+            // Delay before showing the text
+            LaunchedEffect(Unit) {
+                delay(1250)
+                showText.animateTo(1f)
+            }
+
+            if (showText.value == 1f) {
+                Spacer(modifier = Modifier.size(12.dp))
+
+                // Title text
+                Text(
+                    text = "Book🌴 or Booketo🥊",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    textAlign = TextAlign.Center,
                 )
-            )
+            }
         }
     }
 }
-
