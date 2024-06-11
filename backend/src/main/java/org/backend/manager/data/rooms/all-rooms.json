@@ -1,0 +1,194 @@
+[
+  {
+    "roomId": "1",
+    "roomName": "Deluxe Suite",
+    "noOfPersons": 4,
+    "area": "Athens",
+    "stars": 5,
+    "noOfReviews": 12,
+    "price": "800",
+    "roomImage": "src/main/java/org/backend/images/rooms/deluxe_suite.png",
+    "availableDates": [
+      {
+        "startDate": "2024-05-28",
+        "endDate": "2024-06-17"
+      }
+    ]
+  },
+  {
+    "roomId": "2",
+    "roomName": "Family Room",
+    "noOfPersons": 6,
+    "area": "Thessaloniki",
+    "stars": 4,
+    "noOfReviews": 54,
+    "price": "100",
+    "roomImage": "src/main/java/org/backend/images/rooms/family_room.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-10",
+        "endDate": "2024-06-30"
+      }
+    ]
+  },
+  {
+    "roomId": "3",
+    "roomName": "Executive King",
+    "noOfPersons": 2,
+    "area": "Heraclion",
+    "stars": 4,
+    "noOfReviews": 36,
+    "price": "1000",
+    "roomImage": "src/main/java/org/backend/images/rooms/executive_king.jpg",
+    "availableDates": [
+      {
+        "startDate": "2024-07-01",
+        "endDate": "2024-07-15"
+      }
+    ]
+  },
+  {
+    "roomId": "4",
+    "roomName": "Standard Twin",
+    "noOfPersons": 3,
+    "area": "Heraclion",
+    "stars": 3,
+    "noOfReviews": 92,
+    "price": "50",
+    "roomImage": "src/main/java/org/backend/images/rooms/standard_twin.png",
+    "availableDates": [
+      {
+        "startDate": "2024-07-01",
+        "endDate": "2024-07-10"
+      }
+    ]
+  },
+  {
+    "roomId": "5",
+    "roomName": "Luxury Villa",
+    "noOfPersons": 8,
+    "area": "Athens",
+    "stars": 5,
+    "noOfReviews": 22,
+    "price": "500",
+    "roomImage": "src/main/java/org/backend/images/rooms/luxury_villa.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-10",
+        "endDate": "2024-06-19"
+      }
+    ]
+  },
+  {
+    "roomId": "6",
+    "roomName": "Classic Double",
+    "noOfPersons": 2,
+    "area": "Patras",
+    "stars": 3,
+    "noOfReviews": 68,
+    "price": "120",
+    "roomImage": "src/main/java/org/backend/images/rooms/classic_double.png",
+    "availableDates": [
+      {
+        "startDate": "2024-04-01",
+        "endDate": "2024-04-15"
+      }
+    ]
+  },
+  {
+    "roomId": "7",
+    "roomName": "Ocean View Suite",
+    "noOfPersons": 3,
+    "area": "Athens",
+    "stars": 4,
+    "noOfReviews": 47,
+    "price": "350",
+    "roomImage": "src/main/java/org/backend/images/rooms/ocean_view_suite.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-20",
+        "endDate": "2024-07-10"
+      }
+    ]
+  },
+  {
+    "roomId": "8",
+    "roomName": "Presidential Suite",
+    "noOfPersons": 6,
+    "area": "Athens",
+    "stars": 5,
+    "noOfReviews": 15,
+    "price": "500",
+    "roomImage": "src/main/java/org/backend/images/rooms/presidential_suite.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-25",
+        "endDate": "2024-07-10"
+      }
+    ]
+  },
+  {
+    "roomId": "9",
+    "roomName": "Honeymoon Villa",
+    "noOfPersons": 2,
+    "area": "Thessaloniki",
+    "stars": 5,
+    "noOfReviews": 32,
+    "price": "300",
+    "roomImage": "src/main/java/org/backend/images/rooms/honeymoon_villa.png",
+    "availableDates": [
+      {
+        "startDate": "2024-05-15",
+        "endDate": "2024-05-30"
+      }
+    ]
+  },
+  {
+    "roomId": "10",
+    "roomName": "Budget Room",
+    "noOfPersons": 2,
+    "area": "Patras",
+    "stars": 2,
+    "noOfReviews": 128,
+    "price": "40",
+    "roomImage": "src/main/java/org/backend/images/rooms/budget_room.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-01",
+        "endDate": "2024-07-28"
+      }
+    ]
+  },
+  {
+    "roomId": "11",
+    "roomName": "Garden View Room",
+    "noOfPersons": 3,
+    "area": "Thessaloniki",
+    "stars": 4,
+    "noOfReviews": 67,
+    "price": "90",
+    "roomImage": "src/main/java/org/backend/images/rooms/garden_view_room.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-10",
+        "endDate": "2024-06-25"
+      }
+    ]
+  },
+  {
+    "roomId": "12",
+    "roomName": "Junior Suite",
+    "noOfPersons": 4,
+    "area": "Athens",
+    "stars": 4,
+    "noOfReviews": 49,
+    "price": "220",
+    "roomImage": "src/main/java/org/backend/images/rooms/junior_suite.png",
+    "availableDates": [
+      {
+        "startDate": "2024-06-10",
+        "endDate": "2024-06-25"
+      }
+    ]
+  }
+]

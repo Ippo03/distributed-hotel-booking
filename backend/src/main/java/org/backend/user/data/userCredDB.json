@@ -1,0 +1,20 @@
+[
+  {
+    "userId": 1,
+    "username": "Ippo",
+    "hashedPassword": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "profilePicture": "src/main/java/org/backend/user/data/profilePics/man.png"
+  },
+  {
+    "userId": 2,
+    "username": "Nick",
+    "hashedPassword": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "profilePicture": "src/main/java/org/backend/user/data/profilePics/bald_man.png"
+  },
+  {
+    "userId": 3,
+    "username": "Bill",
+    "hashedPassword": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "profilePicture": "src/main/java/org/backend/user/data/profilePics/girl.png"
+  }
+]
