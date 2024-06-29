@@ -131,11 +131,9 @@ This example JSON provides a basic representation of a hotel room object, outlin
 
 You can find a demo video here :
 
-<div style="text-align:center;">
-  <video width="320" height="560" controls>
-    <source src="https://drive.google.com/uc?export=download&id=1FKU-73MLF4oETGqRO-2OMYfjkCcTG84d" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+<div style="text-align: center;">
+  <iframe src="https://drive.google.com/file/d/1FKU-73MLF4oETGqRO-2OMYfjkCcTG84d/preview" width="320" height="560"></iframe>
 </div>
+
 
 
