@@ -131,9 +131,7 @@ This example JSON provides a basic representation of a hotel room object, outlin
 
 You can find a demo video here :
 
-<div style="text-align: center;">
-  <iframe src="https://drive.google.com/file/d/1FKU-73MLF4oETGqRO-2OMYfjkCcTG84d/preview" width="320" height="560"></iframe>
-</div>
+<div style="padding:222.22% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/971109087?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="distributed-hotel-booking-demo"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 
 
